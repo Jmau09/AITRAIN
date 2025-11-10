@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario - AiTrain</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .profile-container {
+      background: #1f1f1f;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+      width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff2d2d;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-top: 20px;
+      background: #ff2d2d;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #ff5050;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #bbb;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      color: #fff;
+    }
+
+    /* ✅ alertas bonitas */
+    #alertBox {
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+    .success {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .error {
+      background-color: #dc3545;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h2>Perfil de Usuario</h2>
+    <form id="updateForm">
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="cedula">Cédula</label>
+      <input type="text" id="cedula" name="cedula" required />
+
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" />
+
+      <label for="role">Rol</label>
+      <input type="text" id="role" name="role" required />
+
+      <label for="edad">Edad</label>
+      <input type="number" id="edad" name="edad" required />
+
+      <button type="submit" class="btn-primary">Actualizar</button>
+    </form>
+
+    <div id="alertBox"></div>
+
+    <a href="dashboard.html" class="back-link">← Volver al Dashboard</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const isLoggedIn = localStorage.getItem('aitrain_logged');
+      const userData = localStorage.getItem('aitrain_user');
+
+      if (!isLoggedIn || !userData) {
+        alert('Debes iniciar sesión primero');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const user = JSON.parse(userData);
+      const userCedula = user.cedula;
+      const alertBox = document.getElementById('alertBox');
+
+      function showAlert(msg, type) {
+        alertBox.textContent = msg;
+        alertBox.className = type;
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+          alertBox.style.display = 'none';
+        }, 4000);
+      }
+
+      try {
+        // ✅ Consumir la API de buscar por cédula
+        const response = await fetch(`http://localhost:8080/api/aitrain/usuario/buscarCedula/${userCedula}`);
+        if (!response.ok) throw new Error('Error al obtener usuario');
+
+        const usuario = await response.json();
+        console.log("Usuario encontrado:", usuario);
+
+        // ✅ Rellenar los campos
+        document.getElementById('nombre').value = usuario.nombre || '';
+        document.getElementById('cedula').value = usuario.cedula || '';
+        document.getElementById('email').value = usuario.email || '';
+        document.getElementById('password').value = ''; // vacío por seguridad
+        document.getElementById('role').value = usuario.role || '';
+        document.getElementById('edad').value = usuario.edad || '';
+      } catch (err) {
+        console.error(err);
+        showAlert('❌ No se pudieron cargar los datos del perfil.', 'error');
+      }
+
+      // ✅ Evento de actualizar usuario
+      document.getElementById('updateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const userDataUpdated = {
+          nombre: document.getElementById('nombre').value,
+          cedula: document.getElementById('cedula').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          role: document.getElementById('role').value,
+          edad: parseInt(document.getElementById('edad').value)
+        };
+
+        try {
+          const updateResponse = await fetch('http://localhost:8080/api/aitrain/usuario/update', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userDataUpdated)
+          });
+
+          if (updateResponse.ok) {
+            showAlert('✅ Perfil actualizado correctamente.', 'success');
+            localStorage.setItem('aitrain_user', JSON.stringify(userDataUpdated));
+          } else {
+            showAlert('❌ Error al actualizar el perfil.', 'error');
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert('⚠️ No se pudo conectar con el servidor.', 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

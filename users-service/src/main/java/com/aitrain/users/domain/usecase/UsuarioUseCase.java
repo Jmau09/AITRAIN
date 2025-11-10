@@ -1,0 +1,140 @@
+package com.aitrain.users.domain.usecase;
+
+
+import com.aitrain.users.domain.model.Usuario;
+import com.aitrain.users.domain.model.gateway.EncrypterGateway;
+import com.aitrain.users.domain.model.gateway.UsuarioGateway;
+import lombok.RequiredArgsConstructor;
+
+
+//logica de negocio
+//no agregar dependencias ni etiquetas
+@RequiredArgsConstructor
+
+
+public class UsuarioUseCase {
+//Guardar,eliminar, buscar (van a ser el caso de uso y sera la logica de negocio)
+
+    //no se puede contectar la BD en la infraestructura
+    private final UsuarioGateway usuarioGateway;
+    private final EncrypterGateway encrypterGateway;
+
+public String guardarUsuario(Usuario usuario){
+    if (usuario.getCedula() == null || usuario.getCedula().trim().isEmpty()){
+        return "La cedula es obligatoria";
+    }
+    if (usuario.getNombre()==null || usuario.getNombre().trim().isEmpty()){
+        return "El campo nombre es obligatorio";
+    }
+    if (usuario.getEmail()==null || usuario.getEmail().trim().isEmpty()){
+        return "El campo email es obligatorio";
+    }
+    if (usuario.getPassword()==null || usuario.getPassword().trim().isEmpty()){
+        return "El campo password es obligatorio";
+    }
+    if (usuario.getEdad()==null || usuario.getEdad() <= 0){
+        return "El campo edad es obligatorio y debe ser mayor que 0";
+    }
+    if (usuario.getRole()==null || usuario.getRole().trim().isEmpty()){
+        return "El campo role es obligatorio";
+    }
+    Usuario existente = usuarioGateway.findByCedula(usuario.getCedula());
+    if (existente!=null){
+        return "Ya existe un usuario con esa identificacion";
+    }
+
+    usuario.setPassword(encrypterGateway.encrypt(usuario.getPassword()));
+    usuarioGateway.guardarUsuario(usuario);
+
+    return "Usuario guardado correctamente";
+}
+
+    //public Usuario guardarUsuario(Usuario usuario) {
+
+        //si da error, en los logs aparece ese mensaje
+      //  if (usuario.getEmail() == null && usuario.getPassword() == null) {
+            //Arrojar excepciones
+        //    throw new NullPointerException("Ojo con eso manito - guardarUsuario");
+        //}
+        //usuario.setPassword(encrypterGateway.encrypt(usuario.getPassword()));
+        //return usuarioGateway.guardar(usuario);
+//        Forma 2
+//        String cpasswordEncrypt = encrypterGateway.encrypt(usuario.getPassword());
+//        usuario.setPassword(cpasswordEncrypt);
+
+    public Usuario buscarPorIdUsuario(Long id) {
+        try {
+            Usuario usuario = usuarioGateway.buscarUsuarioPorID(id);
+            return usuario; // puede venir nulo si no existe
+        } catch (Exception e) {
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    public void eliminarPorIdUsuario(Long id){
+        try{
+            usuarioGateway.eliminarUsuarioPorID(id);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public Usuario actualizarUsuario(Usuario usuario) {
+        if (usuario.getCedula() == null) {
+            throw new IllegalArgumentException("La cédula es obligatoria para actualizar");
+        }
+
+        // Buscar el usuario existente por cédula
+        Usuario usuarioExistente = usuarioGateway.findByCedula(usuario.getCedula());
+        if (usuarioExistente == null) {
+            // Retorna null si no existe
+            return null;
+        }
+
+        // Mantener el ID original del usuario existente
+        usuario.setId(usuarioExistente.getId());
+
+        // Encriptar la contraseña solo si se envía una nueva
+        if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
+            String passwordEncrypt = encrypterGateway.encrypt(usuario.getPassword());
+            usuario.setPassword(passwordEncrypt);
+        } else {
+            // Mantener la contraseña anterior si no se envía una nueva
+            usuario.setPassword(usuarioExistente.getPassword());
+        }
+
+        // Actualizar en base de datos
+        return usuarioGateway.actualizarUsuario(usuario);
+    }
+
+
+
+    public String loginUsuario(String email, String password) {
+        Usuario usuarioLogueado = usuarioGateway.findByEmail(email);
+        if (usuarioLogueado.getEmail() == null || usuarioLogueado.getPassword() == null) {
+            return "Usuario no encontrado";
+        }
+
+        if(encrypterGateway.checkPass(password, usuarioLogueado.getPassword())) {
+            return "Credenciales correctos";
+        } else  {
+            return "Credenciales incorrectos";
+        }
+    }
+
+    public Usuario buscarPorCedula(String cedula) {
+        try {
+            return usuarioGateway.findByCedula(cedula);
+        } catch (Exception e) {
+            System.out.println("Error al buscar usuario por cédula: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+
+}
+
