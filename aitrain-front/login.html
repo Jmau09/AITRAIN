@@ -6,33 +6,113 @@
   <title>Iniciar Sesión - AiTrain</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif}
-    body{background:#f4f6f8;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-    .card{background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.08);width:100%;max-width:920px;display:flex;overflow:hidden}
-    .left{flex:1;padding:40px;background:#000;color:#fff;display:flex;flex-direction:column;justify-content:center;gap:16px}
-    .left .logo{display:flex;gap:12px;align-items:center}
+    body{
+      background:#0d0d0d;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      padding:20px;
+    }
+    .card{
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(255,0,0,0.15);
+      width:100%;
+      max-width:920px;
+      display:flex;
+      overflow:hidden;
+      animation:fadeIn 0.6s ease-out;
+    }
+    .left{
+      flex:1;
+      padding:40px;
+      background:#000;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:16px;
+    }
+    .left .logo{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
     .left .logo img{width:64px;height:auto}
-    .left h1{font-size:28px;margin-top:6px}
-    .left p{color:rgba(255,255,255,0.85);max-width:320px}
-    .right{flex:1;padding:32px 40px;display:flex;flex-direction:column;justify-content:center;gap:16px}
-    h2{font-size:22px;color:#0f1724;margin-bottom:4px}
+    .left h1{font-size:28px;margin-top:6px;color:#fff}
+    .left p{color:rgba(255,255,255,0.8);max-width:320px;line-height:1.4}
+    .right{
+      flex:1;
+      padding:40px 45px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:16px;
+      background:#fafafa;
+    }
+    h2{font-size:24px;color:#0f1724;margin-bottom:4px;font-weight:700}
     p.sub{color:#6b7280;margin-bottom:12px}
-    form{display:flex;flex-direction:column;gap:12px}
+    form{display:flex;flex-direction:column;gap:14px}
     label{font-size:13px;color:#374151;margin-bottom:6px;display:block}
     input[type="email"],input[type="password"]{
-      width:100%;padding:10px 12px;border-radius:8px;border:1px solid #e6e9ee;background:#fff;outline:none;font-size:14px;
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #e6e9ee;
+      background:#fff;
+      outline:none;
+      font-size:14px;
+      transition:all 0.2s ease;
     }
-    input:focus{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,0.07)}
-    button{background:#ef4444;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:600;cursor:pointer}
-    button.secondary{background:#eef2f7;color:#0f1724}
-    .divider{text-align:center;color:#6b7280;font-size:13px;margin-top:8px;margin-bottom:4px}
+    input:focus{
+      border-color:#ef4444;
+      box-shadow:0 0 0 3px rgba(239,68,68,0.07);
+    }
+    button{
+      background:#ef4444;
+      color:#fff;
+      border:none;
+      padding:12px;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    button:hover{background:#cc0000;transform:scale(1.03)}
+    .divider{
+      text-align:center;
+      color:#6b7280;
+      font-size:13px;
+      margin-top:8px;
+      margin-bottom:4px;
+    }
     .social-buttons{display:flex;gap:8px}
     .social-buttons button{
-      flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-      padding:10px;border-radius:8px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;font-weight:500;
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      cursor:pointer;
+      font-weight:500;
+      transition:background 0.2s;
     }
     .social-buttons button:hover{background:#f9fafb}
-    #mensaje{text-align:center;padding:10px;border-radius:8px;display:none;margin-top:8px}
+    #mensaje{
+      text-align:center;
+      padding:10px;
+      border-radius:8px;
+      display:none;
+      margin-top:10px;
+      font-size:14px;
+    }
     @media (max-width:780px){.left{display:none}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
@@ -41,17 +121,17 @@
     <div class="left" aria-hidden="true">
       <div class="logo">
         <img src="brazo.png" alt="AiTrain logo" />
-        <div style="font-weight:700;font-size:18px">Ai<span style="color:#f43f5e">Train</span></div>
+        <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
       </div>
       <h1>Entrena con inteligencia</h1>
-      <p>Inicia sesión y accede a tu progreso, rutinas personalizadas y recomendaciones impulsadas por IA.</p>
+      <p>Accede a tu cuenta y continúa tu progreso con rutinas personalizadas y seguimiento por IA.</p>
     </div>
 
     <!-- PANEL DERECHO -->
     <div class="right">
       <div>
         <h2>Iniciar Sesión</h2>
-        <p class="sub"><br>Accede con tu correo y contraseña.</p>
+        <p class="sub">Accede con tu correo y contraseña.</p>
       </div>
 
       <form id="loginForm" novalidate>
@@ -67,8 +147,9 @@
 
         <button type="submit">Iniciar Sesión</button>
 
-        <div class="divider">o inicia con</div>
+        <div id="mensaje" role="status"></div>
 
+        <div class="divider">o inicia con</div>
         <div class="social-buttons">
           <button type="button">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" width="20" height="20">
@@ -84,8 +165,6 @@
           ¿No tienes cuenta?
           <a href="registro.html" style="color:#ef4444;font-weight:600;text-decoration:none">Regístrate</a>
         </p>
-
-        <div id="mensaje" role="status"></div>
       </form>
     </div>
   </div>
@@ -98,6 +177,8 @@
   function mostrarMensaje(text, tipo = 'info') {
     mensajeDiv.style.display = 'block';
     mensajeDiv.textContent = text;
+    mensajeDiv.style.transition = 'all 0.3s ease';
+
     if (tipo === 'ok') {
       mensajeDiv.style.background = '#ecfdf5';
       mensajeDiv.style.color = '#065f46';
@@ -121,12 +202,12 @@
     const password = document.getElementById('password').value;
 
     if (!email || !password) {
-      mostrarMensaje('Por favor ingresa todos los campos', 'error');
+      mostrarMensaje('⚠️ Por favor ingresa todos los campos', 'error');
       return;
     }
 
     try {
-      mostrarMensaje('Iniciando sesión...', 'info');
+      mostrarMensaje('🔄 Iniciando sesión...', 'info');
 
       const res = await fetch(API_LOGIN, {
         method: 'POST',
@@ -138,17 +219,14 @@
 
       if (res.ok) {
         mostrarMensaje('✅ Sesión iniciada correctamente', 'ok');
-
-        // Guardamos datos en localStorage
         localStorage.setItem('aitrain_logged', 'true');
         localStorage.setItem('aitrain_user', email);
 
-        // Redirigir después de un breve delay
         setTimeout(() => {
           window.location.href = 'dashboard.html';
-        }, 1200);
+        }, 1000);
       } else {
-        mostrarMensaje('❌ ' + text, 'error');
+        mostrarMensaje('❌ Credenciales incorrectas', 'error');
       }
     } catch (err) {
       console.error(err);
@@ -156,7 +234,6 @@
     }
   });
 </script>
-
-
 </body>
 </html>
+

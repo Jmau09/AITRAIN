@@ -1,6 +1,8 @@
 package com.aitrain.users.infraestructure.driver_adapter.jpa_repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.*;
 
 import java.util.Optional;
 
@@ -8,6 +10,11 @@ public interface UsuarioDataJpaRepository extends JpaRepository <UsuarioData, Lo
 
     //Consulta email a la base de datos
     Optional<UsuarioData> findByCedula(String cedula);
+
     Optional<UsuarioData> findByEmail(String email);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM UsuarioData u WHERE u.cedula = :cedula")
+    void deleteByCedula(String cedula);
 }

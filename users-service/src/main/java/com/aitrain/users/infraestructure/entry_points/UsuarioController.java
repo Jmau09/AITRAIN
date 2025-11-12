@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController //indica que esta clase es un controlador, y se van a crear APIs que se van a exponer
 @RequestMapping("/api/aitrain/usuario") //parametrizar URLs
 @RequiredArgsConstructor //crea constructores
@@ -24,26 +26,20 @@ public class UsuarioController {
 
     @PostMapping("/save")
     public ResponseEntity<String> saveUsuario(@RequestBody UsuarioData usuarioData) {
-        //responseEntity es un tipo de obj que devuelve un statuscode
-        //engloba el usuario y devuelve usuario y metadata
-        //da el HttpStatusCode (son codigos que se deben devolver al consumir una API)
-        //400 es error del usuario - 500 es error del programador
-        //requestbody hace el mapeo. convierte el contenido de la peticion http
-        //se debe pasar primero por los casos de uso
         Usuario usuario = mapperUsuario.toUsuario(usuarioData);
         String resultado = usuarioUseCase.guardarUsuario(usuario);
 
         if (resultado.startsWith("Usuario guardado")) {
             return new ResponseEntity<>(resultado, HttpStatus.OK);
         }
-        if (resultado.contains("El usuario ya existe")) {
+        if (resultado.contains("Ya existe un usuario" )) {
             return new ResponseEntity<>(resultado, HttpStatus.OK);
         }
         return new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("buscarId/{id}")
     public ResponseEntity<Usuario> findByIdUsuario(@PathVariable Long id) {
         try {
             Usuario usuarioEncontrado = usuarioUseCase.buscarPorIdUsuario(id);
@@ -60,16 +56,16 @@ public class UsuarioController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{cedula}")
     //que pase el obj por la URL, y no por un body
-    public ResponseEntity<String> deleteByIdUsuario(@PathVariable Long id) {
+    public ResponseEntity<String>eliminarUsuarioPorCedula(@PathVariable String cedula) {
         try {
-            Usuario usuario = usuarioUseCase.buscarPorIdUsuario(id);
+            Usuario usuario = usuarioUseCase.buscarPorCedula(cedula);
             if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("El usuario con el ID:" + id + " no exite en la BD");
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body("El usuario con la cedula:" + cedula + " no exite en la BD");
             }
-            usuarioUseCase.eliminarPorIdUsuario(id);
+            usuarioUseCase.eliminarUsuarioPorCedula(cedula);
             //siempre se debe retornar un HTTP status
             return ResponseEntity.ok().body("Usuario eliminado exitosamente");
         } catch (Exception e) {
@@ -98,25 +94,27 @@ public class UsuarioController {
 
 
     @PostMapping("/login")
-    //recibe el email y password, llama al caso de uso, y retorna el usuario autenticado.
-    public ResponseEntity<Object> loginUsuario(@RequestBody UsuarioData usuarioData) {
-        try {
-            String mensajeRTA = usuarioUseCase.loginUsuario(usuarioData.getEmail(), usuarioData.getPassword());
-            return new ResponseEntity<>(mensajeRTA, HttpStatus.OK);
+    public ResponseEntity<String> loginUsuario(@RequestBody UsuarioData usuarioData) {
+        String respuesta = usuarioUseCase.loginUsuario(usuarioData.getEmail(), usuarioData.getPassword());
 
-        } catch (Exception error) {
-            return new ResponseEntity<>("Falló el logueo", HttpStatus.CONFLICT);
-        }
+        return switch (respuesta) {
+            case "Credenciales correctos" -> ResponseEntity.ok(respuesta);
+            case "Usuario no encontrado", "Credenciales incorrectos" ->
+                    ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
+            default ->
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
+        };
     }
 
-    @GetMapping("/buscarCedula/{cedula}")
+
+    @GetMapping("/buscar/{cedula}")
     public ResponseEntity<Usuario> buscarPorCedula(@PathVariable String cedula) {
         try {
             Usuario usuarioEncontrado = usuarioUseCase.buscarPorCedula(cedula);
 
             if (usuarioEncontrado == null) {
                 // Si no lo encuentra, devolvemos 404 sin usar Object
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.ok().body(usuarioEncontrado);
             }
 
             // Si lo encuentra, devolvemos el usuario completo
@@ -126,6 +124,11 @@ public class UsuarioController {
             // Si algo falla, devolvemos 500 pero sin generic types
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<Usuario>> listar() {
+        return ResponseEntity.ok(usuarioUseCase.listarUsuarios());
     }
 
 

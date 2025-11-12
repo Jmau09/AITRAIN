@@ -15,9 +15,10 @@ public class Usuario {
     private Long id;
     private String cedula;
     private String nombre;
+    private String apellido;
     private String email;
+    private String telefono;
     private String password;
-    private String role;
     private Integer edad;
 
 

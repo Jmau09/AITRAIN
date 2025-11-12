@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil del Usuario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    input[readonly] {
+      background-color: #eee;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Perfil del Usuario</h2>
+    <form id="perfilForm">
+      <label>Cédula</label>
+      <input type="text" id="cedula" name="cedula" readonly />
+
+      <label>Nombre</label>
+      <input type="text" id="nombre" name="nombre" />
+
+      <label>Email</label>
+      <input type="email" id="email" name="email" />
+
+      <label>Edad</label>
+      <input type="number" id="edad" name="edad" />
+
+      <label>Rol</label>
+      <input type="text" id="role" name="role" readonly />
+
+      <button type="submit">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
+      if (!usuarioLocal || !usuarioLocal.cedula) {
+        alert("No hay sesión iniciada. Por favor inicia sesión.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Buscar datos actualizados del backend
+      try {
+        const response = await fetch(`http://localhost:8080/api/aitrain/usuario/buscarCedula/${usuarioLocal.cedula}`);
+        const data = await response.json();
+
+        // Llenar los campos
+        document.getElementById("cedula").value = data.cedula || "";
+        document.getElementById("nombre").value = data.nombre || "";
+        document.getElementById("email").value = data.email || "";
+        document.getElementById("edad").value = data.edad || "";
+        document.getElementById("role").value = data.role || "";
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+
+      // Guardar cambios
+      document.getElementById("perfilForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const usuarioActualizado = {
+          cedula: document.getElementById("cedula").value,
+          nombre: document.getElementById("nombre").value,
+          email: document.getElementById("email").value,
+          edad: parseInt(document.getElementById("edad").value),
+          role: document.getElementById("role").value
+        };
+
+        try {
+          const res = await fetch("http://localhost:8080/api/aitrain/usuario/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(usuarioActualizado)
+          });
+
+          const text = await res.text();
+          alert(text);
+        } catch (error) {
+          alert("Error al actualizar usuario");
+          console.error(error);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

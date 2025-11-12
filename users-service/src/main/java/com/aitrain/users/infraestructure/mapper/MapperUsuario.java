@@ -12,9 +12,10 @@ public class MapperUsuario {
                 usuarioData.getId(),
                 usuarioData.getCedula(),
                 usuarioData.getNombre(),
+                usuarioData.getApellido(),
                 usuarioData.getEmail(),
+                usuarioData.getTelefono(),
                 usuarioData.getPassword(),
-                usuarioData.getRole(),
                 usuarioData.getEdad()
         );
     }
@@ -24,9 +25,10 @@ public class MapperUsuario {
                 usuario.getId(),
                 usuario.getCedula(),
                 usuario.getNombre(),
+                usuario.getApellido(),
                 usuario.getEmail(),
+                usuario.getTelefono(),
                 usuario.getPassword(),
-                usuario.getRole(),
                 usuario.getEdad()
         );
     }

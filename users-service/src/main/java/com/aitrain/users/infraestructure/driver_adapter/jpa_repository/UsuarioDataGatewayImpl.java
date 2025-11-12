@@ -7,6 +7,8 @@ import com.aitrain.users.infraestructure.mapper.MapperUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository //indica que la clase almacena, guarda, elimina en la base de datos, tiene sql
 //esa clase hace las consultas a la BD
 
@@ -22,6 +24,15 @@ public class UsuarioDataGatewayImpl implements UsuarioGateway {
     public Usuario guardarUsuario(Usuario usuario) {
         UsuarioData usuarioData = mapperUsuario.toData(usuario);
         return mapperUsuario.toUsuario(repository.save(usuarioData));
+    }
+
+    @Override
+    public void eliminarUsuarioPorCedula(String cedula) {
+        try{
+            repository.deleteByCedula(cedula);
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 
@@ -58,19 +69,20 @@ public class UsuarioDataGatewayImpl implements UsuarioGateway {
 
     @Override
     public Usuario findByEmail(String email) {
-        return repository.findByEmail(email)
-                .map(usuarioData -> mapperUsuario.toUsuario(usuarioData))
-                .orElseThrow(() -> new RuntimeException("Consulta a la BD fallida"));
+        try {
+            return repository.findByEmail(email)
+                    .map(usuarioData -> mapperUsuario.toUsuario(usuarioData))
+                    .orElse(null);
+        } catch (Exception e) {
+            System.out.println("Error al consultar  email en BD: " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public void eliminarUsuarioPorID(Long id) {
-
-        try{
-            repository.deleteById(id);
-        }catch(Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
+    public List<Usuario> listarUsuarios() {
+        return List.of();
     }
+
 
 }

@@ -15,18 +15,18 @@ public class UsuarioData {
 
     //las anotaciones para los atributos van encima del atributo, significa que afectan al atributo que estè debajo
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //crea el id automaticamente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
     private String cedula;
+
     private String nombre;
-
-    @Column(length = 30, nullable = false)
+    private String apellido;
+    @Column(unique = true, nullable = false)
     private String email;
-
+    private String telefono;
     private String password;
-    private String role;
     private Integer edad;
 
 }
