@@ -2,7 +2,7 @@ package com.aitrain.users.infraestructure.entry_points;
 
 import com.aitrain.users.domain.model.Usuario;
 import com.aitrain.users.domain.usecase.UsuarioUseCase;
-import com.aitrain.users.infraestructure.driver_adapter.jpa_repository.UsuarioData;
+import com.aitrain.users.infraestructure.driver_adapter.jpa_repository.usuario.UsuarioData;
 import com.aitrain.users.infraestructure.mapper.MapperUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,10 +39,10 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("buscarId/{id}")
-    public ResponseEntity<Usuario> findByIdUsuario(@PathVariable Long id) {
+    @GetMapping("buscar/{email}")
+    public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
         try {
-            Usuario usuarioEncontrado = usuarioUseCase.buscarPorIdUsuario(id);
+            Usuario usuarioEncontrado = usuarioUseCase.buscarPorIdUsuario(email);
 
             if (usuarioEncontrado == null) {
                 return ResponseEntity.status(HttpStatus.OK).build();
@@ -56,16 +56,16 @@ public class UsuarioController {
     }
 
 
-    @DeleteMapping("/eliminar/{cedula}")
+    @DeleteMapping("/eliminar/{email}")
     //que pase el obj por la URL, y no por un body
-    public ResponseEntity<String>eliminarUsuarioPorCedula(@PathVariable String cedula) {
+    public ResponseEntity<String>eliminarUsuario(@PathVariable String email) {
         try {
-            Usuario usuario = usuarioUseCase.buscarPorCedula(cedula);
+            Usuario usuario = usuarioUseCase.buscarPorIdUsuario(email);
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body("El usuario con la cedula:" + cedula + " no exite en la BD");
+                        .body("El usuario con el email:" + email + " no exite en la BD");
             }
-            usuarioUseCase.eliminarUsuarioPorCedula(cedula);
+            usuarioUseCase.eliminarUsuario(email);
             //siempre se debe retornar un HTTP status
             return ResponseEntity.ok().body("Usuario eliminado exitosamente");
         } catch (Exception e) {
@@ -80,8 +80,8 @@ public class UsuarioController {
             Usuario usuario = mapperUsuario.toUsuario(usuarioData);
             Usuario usuarioActualizado = usuarioUseCase.actualizarUsuario(usuario);
 
-            if (usuarioActualizado == null) {
-                return new ResponseEntity<>("No se encontro el usuario con la cédula: "+usuario.getCedula(), HttpStatus.OK);
+            if (usuarioActualizado.getEmail() == null) {
+                return new ResponseEntity<>("No se encontro el usuario con el email "+usuario.getEmail(), HttpStatus.OK);
             }
 
             return new ResponseEntity<>("Usuario actualizado correctamente", HttpStatus.OK);
@@ -92,39 +92,6 @@ public class UsuarioController {
         }
     }
 
-
-    @PostMapping("/login")
-    public ResponseEntity<String> loginUsuario(@RequestBody UsuarioData usuarioData) {
-        String respuesta = usuarioUseCase.loginUsuario(usuarioData.getEmail(), usuarioData.getPassword());
-
-        return switch (respuesta) {
-            case "Credenciales correctos" -> ResponseEntity.ok(respuesta);
-            case "Usuario no encontrado", "Credenciales incorrectos" ->
-                    ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
-            default ->
-                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
-        };
-    }
-
-
-    @GetMapping("/buscar/{cedula}")
-    public ResponseEntity<Usuario> buscarPorCedula(@PathVariable String cedula) {
-        try {
-            Usuario usuarioEncontrado = usuarioUseCase.buscarPorCedula(cedula);
-
-            if (usuarioEncontrado == null) {
-                // Si no lo encuentra, devolvemos 404 sin usar Object
-                return ResponseEntity.ok().body(usuarioEncontrado);
-            }
-
-            // Si lo encuentra, devolvemos el usuario completo
-            return ResponseEntity.ok(usuarioEncontrado);
-
-        } catch (Exception e) {
-            // Si algo falla, devolvemos 500 pero sin generic types
-            return ResponseEntity.internalServerError().build();
-        }
-    }
 
     @GetMapping("/listar")
     public ResponseEntity<List<Usuario>> listar() {

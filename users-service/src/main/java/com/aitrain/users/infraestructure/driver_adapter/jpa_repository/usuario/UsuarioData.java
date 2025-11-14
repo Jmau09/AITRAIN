@@ -1,4 +1,4 @@
-package com.aitrain.users.infraestructure.driver_adapter.jpa_repository;
+package com.aitrain.users.infraestructure.driver_adapter.jpa_repository.usuario;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,18 +15,17 @@ public class UsuarioData {
 
     //las anotaciones para los atributos van encima del atributo, significa que afectan al atributo que estè debajo
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String cedula;
-
-    private String nombre;
-    private String apellido;
     @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
+    private String nombre;
+    @Column(nullable = false)
+    private String apellido;
+    @Column(nullable = false)
     private String telefono;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private Integer edad;
 
 }

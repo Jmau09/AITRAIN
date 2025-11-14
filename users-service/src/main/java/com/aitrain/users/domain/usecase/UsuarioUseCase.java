@@ -22,8 +22,8 @@ public class UsuarioUseCase {
     private final EncrypterGateway encrypterGateway;
 
 public String guardarUsuario(Usuario usuario){
-    if (usuario.getCedula() == null || usuario.getCedula().trim().isEmpty()){
-        return "La cedula es obligatoria";
+    if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()){
+        return "El email es obligatorio";
     }
     if (usuario.getNombre()==null || usuario.getNombre().trim().isEmpty()){
         return "El campo nombre es obligatorio";
@@ -41,12 +41,8 @@ public String guardarUsuario(Usuario usuario){
         return "El campo edad es obligatorio y debe ser mayor que 0";
     }
 
-    Usuario existente = usuarioGateway.findByCedula(usuario.getCedula());
+    Usuario existente = usuarioGateway.buscarPorEmail(usuario.getEmail());
     if (existente!=null){
-        return "Ya existe un usuario con esa identificacion";
-    }
-    Usuario uexistente = usuarioGateway.findByEmail(usuario.getEmail());
-    if (uexistente!=null){
         throw new IllegalArgumentException("Ya existe un usuario con esa email");
     }
 
@@ -69,9 +65,9 @@ public String guardarUsuario(Usuario usuario){
 //        String cpasswordEncrypt = encrypterGateway.encrypt(usuario.getPassword());
 //        usuario.setPassword(cpasswordEncrypt);
 
-    public Usuario buscarPorIdUsuario(Long id) {
+    public Usuario buscarPorIdUsuario(String email) {
         try {
-            Usuario usuario = usuarioGateway.buscarUsuarioPorID(id);
+            Usuario usuario = usuarioGateway.buscarPorEmail(email);
             return usuario; // puede venir nulo si no existe
         } catch (Exception e) {
             System.out.println("Error al buscar usuario: " + e.getMessage());
@@ -80,14 +76,14 @@ public String guardarUsuario(Usuario usuario){
     }
 
 
-    public void eliminarUsuarioPorCedula(String cedula){
+    public void eliminarUsuario(String email) {
         try{
-            Usuario usuario = usuarioGateway.findByCedula(cedula);
+            Usuario usuario = usuarioGateway.buscarPorEmail(email);
             if(usuario==null){
-                throw new IllegalArgumentException("No existe usuario con la cédula: " + cedula);
+                throw new IllegalArgumentException("No existe usuario con el correo: " + email);
             }
-            usuarioGateway.eliminarUsuarioPorCedula(cedula);
-            System.out.println("Usuario eliminado con éxito: " + cedula);
+            usuarioGateway.eliminarUsuario(email);
+            System.out.println("Usuario eliminado con éxito: " + email);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -95,19 +91,18 @@ public String guardarUsuario(Usuario usuario){
 
 
     public Usuario actualizarUsuario(Usuario usuario) {
-        if (usuario.getCedula() == null) {
+        if (usuario.getEmail() == null) {
             throw new IllegalArgumentException("La cédula es obligatoria para actualizar");
         }
 
-        // Buscar el usuario existente por cédula
-        Usuario usuarioExistente = usuarioGateway.findByCedula(usuario.getCedula());
+        Usuario usuarioExistente = usuarioGateway.buscarPorEmail(usuario.getEmail());
         if (usuarioExistente == null) {
             // Retorna null si no existe
             return null;
         }
 
         // Mantener el ID original del usuario existente
-        usuario.setId(usuarioExistente.getId());
+        usuario.setEmail(usuarioExistente.getEmail());
 
         // Encriptar la contraseña solo si se envía una nueva
         if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
@@ -125,7 +120,7 @@ public String guardarUsuario(Usuario usuario){
 
 
     public String loginUsuario(String email, String password) {
-        Usuario usuarioLogueado = usuarioGateway.findByEmail(email);
+        Usuario usuarioLogueado = usuarioGateway.buscarPorEmail(email);
         if (usuarioLogueado ==null) {
             return "Usuario con el email: " + email + " no existe";
         }
@@ -136,19 +131,9 @@ public String guardarUsuario(Usuario usuario){
             return "Credenciales incorrectos";
         }
     }
-
-    public Usuario buscarPorCedula(String cedula) {
-        try {
-            return usuarioGateway.findByCedula(cedula);
-        } catch (Exception e) {
-            System.out.println("Error al buscar usuario por cédula: " + e.getMessage());
-            return null;
-        }
+    public List<Usuario> listarUsuarios() {
+        return usuarioGateway.listarUsuarios();
     }
-    public List<Usuario>listarUsuarios() {
-    return usuarioGateway.listarUsuarios();
-    }
-
 
 
 }

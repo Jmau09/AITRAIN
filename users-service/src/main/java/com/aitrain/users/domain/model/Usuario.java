@@ -12,14 +12,11 @@ import lombok.Setter;
 public class Usuario {
 
 //Atributos
-    private Long id;
-    private String cedula;
+    private String email;
     private String nombre;
     private String apellido;
-    private String email;
     private String telefono;
     private String password;
     private Integer edad;
-
 
 }
