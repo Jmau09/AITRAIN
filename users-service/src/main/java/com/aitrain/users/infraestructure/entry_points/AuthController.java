@@ -22,27 +22,27 @@ public class AuthController {
 
     @PostMapping("/loginUsuario")
     public ResponseEntity<String> loginUsuario(@RequestBody UsuarioData usuarioData) {
-        String respuesta = usuarioUseCase.loginUsuario(usuarioData.getEmail(), usuarioData.getPassword());
+        String respuesta = usuarioUseCase.loginUsuario(
+                usuarioData.getEmail(),
+                usuarioData.getPassword()
+        );
 
-        return switch (respuesta) {
-            case "Credenciales correctos" -> ResponseEntity.ok(respuesta);
-            case "Usuario no encontrado", "Credenciales incorrectos" ->
-                    ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
-            default ->
-                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
-        };
+        return ResponseEntity.ok(respuesta);
     }
+
+
     @PostMapping("/loginAdmin")
     public ResponseEntity<String> loginAdmin(@RequestBody AdminData adminData) {
         String respuesta = adminUseCase.loginAdmin(adminData.getEmail(), adminData.getPassword());
 
         return switch (respuesta) {
-            case "Credenciales correctos" -> ResponseEntity.ok(respuesta);
-            case "Usuario no encontrado", "Credenciales incorrectos" ->
-                    ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
+            case "Credenciales correctas" -> ResponseEntity.ok(respuesta); // <- corregido
+            case "Admin no encontrado", "Credenciales incorrectos" ->
+                    ResponseEntity.status(HttpStatus.OK).body(respuesta);
             default ->
                     ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
         };
     }
-
 }
+
+

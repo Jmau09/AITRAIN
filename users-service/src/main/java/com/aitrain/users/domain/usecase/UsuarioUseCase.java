@@ -1,6 +1,10 @@
 package com.aitrain.users.domain.usecase;
 
 
+import com.aitrain.users.domain.exceptions.EmailAlreadyExistException;
+import com.aitrain.users.domain.exceptions.EmailEmptyException;
+import com.aitrain.users.domain.exceptions.IncorrectCredentialsException;
+import com.aitrain.users.domain.exceptions.UserNotFoundException;
 import com.aitrain.users.domain.model.Usuario;
 import com.aitrain.users.domain.model.gateway.EncrypterGateway;
 import com.aitrain.users.domain.model.gateway.UsuarioGateway;
@@ -43,7 +47,7 @@ public String guardarUsuario(Usuario usuario){
 
     Usuario existente = usuarioGateway.buscarPorEmail(usuario.getEmail());
     if (existente!=null){
-        throw new IllegalArgumentException("Ya existe un usuario con esa email");
+        throw new EmailAlreadyExistException("Ya existe un usuario con esa email");
     }
 
     usuario.setPassword(encrypterGateway.encrypt(usuario.getPassword()));
@@ -80,7 +84,7 @@ public String guardarUsuario(Usuario usuario){
         try{
             Usuario usuario = usuarioGateway.buscarPorEmail(email);
             if(usuario==null){
-                throw new IllegalArgumentException("No existe usuario con el correo: " + email);
+                throw new UserNotFoundException("No existe usuario con el correo: " + email);
             }
             usuarioGateway.eliminarUsuario(email);
             System.out.println("Usuario eliminado con éxito: " + email);
@@ -91,14 +95,14 @@ public String guardarUsuario(Usuario usuario){
 
 
     public Usuario actualizarUsuario(Usuario usuario) {
-        if (usuario.getEmail() == null) {
-            throw new IllegalArgumentException("La cédula es obligatoria para actualizar");
+        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+            throw new EmailEmptyException("El email es obligatorio para actualizar");
         }
 
         Usuario usuarioExistente = usuarioGateway.buscarPorEmail(usuario.getEmail());
         if (usuarioExistente == null) {
             // Retorna null si no existe
-            return null;
+            throw new UserNotFoundException("Usuario no encontrado");
         }
 
         // Mantener el ID original del usuario existente
@@ -120,17 +124,25 @@ public String guardarUsuario(Usuario usuario){
 
 
     public String loginUsuario(String email, String password) {
+
         Usuario usuarioLogueado = usuarioGateway.buscarPorEmail(email);
-        if (usuarioLogueado ==null) {
-            return "Usuario con el email: " + email + " no existe";
+
+        if (usuarioLogueado == null) {
+            throw new UserNotFoundException(
+                    "No existe un usuario registrado con el email: " + email
+            );
         }
 
-        if(encrypterGateway.checkPass(password, usuarioLogueado.getPassword())) {
-            return "Credenciales correctos";
-        } else  {
-            return "Credenciales incorrectos";
+        boolean passwordCorrecta = encrypterGateway.checkPass(password, usuarioLogueado.getPassword());
+
+        if (!passwordCorrecta) {
+            throw new IncorrectCredentialsException("La contraseña es incorrecta");
         }
+
+        return "Credenciales correctas";
     }
+
+
     public List<Usuario> listarUsuarios() {
         return usuarioGateway.listarUsuarios();
     }

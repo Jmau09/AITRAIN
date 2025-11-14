@@ -52,7 +52,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/eliminarAdmin/{email}")
+    @DeleteMapping("/eliminar/{email}")
     //que pase el obj por la URL, y no por un body
     public ResponseEntity<String>eliminarAdmin(@PathVariable String email) {
         try {

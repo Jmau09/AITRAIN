@@ -1,5 +1,9 @@
 package com.aitrain.users.domain.usecase;
 
+import com.aitrain.users.domain.exceptions.AdminNotFoundException;
+import com.aitrain.users.domain.exceptions.EmailAlreadyExistException;
+import com.aitrain.users.domain.exceptions.IncorrectCredentialsException;
+import com.aitrain.users.domain.exceptions.UserNotFoundException;
 import com.aitrain.users.domain.model.Admin;
 import com.aitrain.users.domain.model.Usuario;
 import com.aitrain.users.domain.model.gateway.AdminGateway;
@@ -24,13 +28,13 @@ public class AdminUseCase {
 
             Admin existente = adminGateway.buscarPorEmail(admin.getEmail());
             if (existente != null) {
-                throw new IllegalArgumentException("Ya existe un usuario con esa email");
+                throw new EmailAlreadyExistException("Ya existe un admin con esa email");
             }
 
             admin.setPassword(encrypterGateway.encrypt(admin.getPassword()));
             adminGateway.guardarAdmin(admin);
 
-            return "Usuario guardado correctamente";
+            return "Admin guardado correctamente";
         }
 
     public Admin buscarAdmin (String email) {
@@ -47,7 +51,7 @@ public class AdminUseCase {
         try{
              Admin admin= adminGateway.buscarPorEmail(email);
             if(admin==null){
-                throw new IllegalArgumentException("No existe usuario con el correo: " + email);
+                throw new AdminNotFoundException("No existe un admin con el correo: " + email);
             }
             adminGateway.eliminarAdmin(email);
             System.out.println("Admin eliminado con éxito: " + email);
@@ -56,21 +60,25 @@ public class AdminUseCase {
         }
     }
 
-    public List<Admin> listarAdmins() {
-        return adminGateway.listarAdmins();
-    }
 
     public String loginAdmin(String email, String password) {
+
         Admin adminLogueado = adminGateway.buscarPorEmail(email);
-        if (adminLogueado ==null) {
-            return "Admin con el email: " + email + " no existe";
+
+        if (adminLogueado == null) {
+            throw new AdminNotFoundException(
+                    "No existe un admin registrado con el email: " + email
+            );
         }
 
-        if(encrypterGateway.checkPass(password, adminLogueado.getPassword())) {
-            return "Credenciales correctos";
-        } else  {
-            return "Credenciales incorrectos";
+        boolean passwordCorrecta = encrypterGateway.checkPass(password, adminLogueado.getPassword());
+
+        if (!passwordCorrecta) {
+            throw new IncorrectCredentialsException("La contraseña es incorrecta");
         }
+
+        return "Credenciales correctas"; // <- mantener así
     }
+
 
 }

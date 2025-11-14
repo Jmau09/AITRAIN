@@ -76,21 +76,13 @@ public class UsuarioController {
 
     @PutMapping("/update")
     public ResponseEntity<String> updateUsuario(@RequestBody UsuarioData usuarioData) {
-        try {
-            Usuario usuario = mapperUsuario.toUsuario(usuarioData);
-            Usuario usuarioActualizado = usuarioUseCase.actualizarUsuario(usuario);
 
-            if (usuarioActualizado.getEmail() == null) {
-                return new ResponseEntity<>("No se encontro el usuario con el email "+usuario.getEmail(), HttpStatus.OK);
-            }
+        Usuario usuario = mapperUsuario.toUsuario(usuarioData);
+        Usuario usuarioActualizado = usuarioUseCase.actualizarUsuario(usuario);
 
-            return new ResponseEntity<>("Usuario actualizado correctamente", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok("Usuario actualizado correctamente");
     }
+
 
 
     @GetMapping("/listar")

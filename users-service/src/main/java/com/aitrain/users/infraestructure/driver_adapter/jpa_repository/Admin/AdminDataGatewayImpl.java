@@ -19,11 +19,6 @@ public class AdminDataGatewayImpl  implements AdminGateway {
         return mapper.toAdmin(repository.save(adminData));
     }
 
-    @Override
-    public Admin actualizarAdmin(Admin admin) {
-        AdminData adminData = mapper.toAdminData(admin);
-        return mapper.toAdmin(repository.save(adminData));
-    }
 
     @Override
     public Admin buscarPorEmail(String email) {
@@ -35,11 +30,6 @@ public class AdminDataGatewayImpl  implements AdminGateway {
     @Override
     public void eliminarAdmin(String email) {
         repository.deleteById(email);
-    }
-
-    @Override
-    public boolean existePorEmail(String email) {
-        return repository.existsById(email);
     }
 
     @Override
