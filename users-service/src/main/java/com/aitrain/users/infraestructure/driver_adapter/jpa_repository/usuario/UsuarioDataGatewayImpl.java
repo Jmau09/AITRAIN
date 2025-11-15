@@ -6,7 +6,6 @@ import com.aitrain.users.domain.model.gateway.UsuarioGateway;
 import com.aitrain.users.infraestructure.mapper.MapperUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository //indica que la clase almacena, guarda, elimina en la base de datos, tiene sql

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - AiTrain</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif;
+}
+
+body{
+  display:flex;
+  min-height:100vh;
+  background:#0d0d0d;
+  color:#fff;
+}
+
+/* Sidebar */
+.sidebar{
+  width:260px;
+  background:#141414;
+  display:flex;
+  flex-direction:column;
+  padding:25px;
+  border-right:2px solid #ef4444;
+  box-shadow:4px 0 15px rgba(239,68,68,0.15);
+}
+
+.logo{
+  width:150px;
+  margin:0 auto 25px auto;
+  cursor:pointer;
+  border-radius:15px;
+  transition:transform .2s;
+}
+.logo:hover{
+  transform:scale(1.06);
+}
+
+.sidebar h2{
+  color:#ef4444;
+  margin-bottom:20px;
+  font-size:20px;
+  text-align:center;
+  font-weight:700;
+}
+
+.sidebar button{
+  background:none;
+  border:none;
+  color:#fff;
+  text-align:left;
+  padding:12px 14px;
+  font-size:15px;
+  margin-bottom:8px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-radius:8px;
+  transition:all 0.2s;
+}
+
+.sidebar button:hover,
+.sidebar button.active{
+  background:#222;
+  color:#ef4444;
+  transform:translateX(5px);
+}
+
+/* Main content */
+.main-content{
+  flex:1;
+  padding:40px;
+}
+
+/* Cards */
+.cards{
+  display:flex;
+  gap:20px;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+}
+
+.card{
+  background:#1a1a1a;
+  border:1px solid #ef4444;
+  border-radius:15px;
+  padding:20px 25px;
+  width:250px;
+  box-shadow:0 0 15px rgba(239,68,68,0.2);
+}
+
+.card h3{
+  color:#ef4444;
+  margin-bottom:10px;
+}
+
+.card p{
+  font-size:20px;
+  font-weight:600;
+}
+
+/* Table */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+
+thead{
+  background:#141414;
+}
+
+th, td{
+  padding:12px 15px;
+  text-align:left;
+  border-bottom:1px solid #ef4444;
+}
+
+th{
+  color:#ef4444;
+}
+
+tr:hover{
+  background:#222;
+}
+
+button.action-btn{
+  padding:5px 10px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  color:#fff;
+  font-weight:600;
+}
+
+button.view-btn{
+  background:#4ade80;
+  margin-right:5px;
+}
+
+button.delete-btn{
+  background:#ef4444;
+}
+
+/* Search */
+#searchInput{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ef4444;
+  background:#1a1a1a;
+  color:#fff;
+  margin-bottom:15px;
+  width:250px;
+}
+
+#searchInput:focus{
+  border-color:#ff6b6b;
+  outline:none;
+  box-shadow:0 0 5px rgba(239,68,68,0.5);
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
+  <h2>Admin Panel</h2>
+  <button id="btnDashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+</div>
+
+<div class="main-content">
+  <div class="cards">
+    <div class="card">
+      <h3>Usuarios Activos</h3>
+      <p id="usuariosActivos">0</p>
+    </div>
+    <div class="card">
+      <h3>Total de Usuarios</h3>
+      <p id="totalUsuarios">0</p>
+    </div>
+  </div>
+
+  <input type="text" id="searchInput" placeholder="Buscar por nombre o correo...">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Edad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="usuariosTable">
+      <!-- Usuarios se cargan aquí -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+const usuariosTable = document.getElementById('usuariosTable');
+const totalUsuariosCard = document.getElementById('totalUsuarios');
+const usuariosActivosCard = document.getElementById('usuariosActivos');
+const searchInput = document.getElementById('searchInput');
+
+let usuarios = [];
+
+// Función para cargar usuarios
+async function cargarUsuarios() {
+  try {
+    const res = await fetch('http://localhost:8080/api/aitrain/usuario/listar');
+    usuarios = await res.json();
+
+    totalUsuariosCard.textContent = usuarios.length;
+    usuariosActivosCard.textContent = usuarios.length; // Aquí puedes filtrar los activos si tienes esa info
+
+    renderTabla(usuarios);
+  } catch(err) {
+    console.error('Error al cargar usuarios:', err);
+  }
+}
+
+// Renderizar tabla
+function renderTabla(data) {
+  usuariosTable.innerHTML = '';
+  data.forEach(u => {
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td>${u.nombre} ${u.apellido}</td>
+      <td>${u.email}</td>
+      <td>${u.telefono || '-'}</td>
+      <td>${u.edad || '-'}</td>
+      <td>
+        <button class="action-btn view-btn" onclick="verUsuario('${u.email}')">Ver</button>
+        <button class="action-btn delete-btn" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
+      </td>
+    `;
+
+    usuariosTable.appendChild(tr);
+  });
+}
+
+// Ver usuario
+async function verUsuario(email) {
+  try {
+    const res = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
+    const data = await res.json();
+    alert(`Nombre: ${data.nombre} ${data.apellido}\nCorreo: ${data.email}\nTeléfono: ${data.telefono || '-'}\nEdad: ${data.edad || '-'}`);
+  } catch(err) {
+    console.error('Error al ver usuario:', err);
+    alert('Error al obtener información del usuario.');
+  }
+}
+
+// Eliminar usuario
+async function eliminarUsuario(email) {
+  const confirmar = confirm(`⚠ ¿Eliminar usuario ${email}?`);
+  if(!confirmar) return;
+
+  try {
+    await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
+    alert('Usuario eliminado correctamente');
+    cargarUsuarios(); // recargar tabla
+  } catch(err) {
+    console.error('Error al eliminar usuario:', err);
+    alert('Error al eliminar usuario.');
+  }
+}
+
+// Filtrar tabla
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.toLowerCase();
+  const filtered = usuarios.filter(u => 
+    `${u.nombre} ${u.apellido}`.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)
+  );
+  renderTabla(filtered);
+});
+
+cargarUsuarios();
+</script>
+
+</body>
+</html>
