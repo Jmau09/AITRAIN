@@ -12,24 +12,26 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ValoracionDataGatewayImpl implements ValoracionGateway {
     private final MapperValoracion  mapperValoracion;
-    private final ValoracionDataGatewayImpl repository ;
+    private final ValoracionDataJpaRepository ValoracionRepository ;
+
 
     @Override
     public Valoracion guardarValoracion(Valoracion valoracion) {
+        // convertir dominio -> entidad, guardar y convertir entidad -> dominio
         return mapperValoracion.toModel(
-                repository.wait(mapperValoracion.toEntity(valoracion))
+                ValoracionRepository.save(mapperValoracion.toEntity(valoracion))
         );
     }
 
     @Override
     public Valoracion buscarPorId(Long id) {
-        return repository.findById(id)
+        return ValoracionRepository.findById(id)
                 .map(mapperValoracion::toModel)
                 .orElse(null);
     }
 
     @Override
     public void eliminarValoracion(Long id) {
-        repository.deleteById(id);
+        ValoracionRepository.deleteById(id);
     }
 }

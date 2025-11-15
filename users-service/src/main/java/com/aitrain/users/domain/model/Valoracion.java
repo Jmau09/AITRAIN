@@ -15,20 +15,19 @@ import lombok.Setter;
 
 public class Valoracion {
 
-    private Long id; // recomendado
-    private String emailUsuario; // FK hacia Usuario
-
+    private Long id; // PK generada automáticamente
     private Double pesoKg;
     private Double estaturaCm;
     private String genero;
     private Double imc;
     private Integer edad;
-
     private String nivelActividad;
     private Integer diasEntrenamiento;
     private Integer tiempoPorSesionMin;
-
     private String objetivo;
     private String restricciones;
     private String limitaciones;
+
+    // Este es el vínculo con Usuario
+    private String emailUsuario;
 }

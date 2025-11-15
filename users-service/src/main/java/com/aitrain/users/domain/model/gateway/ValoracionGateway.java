@@ -9,4 +9,6 @@ public interface ValoracionGateway {
     Valoracion buscarPorId(Long id);
 
     void eliminarValoracion(Long id);
+
+
 }
