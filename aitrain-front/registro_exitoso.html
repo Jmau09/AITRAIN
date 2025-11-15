@@ -3,66 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Exitoso</title>
+    <title>Registro Exitoso - AiTrain</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: Inter, Segoe UI, Arial, Helvetica, sans-serif;
         }
 
         body {
-            background-color: #0d0d0d;
+            background: #0d0d0d;
             color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
             animation: fadeIn 1s ease-in;
         }
 
-        .container {
-            background-color: #1a1a1a;
-            border: 2px solid #ff0000;
-            border-radius: 15px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
-            width: 400px;
-            max-width: 90%;
-            padding: 40px 30px;
+        .card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 20px #ef4444, 0 8px 30px rgba(2,6,23,0.5);
+            width: 100%;
+            max-width: 480px;
+            padding: 50px 40px;
             text-align: center;
             animation: slideIn 0.8s ease-out;
         }
 
-        .container h1 {
-            color: #ff0000;
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #0a261f;
+            border: 2px solid #0fff90;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
             font-size: 2rem;
-            margin-bottom: 15px;
+            color: #0fff90;
+            box-shadow: 0 0 15px #0fff90;
         }
 
-        .container p {
-            color: #ddd;
-            font-size: 1rem;
-            margin-bottom: 30px;
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        p {
+            color: rgba(255,255,255,0.85);
+            font-size: 16px;
             line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features {
+            background: #000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid #333;
+        }
+
+        .features h3 {
+            color: #ef4444;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .features ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .features li {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            color: #0fff90;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
         }
 
         button {
-            background-color: #ff0000;
+            background: #ef4444;
             color: #fff;
             border: none;
-            padding: 10px 25px;
-            font-size: 1rem;
-            font-weight: 600;
+            padding: 14px;
             border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #cc0000;
-            transform: scale(1.05);
+            background: #ff1a1a;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #ef4444;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ccc;
+            margin-top: 12px;
+        }
+
+        .secondary-btn:hover {
+            background: #333;
+            border-color: #777;
+            box-shadow: 0 0 10px #555;
+            transform: scale(1.02);
         }
 
         @keyframes fadeIn {
@@ -74,14 +146,110 @@
             from { transform: translateY(-30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px #0fff90; }
+            50% { box-shadow: 0 0 25px #0fff90; }
+            100% { box-shadow: 0 0 15px #0fff90; }
+        }
+
+        .success-icon {
+            animation: pulse 2s infinite;
+        }
+
+        /* Efectos de partículas de éxito */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            opacity: 0;
+            animation: confettiFall 3s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="card">
+        <div class="success-icon">✓</div>
+        
         <h1>¡Registro Exitoso!</h1>
-        <p>Tu cuenta se ha creado correctamente.<br>
-           Ahora puedes iniciar sesión y comenzar a usar la aplicación.</p>
-        <button onclick="window.location.href='login.html'">Ir al Login</button>
+        
+        <p>Tu cuenta en <strong>AiTrain</strong> ha sido creada correctamente. Ya puedes comenzar tu transformación física con inteligencia artificial.</p>
+
+        <div class="features">
+            <h3>Ahora tienes acceso a:</h3>
+            <ul>
+                <li>Rutinas personalizadas con IA</li>
+                <li>Seguimiento detallado de progreso</li>
+                <li>Ajustes dinámicos según tu rendimiento</li>
+                <li>Recomendaciones nutricionales</li>
+                <li>Asistente de entrenamiento 24/7</li>
+            </ul>
+        </div>
+
+        <button onclick="window.location.href='login.html'">
+            Iniciar Sesión
+        </button>
+        
+        <button class="secondary-btn" onclick="window.location.href='index.html'">
+            Volver al Inicio
+        </button>
     </div>
+
+    <script>
+        // Efecto de confetti al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const colors = ['#ef4444', '#0fff90', '#3b82f6', '#f59e0b', '#8b5cf6'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    // Remover después de la animación
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        });
+
+        // Redirección automática después de 8 segundos
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 8000);
+
+        // Mostrar contador
+        document.addEventListener('DOMContentLoaded', function() {
+            let count = 8;
+            const button = document.querySelector('button');
+            const originalText = button.textContent;
+            
+            const countdown = setInterval(() => {
+                button.textContent = `${originalText} (${count}s)`;
+                count--;
+                
+                if (count < 0) {
+                    clearInterval(countdown);
+                    button.textContent = originalText;
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
