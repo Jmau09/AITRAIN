@@ -1,324 +1,940 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - AiTrain</title>
-
-<!-- ICONS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-*{margin:0; padding:0; box-sizing:border-box; font-family:Inter,Segoe UI,Arial,sans-serif;}
-body{background:#0d0d0d; color:#fff;}
-
-/* NAVBAR */
-.navbar{width:100%; background:#141414; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ef4444;}
-.nav-left{display:flex; gap:15px; align-items:center;}
-.nav-left img{width:55px; cursor:pointer;}
-.nav-right{display:flex; gap:20px;}
-.nav-right button{background:none; border:none; color:#fff; font-size:17px; cursor:pointer; transition:0.2s;}
-.nav-right button:hover{color:#ef4444;}
-
-/* MAIN CONTENT */
-.container{padding:40px; display:flex; flex-direction:column; gap:30px;}
-
-/* BIG CARDS */
-.big-card{background:#1a1a1a; border:1px solid #ef4444; border-radius:18px; padding:25px; box-shadow:0 0 15px rgba(239,68,68,0.3); animation:fadeIn .4s ease;}
-.big-card h2{color:#ef4444; display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-.big-card p{color:#ccc; font-size:15px; margin-top:10px;}
-
-/* STATS GRID */
-.stats-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px;}
-
-/* INDIVIDUAL STAT CARD */
-.stat-card{background:#111; border-radius:18px; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(239,68,68,0.2); position:relative; transition:0.3s;}
-.stat-card:hover{transform:translateY(-5px);}
-.stat-card h3{color:#fff; margin-bottom:10px;}
-.stat-value{font-size:32px; font-weight:bold; margin-bottom:10px;}
-.progress-bar{width:100%; height:12px; border-radius:10px; background:#333; overflow:hidden; margin-top:5px;}
-.progress-fill{height:100%; border-radius:10px; background:#ef4444; width:0; transition:width 1s ease;}
-.stat-icon{font-size:28px; margin-bottom:5px; color:#ef4444;}
-
-/* Slider frases motivadoras */
-.slider-wrapper{
-  overflow:hidden;
-  position:relative;
-  height:40px;
-  margin-top:10px;
-}
-
-.slider{
-  display:flex;
-  animation:slide 12s linear infinite;
-}
-
-.slide{
-  min-width:100%;
-  text-align:center;
-  color:#fff;
-  font-size:16px;
-  padding:5px 0;
-}
-
-/* Animación de desplazamiento */
-@keyframes slide{
-  0%{transform:translateX(0);}
-  25%{transform:translateX(-100%);}
-  50%{transform:translateX(-200%);}
-  75%{transform:translateX(-300%);}
-  100%{transform:translateX(0);}
-}
-
-/* Accordion consejos de salud */
-.accordion-item{
-  margin-top:10px;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid #ef4444;
-  background:#111;
-}
-
-.accordion-btn{
-  width:100%;
-  text-align:left;
-  background:none;
-  border:none;
-  color:#fff;
-  padding:12px 15px;
-  font-size:15px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.accordion-btn:hover{
-  background:rgba(239,68,68,0.1);
-}
-
-.accordion-content{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height 0.3s ease;
-  padding:0 15px;
-  color:#ccc;
-  font-size:14px;
-}
-
-.accordion-content p{
-  margin:10px 0;
-}
-
-/* Motivación y Consejos - tarjetas hover */
-.motivacion-grid, .consejos-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:10px;
-}
-
-.motiv-card, .consejo-card{
-  background:#1a1a1a;
-  border:1px solid #ef4444;
-  border-radius:15px;
-  padding:15px;
-  color:#fff;
-  font-size:14px;
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  box-shadow:0 0 10px rgba(239,68,68,0.2);
-  transition:0.3s;
-}
-
-.motiv-card:hover, .consejo-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 15px rgba(239,68,68,0.4);
-}
-
-.motiv-card i, .consejo-card i{
-  color:#ef4444;
-  font-size:18px;
-  flex-shrink:0;
-}
-
-/* Animación general */
-@keyframes fadeIn{from{opacity:0; transform:translateY(10px);}to{opacity:1; transform:translateY(0);}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard - AiTrain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, Segoe UI, Arial, sans-serif;
+        }
+        
+        body {
+            background: #0d0d0d;
+            color: #fff;
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            background: #141414;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ef4444;
+            box-shadow: 0 2px 15px rgba(239,68,68,0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-image {
+            height: 45px;
+            width: auto;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            color: #ef4444;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        
+        .notification-icon:hover {
+            background: rgba(239,68,68,0.1);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px #ef4444;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        
+        .user-profile:hover {
+            background: rgba(239,68,68,0.1);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ef4444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(239,68,68,0.5);
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .user-plan {
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #ef4444;
+            color: #fff;
+            border: 1px solid #ef4444;
+        }
+        
+        .btn-primary:hover {
+            background: #ff1a1a;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(239,68,68,0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(239,68,68,0.1);
+            transform: scale(1.05);
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            background: linear-gradient(45deg, #fff, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .welcome-section p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 20px rgba(239,68,68,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: 0.3s;
+        }
+        
+        .stat-card:hover {
+            border-color: #ef4444;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(239,68,68,0.2);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background: #000;
+            border: 1px solid #333;
+        }
+        
+        .icon-workouts {
+            color: #4caf50;
+            box-shadow: 0 0 15px rgba(76,175,80,0.3);
+        }
+        
+        .icon-streak {
+            color: #2196f3;
+            box-shadow: 0 0 15px rgba(33,150,243,0.3);
+        }
+        
+        .icon-weight {
+            color: #9c27b0;
+            box-shadow: 0 0 15px rgba(156,39,176,0.3);
+        }
+        
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #fff, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-change {
+            font-size: 0.8rem;
+            color: #4caf50;
+            margin-top: 0.3rem;
+        }
+        
+        .stat-change.negative {
+            color: #ef4444;
+        }
+        
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        /* Workout Section */
+        .workout-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 20px rgba(239,68,68,0.1);
+            margin-bottom: 2rem;
+            transition: 0.3s;
+        }
+        
+        .workout-section:hover {
+            border-color: #ef4444;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .workout-card {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+        
+        .workout-card:hover {
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239,68,68,0.2);
+        }
+        
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .workout-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .workout-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(245,124,0,0.2);
+            color: #f57c00;
+            border: 1px solid #f57c00;
+        }
+        
+        .status-completed {
+            background: rgba(76,175,80,0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+        
+        .workout-meta {
+            display: flex;
+            gap: 1rem;
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .workout-exercises {
+            margin-bottom: 1rem;
+        }
+        
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .exercise-name {
+            font-weight: 500;
+            color: #fff;
+        }
+        
+        .exercise-sets {
+            color: #ccc;
+        }
+        
+        .workout-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Sidebar Sections */
+        .sidebar-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 20px rgba(239,68,68,0.1);
+            margin-bottom: 2rem;
+            transition: 0.3s;
+        }
+        
+        .sidebar-section:hover {
+            border-color: #ef4444;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(239,68,68,0.1);
+            border-color: #ef4444;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ef4444;
+        }
+        
+        .action-btn span {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        /* Consejos de salud */
+        .health-tips {
+            margin-top: 1rem;
+        }
+        
+        .tip-item {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+        
+        .tip-item:hover {
+            border-color: #ef4444;
+        }
+        
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tip-icon {
+            color: #ef4444;
+            font-size: 1.2rem;
+        }
+        
+        .tip-title {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .tip-content {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                padding: 1rem;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .user-menu {
+                gap: 0.8rem;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-left">
-    <img src="brazo.png" alt="logo" onclick="location.href='dashboard_usuario.html'">
-    <h2 style="color:#ef4444;">AiTrain Dashboard</h2>
-  </div>
-  <div class="nav-right">
-    <button onclick="location.href='chat.html'"><i class="fas fa-robot"></i> Chatbot</button>
-    <button onclick="location.href='perfil.html'"><i class="fas fa-user"></i> Perfil</button>
-    <button onclick="cerrarSesion()"><i class="fas fa-door-open"></i> Cerrar sesión</button>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="container">
-
-  <!-- MI RUTINA -->
-  <div class="big-card">
-    <h2><i class="fas fa-dumbbell"></i> Mi Rutina Actual</h2>
-    <p id="rutinaText">Aún no tienes rutina generada. ¡Pídesela al chatbot!</p>
-  </div>
-
-  <!-- MI ALIMENTACIÓN -->
-  <div class="big-card">
-    <h2><i class="fas fa-apple-alt"></i> Mi Alimentación</h2>
-    <p id="alimentacionText">Todavía no se ha generado tu alimentación. Solicítala al chatbot.</p>
-  </div>
-
-  <!-- STATS DEL USUARIO -->
-  <div class="stats-grid">
-    <!-- Peso -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-weight"></i></div>
-      <h3>Peso</h3>
-      <div class="stat-value" id="valorPeso">0 kg</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressPeso"></div></div>
-    </div>
-
-    <!-- Estatura -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-ruler-vertical"></i></div>
-      <h3>Estatura</h3>
-      <div class="stat-value" id="valorEstatura">0 cm</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressEstatura"></div></div>
-    </div>
-
-    <!-- IMC -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-      <h3>IMC</h3>
-      <div class="stat-value" id="valorIMC">0</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressIMC"></div></div>
-    </div>
-  </div>
-
-  <!-- Frases motivadoras -->
-  <div class="big-card">
-    <h2><i class="fas fa-star"></i> Frases motivadoras</h2>
-    <div class="slider-wrapper">
-      <div class="slider" id="motivSlider">
-        <div class="slide">🏋️ “El éxito no se logra solo, ¡entrena cada día!”</div>
-        <div class="slide">🏃 “No te compares con otros, compite contigo mismo.”</div>
-        <div class="slide">🔥 “Cada esfuerzo suma. ¡Sigue adelante!”</div>
-        <div class="slide">💪 “La disciplina vence la motivación temporal.”</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Consejos de salud (accordion mini-blog) -->
-  <div class="big-card">
-    <h2><i class="fas fa-heart"></i> Consejos de salud</h2>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-apple-alt"></i> Alimentación saludable</button>
-        <div class="accordion-content">
-          <p>Incluye proteínas magras, carbohidratos complejos y grasas saludables. Evita ultraprocesados y exceso de azúcar.</p>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="brazo.png" alt="AiTrain Logo" class="logo-image">
+            <div class="logo-text">Ai<span>Train</span></div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-water"></i> Hidratación</button>
-        <div class="accordion-content">
-          <p>Bebe al menos 2 litros de agua al día. Mantente hidratado antes, durante y después de entrenar.</p>
+        
+        <div class="user-menu">
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+            <a href="chatbot.html" class="btn btn-primary">
+                <i class="fas fa-robot"></i> Chatbot IA
+            </a>
+            <div class="user-profile">
+                <div class="user-avatar">CR</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Usuario</div>
+                    <div class="user-plan" id="userPlan">Plan Básico</div>
+                </div>
+            </div>
+            <button class="btn btn-outline" onclick="cerrarSesion()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-bed"></i> Sueño y recuperación</button>
-        <div class="accordion-content">
-          <p>Duerme entre 7 y 8 horas diarias. La recuperación muscular ocurre mientras descansas.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 id="welcomeTitle">¡Bienvenido de nuevo!</h1>
+            <p>Tu rutina de hoy está lista. ¿Preparado para entrenar?</p>
+        </section>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-workouts">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Entrenamientos</h3>
+                    <div class="stat-value" id="workoutsValue">0/0</div>
+                    <div class="stat-change" id="workoutsChange">+0 esta semana</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon icon-streak">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Racha Actual</h3>
+                    <div class="stat-value" id="streakValue">0 días</div>
+                    <div class="stat-change" id="streakRecord">Récord: 0 días</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon icon-weight">
+                    <i class="fas fa-weight"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Peso Actual</h3>
+                    <div class="stat-value" id="weightValue">0 kg</div>
+                    <div class="stat-change" id="weightChange">+0 kg este mes</div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-running"></i> Ejercicio</button>
-        <div class="accordion-content">
-          <p>Realiza al menos 30 minutos de actividad física diaria. Alterna cardio, fuerza y estiramientos.</p>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Today's Workout -->
+                <section class="workout-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Entrenamiento de Hoy</h2>
+                        <button class="btn btn-primary" id="startWorkoutBtn">
+                            <i class="fas fa-play"></i> Comenzar
+                        </button>
+                    </div>
+                    
+                    <div class="workout-card">
+                        <div class="workout-header">
+                            <h3 class="workout-title" id="workoutTitle">Cargando rutina...</h3>
+                            <span class="workout-status status-pending" id="workoutStatus">Pendiente</span>
+                        </div>
+                        <div class="workout-meta">
+                            <span><i class="fas fa-clock"></i> <span id="workoutDuration">0 min</span></span>
+                            <span><i class="fas fa-bolt"></i> Intensidad: <span id="workoutIntensity">Media</span></span>
+                            <span><i class="fas fa-dumbbell"></i> <span id="workoutExercises">0 ejercicios</span></span>
+                        </div>
+                        <div class="workout-exercises" id="workoutExercisesList">
+                            <!-- Los ejercicios se cargarán dinámicamente -->
+                        </div>
+                        <div class="workout-actions">
+                            <button class="btn btn-outline" id="detailsBtn">
+                                <i class="fas fa-info-circle"></i> Detalles
+                            </button>
+                            <button class="btn btn-outline" id="modifyBtn">
+                                <i class="fas fa-sync-alt"></i> Modificar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Nutrition Section -->
+                <section class="workout-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Plan Nutricional</h2>
+                        <button class="btn btn-outline" id="viewNutritionBtn">
+                            Ver Plan Completo
+                        </button>
+                    </div>
+                    
+                    <div class="workout-card">
+                        <div class="workout-header">
+                            <h3 class="workout-title" id="nutritionTitle">Alimentación del Día</h3>
+                            <span class="workout-status status-completed" id="nutritionStatus">En Progreso</span>
+                        </div>
+                        <div class="workout-meta">
+                            <span><i class="fas fa-utensils"></i> <span id="nutritionCalories">0 calorías</span></span>
+                            <span><i class="fas fa-apple-alt"></i> Proteínas: <span id="nutritionProtein">0%</span></span>
+                            <span><i class="fas fa-bread-slice"></i> Carbos: <span id="nutritionCarbs">0%</span></span>
+                        </div>
+                        <div class="workout-exercises" id="nutritionMeals">
+                            <!-- Las comidas se cargarán dinámicamente -->
+                        </div>
+                        <div class="workout-actions">
+                            <button class="btn btn-outline" id="recipesBtn">
+                                <i class="fas fa-utensils"></i> Recetas
+                            </button>
+                            <button class="btn btn-outline" id="adjustNutritionBtn">
+                                <i class="fas fa-sync-alt"></i> Ajustar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Quick Actions -->
+                <section class="sidebar-section">
+                    <h3 class="section-title">Acciones Rápidas</h3>
+                    <div class="quick-actions">
+                        <a href="nutricion.html" class="action-btn">
+                            <i class="fas fa-utensils"></i>
+                            <span>Nutrición</span>
+                        </a>
+                        <a href="progreso.html" class="action-btn">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Progreso</span>
+                        </a>
+                        <a href="chatbot.html" class="action-btn">
+                            <i class="fas fa-robot"></i>
+                            <span>Chatbot</span>
+                        </a>
+                        <a href="ajustes.html" class="action-btn">
+                            <i class="fas fa-cog"></i>
+                            <span>Ajustes</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Health Tips -->
+                <section class="sidebar-section">
+                    <h3 class="section-title">Consejos de Salud</h3>
+                    <div class="health-tips">
+                        <div class="tip-item">
+                            <div class="tip-header">
+                                <i class="fas fa-water tip-icon"></i>
+                                <div class="tip-title">Hidratación</div>
+                            </div>
+                            <div class="tip-content">
+                                Bebe al menos 2 litros de agua al día para mantener un óptimo rendimiento físico.
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-header">
+                                <i class="fas fa-bed tip-icon"></i>
+                                <div class="tip-title">Descanso</div>
+                            </div>
+                            <div class="tip-content">
+                                Duerme 7-8 horas diarias para una óptima recuperación muscular.
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-header">
+                                <i class="fas fa-apple-alt tip-icon"></i>
+                                <div class="tip-title">Alimentación</div>
+                            </div>
+                            <div class="tip-content">
+                                Consume proteínas después del entrenamiento para la recuperación muscular.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Next Workout -->
+                <section class="sidebar-section">
+                    <h3 class="section-title">Próximo Entrenamiento</h3>
+                    <div class="workout-card">
+                        <div class="workout-header">
+                            <h4 class="workout-title" id="nextWorkoutTitle">Cargando...</h4>
+                            <span class="workout-status status-pending" id="nextWorkoutStatus">Próximo</span>
+                        </div>
+                        <div class="workout-meta">
+                            <span><i class="fas fa-clock"></i> <span id="nextWorkoutDuration">0 min</span></span>
+                            <span><i class="fas fa-bolt"></i> <span id="nextWorkoutIntensity">Media</span></span>
+                        </div>
+                        <div class="workout-exercises" id="nextWorkoutExercises">
+                            <!-- Los ejercicios se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </main>
 
-</div>
+    <script>
+        // =====================================
+        // CARGAR DATOS DEL USUARIO
+        // =====================================
+        async function cargarDatosUsuario() {
+            const email = localStorage.getItem("aitrain_user");
+            if(!email) {
+                window.location.href = "login.html";
+                return;
+            }
 
-<script>
-// =====================================
-// CARGAR VALORACIÓN DEL USUARIO
-// =====================================
-async function cargarValoracion() {
-  const email = localStorage.getItem("aitrain_user");
-  if(!email) return;
+            try {
+                // Cargar datos del usuario
+                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
+                if(res.ok) {
+                    const data = await res.json();
+                    const valoracion = data.valoracion;
+                    
+                    // Actualizar estadísticas
+                    document.getElementById("weightValue").textContent = valoracion.pesoKg + " kg";
+                    document.getElementById("weightChange").textContent = (valoracion.pesoKg > 75 ? "-" : "+") + Math.abs(valoracion.pesoKg - 75).toFixed(1) + " kg este mes";
+                    document.getElementById("weightChange").className = valoracion.pesoKg > 75 ? "stat-change negative" : "stat-change";
+                }
 
-  try {
-    const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
-    if(!res.ok) return;
-    const data = await res.json();
-    const v = data.valoracion;
+                // Cargar rutina del usuario
+                await cargarRutinaUsuario(email);
+                
+                // Cargar datos de progreso
+                await cargarProgresoUsuario(email);
 
-    mostrarDatos(v.pesoKg, v.estaturaCm, v.imc);
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+                // En caso de error, mostrar datos por defecto
+                mostrarDatosPorDefecto();
+            }
+        }
 
-    // Simular rutina y alimentación
-    document.getElementById("rutinaText").innerText = "🏋️ 3x12 Sentadillas, 3x10 Press Banca, 2x15 Curl Bíceps";
-    document.getElementById("alimentacionText").innerText = "🥗 Proteínas 40%, Carbs 40%, Grasas 20%";
+        // =====================================
+        // CARGAR RUTINA DEL USUARIO
+        // =====================================
+        async function cargarRutinaUsuario(email) {
+            try {
+                // Aquí iría la llamada a tu API para obtener la rutina
+                // Por ahora usamos datos de ejemplo
+                const rutinaEjemplo = {
+                    titulo: "Rutina Superior - Fuerza",
+                    duracion: "45 min",
+                    intensidad: "Alta",
+                    ejercicios: [
+                        { nombre: "Press de Banca", series: "4x8-10" },
+                        { nombre: "Dominadas", series: "3x6-8" },
+                        { nombre: "Press Militar", series: "3x10-12" },
+                        { nombre: "Curl de Bíceps", series: "3x12-15" }
+                    ],
+                    proximoEntrenamiento: {
+                        titulo: "Rutina Inferior",
+                        duracion: "50 min",
+                        intensidad: "Media",
+                        ejercicios: [
+                            { nombre: "Sentadillas", series: "4x10-12" },
+                            { nombre: "Peso Muerto", series: "3x8-10" }
+                        ]
+                    }
+                };
 
-  } catch (e) {
-    console.error("Error cargando valoración.");
-  }
-}
+                // Actualizar interfaz con la rutina
+                actualizarInterfazRutina(rutinaEjemplo);
 
-// =====================================
-// MOSTRAR DATOS EN TARJETAS
-// =====================================
-function mostrarDatos(peso, estatura, imc){
-  // Peso
-  document.getElementById("valorPeso").innerText = peso + " kg";
-  document.getElementById("progressPeso").style.width = Math.min((peso/100)*100,100) + "%";
+            } catch (error) {
+                console.error("Error cargando rutina:", error);
+            }
+        }
 
-  // Estatura
-  document.getElementById("valorEstatura").innerText = estatura + " cm";
-  document.getElementById("progressEstatura").style.width = Math.min((estatura/200)*100,100) + "%";
+        // =====================================
+        // CARGAR PROGRESO DEL USUARIO
+        // =====================================
+        async function cargarProgresoUsuario(email) {
+            try {
+                // Aquí iría la llamada a tu API para obtener el progreso
+                // Por ahora usamos datos de ejemplo
+                const progreso = {
+                    entrenamientosCompletados: 12,
+                    entrenamientosTotales: 15,
+                    rachaActual: 8,
+                    recordRacha: 21
+                };
 
-  // IMC
-  document.getElementById("valorIMC").innerText = imc.toFixed(1);
-  let color = "#22c55e"; // Normal
-  if(imc<18.5) color = "#3b82f6";
-  else if(imc>=25 && imc<30) color = "#f59e0b";
-  else if(imc>=30) color = "#ef4444";
-  document.getElementById("progressIMC").style.width = Math.min((imc/40)*100,100) + "%";
-  document.getElementById("progressIMC").style.backgroundColor = color;
-}
+                document.getElementById("workoutsValue").textContent = 
+                    progreso.entrenamientosCompletados + "/" + progreso.entrenamientosTotales;
+                document.getElementById("workoutsChange").textContent = 
+                    "+" + (progreso.entrenamientosCompletados - 10) + " esta semana";
+                
+                document.getElementById("streakValue").textContent = progreso.rachaActual + " días";
+                document.getElementById("streakRecord").textContent = "Récord: " + progreso.recordRacha + " días";
 
-cargarValoracion();
+            } catch (error) {
+                console.error("Error cargando progreso:", error);
+            }
+        }
 
-// =====================================
-// CERRAR SESIÓN
-// =====================================
-function cerrarSesion(){
-  localStorage.removeItem("aitrain_user");
-  window.location.href = "index.html";
-}
+        // =====================================
+        // ACTUALIZAR INTERFAZ DE RUTINA
+        // =====================================
+        function actualizarInterfazRutina(rutina) {
+            // Rutina actual
+            document.getElementById("workoutTitle").textContent = rutina.titulo;
+            document.getElementById("workoutDuration").textContent = rutina.duracion;
+            document.getElementById("workoutIntensity").textContent = rutina.intensidad;
+            document.getElementById("workoutExercises").textContent = rutina.ejercicios.length + " ejercicios";
+            
+            const ejerciciosList = document.getElementById("workoutExercisesList");
+            ejerciciosList.innerHTML = "";
+            rutina.ejercicios.forEach(ejercicio => {
+                const item = document.createElement("div");
+                item.className = "exercise-item";
+                item.innerHTML = `
+                    <span class="exercise-name">${ejercicio.nombre}</span>
+                    <span class="exercise-sets">${ejercicio.series}</span>
+                `;
+                ejerciciosList.appendChild(item);
+            });
 
-// Accordion toggle
-const accBtns = document.querySelectorAll('.accordion-btn');
-accBtns.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const content = btn.nextElementSibling;
-    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
-    // Cerrar todos
-    document.querySelectorAll('.accordion-content').forEach(c=>c.style.maxHeight="0");
-    if(!isOpen) content.style.maxHeight = content.scrollHeight + "px";
-  });
-});
-</script>
+            // Próximo entrenamiento
+            document.getElementById("nextWorkoutTitle").textContent = rutina.proximoEntrenamiento.titulo;
+            document.getElementById("nextWorkoutDuration").textContent = rutina.proximoEntrenamiento.duracion;
+            document.getElementById("nextWorkoutIntensity").textContent = rutina.proximoEntrenamiento.intensidad;
+            
+            const nextExercises = document.getElementById("nextWorkoutExercises");
+            nextExercises.innerHTML = "";
+            rutina.proximoEntrenamiento.ejercicios.forEach(ejercicio => {
+                const item = document.createElement("div");
+                item.className = "exercise-item";
+                item.innerHTML = `
+                    <span class="exercise-name">${ejercicio.nombre}</span>
+                    <span class="exercise-sets">${ejercicio.series}</span>
+                `;
+                nextExercises.appendChild(item);
+            });
+        }
 
+        // =====================================
+        // DATOS POR DEFECTO
+        // =====================================
+        function mostrarDatosPorDefecto() {
+            document.getElementById("workoutsValue").textContent = "0/0";
+            document.getElementById("streakValue").textContent = "0 días";
+            document.getElementById("weightValue").textContent = "0 kg";
+        }
+
+        // =====================================
+        // CERRAR SESIÓN
+        // =====================================
+        function cerrarSesion() {
+            localStorage.removeItem("aitrain_user");
+            localStorage.removeItem("aitrain_logged");
+            localStorage.removeItem("aitrain_tipo");
+            window.location.href = "login.html";
+        }
+
+        // =====================================
+        // INICIALIZACIÓN
+        // =====================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si el usuario está logueado
+            const isLoggedIn = localStorage.getItem("aitrain_logged");
+            if (!isLoggedIn) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Cargar información del usuario
+            const userEmail = localStorage.getItem("aitrain_user");
+            const userName = userEmail ? userEmail.split('@')[0] : "Usuario";
+            
+            document.getElementById("userName").textContent = userName;
+            document.getElementById("welcomeTitle").textContent = `¡Bienvenido de nuevo, ${userName}!`;
+
+            // Cargar datos
+            cargarDatosUsuario();
+
+            // Event Listeners
+            document.getElementById("startWorkoutBtn").addEventListener("click", function() {
+                alert("¡Comenzando entrenamiento! Redirigiendo a la rutina...");
+                // Aquí iría la redirección a la página de rutina en ejecución
+            });
+
+            document.getElementById("detailsBtn").addEventListener("click", function() {
+                // Redirigir a detalles de rutina
+                window.location.href = "rutina-detalles.html";
+            });
+
+            document.getElementById("modifyBtn").addEventListener("click", function() {
+                // Redirigir a modificación de rutina
+                window.location.href = "chatbot.html";
+            });
+
+            // Notificaciones
+            const notificationIcon = document.querySelector('.notification-icon');
+            notificationIcon.addEventListener('click', function() {
+                alert('🔔 Tienes 3 notificaciones:\n- Nuevo plan disponible\n- Rutina actualizada\n- Consejo nutricional');
+            });
+        });
+    </script>
 </body>
 </html>
