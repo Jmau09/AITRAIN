@@ -1,120 +1,621 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perfil del Usuario</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    input[readonly] {
-      background-color: #eee;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil - AiTrain</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif
+}
+
+body{
+  display:flex;
+  min-height:100vh;
+  background:#0d0d0d;
+  color:#fff;
+}
+
+/* Sidebar */
+.sidebar{
+  width:260px;
+  background:#141414;
+  display:flex;
+  flex-direction:column;
+  padding:25px;
+  border-right:2px solid #ef4444;
+  box-shadow:4px 0 15px rgba(239,68,68,0.15);
+}
+
+.logo{
+  width:150px;
+  margin:0 auto 25px auto;
+  cursor:pointer;
+  border-radius:15px;
+  transition:transform .2s;
+}
+.logo:hover{
+  transform:scale(1.06);
+}
+
+.sidebar h2{
+  color:#ef4444;
+  margin-bottom:20px;
+  font-size:20px;
+  text-align:center;
+  font-weight:700;
+}
+
+.sidebar button{
+  background:none;
+  border:none;
+  color:#fff;
+  text-align:left;
+  padding:12px 14px;
+  font-size:15px;
+  margin-bottom:8px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-radius:8px;
+  transition:all 0.2s;
+}
+
+.sidebar button:hover,
+.sidebar button.active{
+  background:#222;
+  color:#ef4444;
+  transform:translateX(5px);
+}
+
+/* Main content */
+.main-content{
+  flex:1;
+  padding:40px;
+}
+
+section{
+  display:none;
+}
+section.active{
+  display:flex;
+  flex-direction:column;
+  align-items:center;   /* Centrar tarjetas */
+  gap:25px;             /* Espacio entre ellas */
+}
+
+/* ---- CARD ---- */
+.info-card{
+  background:#1a1a1a;
+  border:1px solid #ef4444;
+  border-radius:15px;
+  padding:30px;
+  width:600px;                 /* 🔥 Más grande */
+  box-shadow:0 0 15px rgba(239,68,68,0.20);
+  animation:fadeIn .4s ease;
+}
+
+.info-header{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.info-header i{
+  font-size:32px;
+  color:#ef4444;
+}
+
+.info-header h1{
+  color:#ef4444;
+  font-size:26px;
+  margin:0;
+}
+
+.info-row{
+  margin-bottom:15px;
+  font-size:16px;
+}
+
+.info-row strong{
+  color:#ef4444;
+  font-weight:600;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Forms */
+form{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+label{
+  font-size:14px;
+  color:#fff;
+}
+
+input,textarea{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ef4444;
+  background:#1a1a1a;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+}
+
+input:focus,textarea:focus{
+  border-color:#ff6b6b;
+  box-shadow:0 0 5px rgba(239,68,68,0.5);
+}
+
+button.submit-btn{
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s;
+  background:#ef4444;
+  color:#fff;
+}
+button.submit-btn:hover{
+  background:#cc0000;
+  transform:scale(1.03);
+}
+
+/* ---- VALORACION CARD ---- */
+.valoracion-card {
+  margin-top: 10px;
+  padding: 25px;
+  background: #1a1a1a;
+  border: 1px solid #ef4444;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(239,68,68,0.2);
+  width: 600px;                 /* 🔥 Más grande */
+}
+
+.valoracion-card h2 {
+  margin-bottom: 15px;
+  color: #ef4444;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* Ícono junto al título */
+.valoracion-card h2::before {
+  font-size: 22px;
+}
+
+.valoracion-card p {
+  margin: 6px 0;
+  font-size: 15px;
+}
+
+.valoracion-card strong {
+  color: #ef4444 !important;   /* 🔥 Rojo igual que el resto */
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h2>Perfil del Usuario</h2>
-    <form id="perfilForm">
-      <label>Cédula</label>
-      <input type="text" id="cedula" name="cedula" readonly />
 
-      <label>Nombre</label>
-      <input type="text" id="nombre" name="nombre" />
+<!-- Sidebar -->
+<div class="sidebar">
 
-      <label>Email</label>
-      <input type="email" id="email" name="email" />
+  <!-- Logo -->
+  <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
 
-      <label>Edad</label>
-      <input type="number" id="edad" name="edad" />
+  <h2>Mi Perfil</h2>
 
-      <label>Rol</label>
-      <input type="text" id="role" name="role" readonly />
+  <button id="btnInicio">
+    <i class="fas fa-home"></i> Volver al inicio
+  </button>
 
-      <button type="submit">Guardar Cambios</button>
+  <button class="active" data-target="info">
+    Información Personal <i class="fas fa-user"></i>
+  </button>
+
+  <button data-target="actualizar">
+    Actualizar Datos <i class="fas fa-edit"></i>
+  </button>
+
+  <button data-target="eliminar">
+    Eliminar Cuenta <i class="fas fa-trash-alt"></i>
+  </button>
+
+  <button data-target="valoracion">
+    Registrar Valoración <i class="fas fa-star"></i>
+  </button>
+
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- ⭐ Información Personal BONITA ⭐ -->
+  <section id="info" class="active">
+    <div class="info-card">
+
+      <div class="info-header">
+        <i class="fas fa-address-card"></i>
+        <h1>Información Personal</h1>
+      </div>
+
+      <p class="info-row"><strong>Nombre Completo:</strong> <span id="nombreUsuario"></span></p>
+      <p class="info-row"><strong>Correo:</strong> <span id="correoUsuario"></span></p>
+      <p class="info-row"><strong>Teléfono:</strong> <span id="telefonoUsuario"></span></p>
+      <p class="info-row"><strong>Edad:</strong> <span id="edadUsuario"></span></p>
+
+    </div>
+    <div class="valoracion-card">
+  <h2 class="valoracion-title">
+    <i class="fas fa-dumbbell"></i> Última Valoración Física
+  </h2>
+
+  <p><strong class="valoracion-label">Peso:</strong> <span id="v_peso">—</span> kg</p>
+  <p><strong class="valoracion-label">Estatura:</strong> <span id="v_estatura">—</span> cm</p>
+  <p><strong class="valoracion-label">IMC:</strong> <span id="v_imc">—</span></p>
+  <p><strong class="valoracion-label">Género:</strong> <span id="v_genero">—</span></p>
+  <p><strong class="valoracion-label">Edad:</strong> <span id="v_edad">—</span></p>
+  <p><strong class="valoracion-label">Nivel Actividad:</strong> <span id="v_actividad">—</span></p>
+  <p><strong class="valoracion-label">Días Entrenamiento:</strong> <span id="v_dias">—</span></p>
+  <p><strong class="valoracion-label">Tiempo por sesión:</strong> <span id="v_tiempo">—</span> min</p>
+  <p><strong class="valoracion-label">Objetivo:</strong> <span id="v_objetivo">—</span></p>
+</div>
+  </section>
+
+  <section id="actualizar">
+    <h1 style="color:#ef4444;">Actualizar Datos</h1>
+    <form id="updateForm">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" required>
+
+      <label for="apellido">Apellido</label>
+      <input type="text" id="apellido" required>
+
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" required>
+
+      <label for="edad">Edad</label>
+      <input type="number" id="edad" required min="1">
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" required minlength="4">
+
+      <button type="submit" class="submit-btn">Actualizar</button>
     </form>
-  </div>
+  </section>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
-      if (!usuarioLocal || !usuarioLocal.cedula) {
-        alert("No hay sesión iniciada. Por favor inicia sesión.");
-        window.location.href = "login.html";
-        return;
-      }
+  <section id="eliminar">
+    <h1 style="color:#ef4444;">Eliminar Cuenta</h1>
+    <button id="btnEliminar" class="submit-btn">
+      <i class="fas fa-trash-alt"></i> Eliminar mi cuenta
+    </button>
+  </section>
 
-      // Buscar datos actualizados del backend
-      try {
-        const response = await fetch(`http://localhost:8080/api/aitrain/usuario/buscarCedula/${usuarioLocal.cedula}`);
-        const data = await response.json();
+<section id="valoracion">
+  <h1>Registrar Valoración Física</h1>
 
-        // Llenar los campos
-        document.getElementById("cedula").value = data.cedula || "";
-        document.getElementById("nombre").value = data.nombre || "";
-        document.getElementById("email").value = data.email || "";
-        document.getElementById("edad").value = data.edad || "";
-        document.getElementById("role").value = data.role || "";
-      } catch (error) {
-        console.error("Error al obtener datos:", error);
-      }
+  <form id="valoracionForm">
+    
+    <label>Peso (kg)</label>
+    <input type="number" id="pesoKg" step="0.1" min="1" required>
 
-      // Guardar cambios
-      document.getElementById("perfilForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
+    <label>Estatura (cm)</label>
+    <input type="number" id="estaturaCm" min="50" required>
 
-        const usuarioActualizado = {
-          cedula: document.getElementById("cedula").value,
-          nombre: document.getElementById("nombre").value,
-          email: document.getElementById("email").value,
-          edad: parseInt(document.getElementById("edad").value),
-          role: document.getElementById("role").value
-        };
+    <label>Género</label>
+    <select id="genero" required>
+      <option value="">Seleccione…</option>
+      <option value="M">Masculino</option>
+      <option value="F">Femenino</option>
+    </select>
 
-        try {
-          const res = await fetch("http://localhost:8080/api/aitrain/usuario/update", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(usuarioActualizado)
-          });
+    <label>Edad</label>
+    <input type="number" id="edadValoracion" min="1" required>
 
-          const text = await res.text();
-          alert(text);
-        } catch (error) {
-          alert("Error al actualizar usuario");
-          console.error(error);
-        }
-      });
+    <label>Nivel de Actividad</label>
+    <select id="nivelActividad" required>
+      <option value="">Seleccione…</option>
+      <option value="Sedentaria">Sedentaria</option>
+      <option value="Ligera">Ligera</option>
+      <option value="Moderada">Moderada</option>
+      <option value="Intensa">Intensa</option>
+    </select>
+
+    <label>Días de Entrenamiento por Semana</label>
+    <input type="number" id="diasEntrenamiento" min="1" max="7" required>
+
+    <label>Tiempo por Sesión (min)</label>
+    <input type="number" id="tiempoPorSesionMin" min="10" required>
+
+<label>Objetivo</label>
+<select id="objetivo" required>
+  <option value="">Seleccione…</option>
+  <option value="Perder grasa">Perder grasa</option>
+  <option value="Ganar masa muscular">Ganar masa muscular</option>
+  <option value="Mantener peso">Mantener peso</option>
+  <option value="Mejorar resistencia">Mejorar resistencia</option>
+  <option value="Aumentar fuerza">Aumentar fuerza</option>
+  <option value="Acondicionamiento general">Acondicionamiento general</option>
+</select>
+
+
+    <label>Restricciones</label>
+    <input type="text" id="restricciones" placeholder="Opcional">
+
+    <label>Limitaciones</label>
+    <input type="text" id="limitaciones" placeholder="Opcional">
+
+    <button type="submit" class="submit-btn">Guardar Valoración</button>
+
+    <div id="mensajeValoracion"></div>
+  </form>
+</section>
+
+
+</div>
+
+<script>
+// ================================
+//     NAVEGACIÓN DEL SIDEBAR
+// ================================
+const sections = document.querySelectorAll("section");
+const buttons = document.querySelectorAll(".sidebar button");
+
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const target = btn.dataset.target;
+    sections.forEach(sec => sec.classList.remove("active"));
+    document.getElementById(target).classList.add("active");
+  });
+});
+
+// ================================
+//     LOGO E IR AL DASHBOARD
+// ================================
+document.getElementById("logoBtn").addEventListener("click", () => {
+  window.location.href = "dashboard_usuario.html";
+});
+
+document.getElementById("btnInicio").addEventListener("click", () => {
+  window.location.href = "dashboard_usuario.html";
+});
+
+async function cargarInfoUsuario() {
+  const email = localStorage.getItem("aitrain_user");
+
+  if (!email) {
+    document.getElementById("correoUsuario").textContent = "No encontrado";
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
+    if (!response.ok) throw new Error("No encontrado");
+
+    const data = await response.json();
+
+    // Nombre completo
+    const nombreCompleto = `${data.nombre || ""} ${data.apellido || ""}`.trim();
+
+    document.getElementById("nombreUsuario").textContent = nombreCompleto || "No registrado";
+
+    // Correo
+    document.getElementById("correoUsuario").textContent = data.email || email;
+
+    // Teléfono
+    document.getElementById("telefonoUsuario").textContent = data.telefono || "No registrado";
+
+    // Edad
+    document.getElementById("edadUsuario").textContent = data.edad || "Sin edad";
+
+  } catch (e) {
+    document.getElementById("correoUsuario").textContent = email;
+    document.getElementById("nombreUsuario").textContent = email.split("@")[0];
+    document.getElementById("telefonoUsuario").textContent = "—";
+    document.getElementById("edadUsuario").textContent = "—";
+  }
+}
+
+
+cargarInfoUsuario();
+
+
+
+// ================================
+//     REGISTRAR VALORACIÓN FÍSICA
+// ================================
+document.getElementById("valoracionForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const emailUsuario = localStorage.getItem("aitrain_user");
+  if (!emailUsuario) {
+    mensajeValoracion.textContent = "No se encontró el usuario.";
+    mensajeValoracion.style.color = "red";
+    return;
+  }
+
+  const peso = parseFloat(document.getElementById("pesoKg").value);
+  const estaturaCm = parseFloat(document.getElementById("estaturaCm").value);
+  const estaturaM = estaturaCm / 100;
+  const imc = parseFloat((peso / (estaturaM ** 2)).toFixed(2));
+
+  const data = {
+    emailUsuario: emailUsuario,
+    pesoKg: peso,
+    estaturaCm: estaturaCm,
+    genero: document.getElementById("genero").value,
+    imc: imc,
+    edad: parseInt(document.getElementById("edadValoracion").value),
+    nivelActividad: document.getElementById("nivelActividad").value,
+    diasEntrenamiento: parseInt(document.getElementById("diasEntrenamiento").value),
+    tiempoPorSesionMin: parseInt(document.getElementById("tiempoPorSesionMin").value),
+    objetivo: document.getElementById("objetivo").value,
+    restricciones: document.getElementById("restricciones").value || "Ninguna",
+    limitaciones: document.getElementById("limitaciones").value || "Ninguna"
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/aitrain/valoracion/guardar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     });
-  </script>
+
+    if (!response.ok) throw new Error("Error en el registro");
+
+    mensajeValoracion.textContent = "Valoración registrada correctamente ✔";
+    mensajeValoracion.style.color = "#4ade80";
+
+    document.getElementById("valoracionForm").reset();
+
+  } catch (error) {
+    mensajeValoracion.textContent = "Hubo un error al guardar la valoración ❌";
+    mensajeValoracion.style.color = "red";
+  }
+});
+// ================================
+//   CARGAR ÚLTIMA VALORACIÓN FÍSICA
+// ================================
+async function cargarValoracionUsuario() {
+  const email = localStorage.getItem("aitrain_user");
+  if (!email) return;
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
+    if (!response.ok) throw new Error("No encontrada");
+
+    const data = await response.json();
+    const v = data.valoracion; // ← AQUÍ está la valoración real
+
+    // --- Insertamos los datos en los spans ---
+    document.getElementById("v_peso").textContent = v.pesoKg;
+    document.getElementById("v_estatura").textContent = v.estaturaCm;
+    document.getElementById("v_imc").textContent = v.imc.toFixed(2);
+    document.getElementById("v_genero").textContent = v.genero;
+    document.getElementById("v_edad").textContent = v.edad;
+    document.getElementById("v_actividad").textContent = v.nivelActividad;
+    document.getElementById("v_dias").textContent = v.diasEntrenamiento;
+    document.getElementById("v_tiempo").textContent = v.tiempoPorSesionMin;
+    document.getElementById("v_objetivo").textContent = v.objetivo;
+
+  } catch (e) {
+    console.error("No hay valoraciones todavía.");
+  }
+}
+
+// Llamar a la función
+cargarValoracionUsuario();
+
+
+
+// ================================
+//      ACTUALIZAR DATOS DEL USUARIO
+// ================================
+document.getElementById("updateForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = localStorage.getItem("aitrain_user");
+  if (!email) {
+    alert("No se encontró el usuario.");
+    return;
+  }
+
+  const data = {
+    email: email,
+    nombre: document.getElementById("nombre").value,
+    apellido: document.getElementById("apellido").value,
+    telefono: document.getElementById("telefono").value,
+    password: document.getElementById("password").value,
+    edad: parseInt(document.getElementById("edad").value)
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/aitrain/usuario/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) throw new Error("Error en la actualización");
+
+    alert("Datos actualizados correctamente ✔");
+
+    // Refrescar la info personal en la sección
+    cargarInfoUsuario();
+
+  } catch (error) {
+    console.error(error);
+    alert("Hubo un error al actualizar los datos ❌");
+  }
+});
+
+// ================================
+//     ELIMINAR CUENTA COMPLETA
+// ================================
+document.getElementById("btnEliminar").addEventListener("click", async () => {
+  
+  const email = localStorage.getItem("aitrain_user");
+  if (!email) {
+    alert("No se encontró el usuario.");
+    return;
+  }
+
+  // Confirmación doble para seguridad
+  const confirmar = confirm("⚠ ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+  if (!confirmar) return;
+
+  try {
+
+    // 1️⃣ ELIMINAR VALORACIÓN DEL USUARIO
+    await fetch(`http://localhost:8080/api/aitrain/valoracion/eliminar/${email}`, {
+      method: "DELETE"
+    });
+
+    // 2️⃣ ELIMINAR USUARIO
+    const response = await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      alert("Hubo un error al eliminar el usuario.");
+      return;
+    }
+
+    // 3️⃣ BORRAR SESIÓN
+    localStorage.removeItem("aitrain_user");
+
+    // 4️⃣ REDIRIGIR AL LOGIN
+    alert("Cuenta eliminada correctamente.");
+    window.location.href = "login.html";
+
+  } catch (error) {
+    console.error("Error eliminando cuenta:", error);
+    alert("Ocurrió un error al eliminar la cuenta.");
+  }
+
+});
+
+</script>
+
+
 </body>
 </html>
-

@@ -696,48 +696,50 @@
     </main>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // ✅ Verificar si el usuario está logueado
-    const isLoggedIn = localStorage.getItem('aitrain_logged');
-    const userEmail = localStorage.getItem('aitrain_user');
+  // ✅ Verificar si el usuario está logueado
+  const isLoggedIn = localStorage.getItem('aitrain_logged');
+  const userEmail = localStorage.getItem('aitrain_user');
 
-    if (!isLoggedIn || isLoggedIn !== 'true') {
-      alert('⚠️ Debes iniciar sesión primero');
-      window.location.href = 'login.html';
-      return;
-    }
-
-    // ✅ Mostrar la información del usuario
-    if (userEmail) {
-      const userName = userEmail.split('@')[0];
-      document.querySelector('.user-name').textContent =
-        userName.charAt(0).toUpperCase() + userName.slice(1);
-      document.querySelector('.welcome-section h1').textContent =
-        `¡Bienvenido de nuevo, ${userName.charAt(0).toUpperCase() + userName.slice(1)}!`;
-    }
-
-    // 🏋️ Botón de comenzar entrenamiento
-    const startButton = document.querySelector('.btn-primary');
-    if (startButton) {
-      startButton.addEventListener('click', function() {
-        alert('¡Comenzando entrenamiento! Redirigiendo a la rutina...');
-      });
-    }
-
-    // 🔔 Simular notificaciones
-    const notificationIcon = document.querySelector('.notification-icon');
-    if (notificationIcon) {
-      notificationIcon.addEventListener('click', function() {
-        alert('Tienes 3 notificaciones:\n- Nuevo desafío disponible\n- Rutina actualizada\n- Logro desbloqueado');
-      });
-    }
-  });
-
-  // 🚪 Función para cerrar sesión
-  function logout() {
-    localStorage.removeItem('aitrain_logged');
-    localStorage.removeItem('aitrain_user');
+  if (!isLoggedIn || isLoggedIn !== 'true') {
+    alert('⚠️ Debes iniciar sesión primero');
     window.location.href = 'login.html';
+    return;
   }
+
+  // ✅ Mostrar la información del usuario
+  if (userEmail) {
+    const userName = userEmail.split('@')[0];
+    const displayName = userName.charAt(0).toUpperCase() + userName.slice(1);
+    document.querySelector('.user-name').textContent = displayName;
+    document.querySelector('.welcome-section h1').textContent =
+      `¡Bienvenido de nuevo, ${displayName}!`;
+  }
+
+  // 🏋️ Botón de comenzar entrenamiento
+  const startButton = document.querySelector('.btn-primary');
+  if (startButton) {
+    startButton.addEventListener('click', function() {
+      alert('¡Comenzando entrenamiento! Redirigiendo a la rutina...');
+      // Aquí puedes redirigir a la rutina real si existe
+    });
+  }
+
+  // 🔔 Simular notificaciones
+  const notificationIcon = document.querySelector('.notification-icon');
+  if (notificationIcon) {
+    notificationIcon.addEventListener('click', function() {
+      alert('Tienes 3 notificaciones:\n- Nuevo desafío disponible\n- Rutina actualizada\n- Logro desbloqueado');
+    });
+  }
+});
+
+// 🚪 Función para cerrar sesión
+function logout() {
+  localStorage.removeItem('aitrain_logged');
+  localStorage.removeItem('aitrain_user');
+  window.location.href = 'login.html';
+}
+
 </script>
 
 </body>

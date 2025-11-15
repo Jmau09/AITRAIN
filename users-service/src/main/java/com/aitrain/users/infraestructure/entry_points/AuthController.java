@@ -1,5 +1,8 @@
 package com.aitrain.users.infraestructure.entry_points;
 
+import com.aitrain.users.domain.exceptions.AdminNotFoundException;
+import com.aitrain.users.domain.exceptions.IncorrectCredentialsException;
+import com.aitrain.users.domain.exceptions.UserNotFoundException;
 import com.aitrain.users.domain.usecase.AdminUseCase;
 import com.aitrain.users.domain.usecase.UsuarioUseCase;
 import com.aitrain.users.infraestructure.driver_adapter.jpa_repository.Admin.AdminData;
@@ -22,27 +25,33 @@ public class AuthController {
 
     @PostMapping("/loginUsuario")
     public ResponseEntity<String> loginUsuario(@RequestBody UsuarioData usuarioData) {
-        String respuesta = usuarioUseCase.loginUsuario(
-                usuarioData.getEmail(),
-                usuarioData.getPassword()
-        );
-
-        return ResponseEntity.ok(respuesta);
+        try {
+            String respuesta = usuarioUseCase.loginUsuario(
+                    usuarioData.getEmail(),
+                    usuarioData.getPassword()
+            );
+            return ResponseEntity.ok(respuesta); // Credenciales correctas
+        } catch (UserNotFoundException | IncorrectCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
+        }
     }
+
 
 
     @PostMapping("/loginAdmin")
     public ResponseEntity<String> loginAdmin(@RequestBody AdminData adminData) {
-        String respuesta = adminUseCase.loginAdmin(adminData.getEmail(), adminData.getPassword());
-
-        return switch (respuesta) {
-            case "Credenciales correctas" -> ResponseEntity.ok(respuesta); // <- corregido
-            case "Admin no encontrado", "Credenciales incorrectos" ->
-                    ResponseEntity.status(HttpStatus.OK).body(respuesta);
-            default ->
-                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
-        };
+        try {
+            String respuesta = adminUseCase.loginAdmin(adminData.getEmail(), adminData.getPassword());
+            return ResponseEntity.ok(respuesta); // Credenciales correctas
+        } catch (AdminNotFoundException | IncorrectCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar la solicitud");
+        }
     }
+
 }
 
 

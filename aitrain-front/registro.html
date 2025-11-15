@@ -1,155 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Registro - AiTrain</title>
-    <style>
-        *{ box-sizing:border-box;
-            margin:0;
-            padding:0;
-            font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif
-        }
-        body {
-            background:#f4f6f8;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            min-height:100vh;
-            padding:20px
-        }
-        .card {
-            background:#fff;
-            border-radius:12px;
-            box-shadow:0 8px 30px rgba(2,6,23,0.08);
-            width:100%;
-            max-width:920px;
-            display:flex;overflow:hidden
-        }
-        .left {
-            flex:1;
-            padding:40px;
-            background:#000000;
-            color:#fff;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            gap:16px
-        }
-        .left .logo {
-            display:flex;
-            gap:12px;
-            align-items:center
-        }
-        .left .logo img {
-            width:64px;
-            height:auto
-        }
-        .left h1 {
-            font-size:28px;
-            margin-top:6px
-        }
-        .left p {
-            color:rgba(255,255,255,0.85);
-            max-width:320px;
-            line-height:1.5
-        }
-        .left ul {
-            list-style:none;
-            margin-top:8px;
-            padding-left:0;
-            color:rgba(255,255,255,0.85)
-        }
-        .left ul li {
-            margin-bottom:6px
-        }
-        .right {
-            flex:1;padding:32px 40px;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            gap:16px
-        }
-        h2 {
-            font-size:22px;
-            color:#0f1724;
-            margin-bottom:4px
-        }
-        p.sub {
-            color:#6b7280;
-            margin-bottom:24px;
-            line-height:1.5
-        }
-        form {
-            display:grid;
-            grid-template-columns:repeat(2,1fr);
-            gap:12px
-        }
-        .full {
-            grid-column:1/3
-        }
-        label {
-            font-size:13px;
-            color:#374151;
-            margin-bottom:6px;
-            display:block
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="number"]
-        {
-            width:100%;
-            padding:10px 12px;
-            border-radius:8px;
-            border:1px solid #e6e9ee;background:#fff;
-            outline:none;
-            font-size:14px;
-        }
-        input:focus {
-            border-color:#ef4444;
-            box-shadow:0 0 0 3px rgba(239,68,68,0.07)
-        }
-        .actions {
-            grid-column:1/3;
-            display:flex;
-            flex-direction:column;
-            gap:8px;margin-top:6px
-        }
-        button {
-            background:#ef4444;
-            color:#fff;
-            border:none;
-            padding:12px;
-            border-radius:8px;
-            font-weight:600;
-            cursor:pointer;
-            transition:0.2s
-        }
-        button:hover {
-            background:#dc2626
-        }
-        button.secondary {
-            background:#eef2f7;
-            color:#0f1724
-        }
-        #mensaje {
-            grid-column:1/3;
-            text-align:center;
-            padding:10px;
-            border-radius:8px;
-            display:none
-        }
-        @media (max-width:780px) {
-            form{grid-template-columns:1fr}.left{display:none}
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Registro - AiTrain</title>
+<style>
+*{ box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif }
+body { 
+    background:#0f0f0f; /* fondo oscuro */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+    color:#fff;
+}
+.card { 
+    background:#1a1a1a; /* cuadro oscuro */
+    border-radius:12px;
+    border: 2px solid #ef4444; /* borde neón rojo */
+    box-shadow: 0 0 20px #ef4444, 0 8px 30px rgba(2,6,23,0.5);
+    width:100%;
+    max-width:920px;
+    display:flex;
+    overflow:hidden;
+}
+.left {
+    flex:1;
+    padding:40px;
+    background:#000;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:16px;
+}
+.left .logo { display:flex;gap:12px;align-items:center }
+.left .logo img { width:64px;height:auto }
+.left h1 { font-size:28px;margin-top:6px }
+.left p { color:rgba(255,255,255,0.85);max-width:320px;line-height:1.5 }
+.left ul { list-style:none;margin-top:8px;padding-left:0;color:rgba(255,255,255,0.85) }
+.left ul li { margin-bottom:6px }
+
+.right {
+    flex:1;padding:32px 40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:16px
+}
+h2 { font-size:22px;color:#fff;margin-bottom:4px }
+p.sub { color:#ccc;margin-bottom:24px;line-height:1.5 }
+
+form { display:grid;grid-template-columns:repeat(2,1fr);gap:12px }
+.full { grid-column:1/3 }
+label { font-size:13px;color:#f0f0f0;margin-bottom:6px;display:block }
+input { 
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #555;
+    background:#222;
+    color:#fff;
+    outline:none;
+    font-size:14px;
+}
+input::placeholder { color:#888; }
+input:focus { border-color:#ef4444; box-shadow:0 0 8px #ef4444; }
+
+.actions { grid-column:1/3; display:flex; flex-direction:column; gap:8px; margin-top:6px }
+button { 
+    background:#ef4444;color:#fff;border:none;padding:12px;border-radius:8px;
+    font-weight:600;cursor:pointer;transition:0.2s 
+}
+button:hover { background:#ff1a1a; }
+button.secondary { background:#333;color:#fff; }
+
+#mensaje { grid-column:1/3;text-align:center;padding:10px;border-radius:8px;display:none; transition: all 0.3s ease; }
+.login-link { grid-column:1/3; text-align:center; color:#ccc; }
+.login-link a { color:#ef4444; text-decoration:none; }
+.login-link a:hover { text-decoration:underline; }
+
+@media (max-width:780px) {
+    form{grid-template-columns:1fr}
+    .left{display:none}
+}
+</style>
 </head>
 <body>
 <div class="card" role="main">
     <div class="left" aria-hidden="true">
         <div class="logo">
-            <img src="brazo.png" alt="AiTrain logo (local)" />
+            <img src="brazo.png" alt="AiTrain logo" />
             <div style="font-weight:700;font-size:18px">Ai<span style="color:#f43f5e">Train</span></div>
         </div>
         <h1>Únete a la revolución del fitness con IA</h1>
@@ -170,18 +112,13 @@
 
         <form id="registerForm" novalidate>
             <div>
-                <label for="cedula">Cédula</label>
-                <input id="cedula" type="text" placeholder="1000000000" required />
-            </div>
-
-            <div>
                 <label for="nombre">Nombre</label>
-                <input id="nombre" type="text" placeholder="Camila" required />
+                <input id="nombre" type="text" placeholder="usuario" required />
             </div>
 
             <div>
                 <label for="apellido">Apellido</label>
-                <input id="apellido" type="text" placeholder="Torres" required />
+                <input id="apellido" type="text" placeholder="prueba" required />
             </div>
 
             <div>
@@ -196,7 +133,7 @@
 
             <div>
                 <label for="password">Contraseña</label>
-                <input id="password" type="password" placeholder="••••••••" required minlength="4" />
+                <input id="password" type="password" placeholder="mauro" required minlength="4" />
             </div>
 
             <div>
@@ -219,82 +156,79 @@
 </div>
 
 <script>
-    const API_SAVE = 'http://localhost:8080/api/aitrain/usuario/save';
-    const form = document.getElementById('registerForm');
-    const mensajeDiv = document.getElementById('mensaje');
-    const limpiarBtn = document.getElementById('limpiarBtn');
+const API_SAVE = 'http://localhost:8080/api/aitrain/usuario/save';
+const form = document.getElementById('registerForm');
+const mensajeDiv = document.getElementById('mensaje');
+const limpiarBtn = document.getElementById('limpiarBtn');
 
-    function mostrarMensaje(text, tipo = 'info') {
-        mensajeDiv.style.display = 'block';
-        mensajeDiv.textContent = text;
-        if (tipo === 'ok') {
-            mensajeDiv.style.background = '#ecfdf5';
-            mensajeDiv.style.color = '#065f46';
-            mensajeDiv.style.border = '1px solid #bbf7d0';
-        } else if (tipo === 'error') {
-            mensajeDiv.style.background = '#fff1f2';
-            mensajeDiv.style.color = '#7f1d1d';
-            mensajeDiv.style.border = '1px solid #fecaca';
-        } else {
-            mensajeDiv.style.background = '#eef2ff';
-            mensajeDiv.style.color = '#1e293b';
-            mensajeDiv.style.border = '1px solid #c7d2fe';
-        }
+function mostrarMensaje(text, tipo='info') {
+    mensajeDiv.style.display='block';
+    mensajeDiv.textContent = text;
+    if(tipo==='ok'){
+        mensajeDiv.style.background='#0a261f';
+        mensajeDiv.style.color='#0fff90';
+        mensajeDiv.style.border='1px solid #0fff90';
+    }else if(tipo==='error'){
+        mensajeDiv.style.background='#2a0a0a';
+        mensajeDiv.style.color='#ff4d4d';
+        mensajeDiv.style.border='1px solid #ff4d4d';
+    }else{
+        mensajeDiv.style.background='#1a1a2e';
+        mensajeDiv.style.color='#ccc';
+        mensajeDiv.style.border='1px solid #555';
+    }
+}
+
+limpiarBtn.addEventListener('click', ()=>{
+    form.reset();
+    mensajeDiv.style.display='none';
+});
+
+form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    mensajeDiv.style.display='none';
+
+    const email = document.getElementById('email').value.trim();
+    const nombre = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const password = document.getElementById('password').value;
+    const edad = document.getElementById('edad').value;
+
+    if(!email || !nombre || !apellido || !telefono || !password || !edad){
+        mostrarMensaje('❌ Todos los campos son obligatorios', 'error');
+        return;
     }
 
-    limpiarBtn.addEventListener('click', () => {
-        form.reset();
-        mensajeDiv.style.display = 'none';
-    });
+    const payload = { email,nombre,apellido,telefono,password,edad:Number(edad) };
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        mensajeDiv.style.display = 'none';
+    try{
+        mostrarMensaje('Enviando registro...', 'info');
+        const res = await fetch(API_SAVE,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+        });
 
-        const payload = {
-            cedula: document.getElementById('cedula').value.trim(),
-            nombre: document.getElementById('nombre').value.trim(),
-            apellido: document.getElementById('apellido').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            telefono: document.getElementById('telefono').value.trim(),
-            password: document.getElementById('password').value,
-            edad: Number(document.getElementById('edad').value)
-        };
+        const text = await res.text();
+        let data;
+        try{ data = JSON.parse(text); }catch{ data = text; }
 
-        try {
-            mostrarMensaje('Enviando registro...', 'info');
-            const res = await fetch(API_SAVE, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            let data;
-            const text = await res.text();
-
-            try {
-                data = JSON.parse(text);
-            } catch {
-                data = text;
-            }
-
-            if (res.ok) {
-                // ✅ Registro exitoso → redirige a la página de éxito
-                window.location.href = 'registro_exitoso.html';
+        if(res.ok){
+            if(typeof data === 'string' && data.includes("Ya existe un usuario")){
+                mostrarMensaje('❌ ' + data, 'error');
             } else {
-                if (data && data.message) {
-                    mostrarMensaje('❌ ' + data.message, 'error');
-                } else if (typeof data === 'string') {
-                    mostrarMensaje('❌ ' + data, 'error');
-                } else {
-                    mostrarMensaje('❌ Error desconocido al registrar el usuario', 'error');
-                }
+                mostrarMensaje('✅ Registro exitoso. Redirigiendo...', 'ok');
+                setTimeout(()=>{ window.location.href='registro_exitoso.html'; },2000);
             }
-        } catch (err) {
-            console.error(err);
-            mostrarMensaje('⚠️ No se pudo conectar al servidor', 'error');
+        }else{
+            mostrarMensaje('❌ ' + (data.message || data || 'Error al registrar usuario'), 'error');
         }
-    });
+    }catch(err){
+        console.error(err);
+        mostrarMensaje('⚠️ No se pudo conectar al servidor', 'error');
+    }
+});
 </script>
 </body>
 </html>

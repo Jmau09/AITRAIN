@@ -1,239 +1,203 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Iniciar Sesión - AiTrain</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif}
-    body{
-      background:#0d0d0d;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-      padding:20px;
-    }
-    .card{
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 8px 30px rgba(255,0,0,0.15);
-      width:100%;
-      max-width:920px;
-      display:flex;
-      overflow:hidden;
-      animation:fadeIn 0.6s ease-out;
-    }
-    .left{
-      flex:1;
-      padding:40px;
-      background:#000;
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:16px;
-    }
-    .left .logo{
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    .left .logo img{width:64px;height:auto}
-    .left h1{font-size:28px;margin-top:6px;color:#fff}
-    .left p{color:rgba(255,255,255,0.8);max-width:320px;line-height:1.4}
-    .right{
-      flex:1;
-      padding:40px 45px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:16px;
-      background:#fafafa;
-    }
-    h2{font-size:24px;color:#0f1724;margin-bottom:4px;font-weight:700}
-    p.sub{color:#6b7280;margin-bottom:12px}
-    form{display:flex;flex-direction:column;gap:14px}
-    label{font-size:13px;color:#374151;margin-bottom:6px;display:block}
-    input[type="email"],input[type="password"]{
-      width:100%;
-      padding:10px 12px;
-      border-radius:8px;
-      border:1px solid #e6e9ee;
-      background:#fff;
-      outline:none;
-      font-size:14px;
-      transition:all 0.2s ease;
-    }
-    input:focus{
-      border-color:#ef4444;
-      box-shadow:0 0 0 3px rgba(239,68,68,0.07);
-    }
-    button{
-      background:#ef4444;
-      color:#fff;
-      border:none;
-      padding:12px;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer;
-      transition:all 0.3s ease;
-    }
-    button:hover{background:#cc0000;transform:scale(1.03)}
-    .divider{
-      text-align:center;
-      color:#6b7280;
-      font-size:13px;
-      margin-top:8px;
-      margin-bottom:4px;
-    }
-    .social-buttons{display:flex;gap:8px}
-    .social-buttons button{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      padding:10px;
-      border-radius:8px;
-      border:1px solid #e5e7eb;
-      background:#fff;
-      cursor:pointer;
-      font-weight:500;
-      transition:background 0.2s;
-    }
-    .social-buttons button:hover{background:#f9fafb}
-    #mensaje{
-      text-align:center;
-      padding:10px;
-      border-radius:8px;
-      display:none;
-      margin-top:10px;
-      font-size:14px;
-    }
-    @media (max-width:780px){.left{display:none}}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Iniciar Sesión - AiTrain</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif}
+body{
+  background:#0d0d0d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:20px;
+}
+.card{
+  background:#1a1a1a;
+  border-radius:12px;
+  border:2px solid #ef4444; /* borde neón rojo */
+  box-shadow:0 0 20px #ef4444,0 8px 30px rgba(2,6,23,0.5);
+  width:100%;
+  max-width:920px;
+  display:flex;
+  overflow:hidden;
+}
+.left{
+  flex:1;
+  padding:40px;
+  background:#000;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+}
+.left .logo{display:flex;gap:12px;align-items:center}
+.left .logo img{width:64px;height:auto}
+.left h1{font-size:28px;margin-top:6px;color:#fff}
+.left p{color:rgba(255,255,255,0.8);max-width:320px;line-height:1.4}
+.right{
+  flex:1;
+  padding:40px 45px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+  background:#1a1a1a;
+}
+h2{font-size:24px;color:#fff;margin-bottom:4px;font-weight:700}
+p.sub{color:#ccc;margin-bottom:12px}
+form{display:flex;flex-direction:column;gap:14px}
+label{font-size:13px;color:#ccc;margin-bottom:6px;display:block}
+input[type="email"],input[type="password"], select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #555;
+  background:#222;
+  color:#fff;
+  outline:none;
+  font-size:14px;
+  transition:all 0.2s ease;
+}
+input::placeholder{color:#888}
+input:focus, select:focus{border-color:#ef4444;box-shadow:0 0 8px #ef4444;}
+button{
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+button:hover{background:#ff1a1a;transform:scale(1.03)}
+#mensaje{
+  text-align:center;
+  padding:10px;
+  border-radius:8px;
+  display:none;
+  margin-top:10px;
+  font-size:14px;
+}
+@media (max-width:780px){.left{display:none}}
+</style>
 </head>
 <body>
-  <div class="card" role="main">
-    <!-- PANEL IZQUIERDO -->
-    <div class="left" aria-hidden="true">
-      <div class="logo">
-        <img src="brazo.png" alt="AiTrain logo" />
-        <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
-      </div>
-      <h1>Entrena con inteligencia</h1>
-      <p>Accede a tu cuenta y continúa tu progreso con rutinas personalizadas y seguimiento por IA.</p>
+<div class="card" role="main">
+  <div class="left" aria-hidden="true">
+    <div class="logo">
+      <img src="brazo.png" alt="AiTrain logo" />
+      <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
     </div>
-
-    <!-- PANEL DERECHO -->
-    <div class="right">
-      <div>
-        <h2>Iniciar Sesión</h2>
-        <p class="sub">Accede con tu correo y contraseña.</p>
-      </div>
-
-      <form id="loginForm" novalidate>
-        <div>
-          <label for="email">Correo electrónico</label>
-          <input id="email" type="email" placeholder="usuario@aitrain.com" required />
-        </div>
-
-        <div>
-          <label for="password">Contraseña</label>
-          <input id="password" type="password" placeholder="••••••••" required minlength="4" />
-        </div>
-
-        <button type="submit">Iniciar Sesión</button>
-
-        <div id="mensaje" role="status"></div>
-
-        <div class="divider">o inicia con</div>
-        <div class="social-buttons">
-          <button type="button">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" width="20" height="20">
-            Google
-          </button>
-          <button type="button">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" width="20" height="20">
-            Facebook
-          </button>
-        </div>
-
-        <p style="text-align:center;margin-top:10px;font-size:14px;color:#374151">
-          ¿No tienes cuenta?
-          <a href="registro.html" style="color:#ef4444;font-weight:600;text-decoration:none">Regístrate</a>
-        </p>
-      </form>
-    </div>
+    <h1>Entrena con inteligencia</h1>
+    <p>Accede a tu cuenta y continúa tu progreso con rutinas personalizadas y seguimiento por IA.</p>
   </div>
 
+  <div class="right">
+    <div>
+      <h2>Iniciar Sesión</h2>
+      <p class="sub">Accede con tu correo y contraseña.</p>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div>
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="usuario@aitrain.com" required />
+      </div>
+
+      <div>
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="••••••••" required minlength="4" />
+      </div>
+
+      <div>
+        <label for="tipo">Tipo de cuenta</label>
+        <select id="tipo" required>
+          <option value="usuario" selected>Usuario</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <button type="submit">Iniciar Sesión</button>
+
+      <div id="mensaje" role="status"></div>
+
+      <p style="text-align:center;margin-top:10px;font-size:14px;color:#ccc">
+        ¿No tienes cuenta?
+        <a href="registro.html" style="color:#ef4444;font-weight:600;text-decoration:none">Regístrate</a>
+      </p>
+    </form>
+  </div>
+</div>
+
 <script>
-  const API_LOGIN = 'http://localhost:8080/api/aitrain/usuario/login';
-  const form = document.getElementById('loginForm');
-  const mensajeDiv = document.getElementById('mensaje');
+const API_ADMIN = 'http://localhost:8080/api/aitrain/auth/loginAdmin';
+const API_USUARIO = 'http://localhost:8080/api/aitrain/auth/loginUsuario';
 
-  function mostrarMensaje(text, tipo = 'info') {
-    mensajeDiv.style.display = 'block';
-    mensajeDiv.textContent = text;
-    mensajeDiv.style.transition = 'all 0.3s ease';
+const form = document.getElementById('loginForm');
+const mensajeDiv = document.getElementById('mensaje');
 
-    if (tipo === 'ok') {
-      mensajeDiv.style.background = '#ecfdf5';
-      mensajeDiv.style.color = '#065f46';
-      mensajeDiv.style.border = '1px solid #bbf7d0';
-    } else if (tipo === 'error') {
-      mensajeDiv.style.background = '#fff1f2';
-      mensajeDiv.style.color = '#7f1d1d';
-      mensajeDiv.style.border = '1px solid #fecaca';
-    } else {
-      mensajeDiv.style.background = '#eef2ff';
-      mensajeDiv.style.color = '#1e293b';
-      mensajeDiv.style.border = '1px solid #c7d2fe';
-    }
+function mostrarMensaje(text, tipo='info'){
+  mensajeDiv.style.display='block';
+  mensajeDiv.textContent=text;
+  mensajeDiv.style.transition='all 0.3s ease';
+  if(tipo==='ok'){ mensajeDiv.style.background='#0a261f'; mensajeDiv.style.color='#0fff90'; mensajeDiv.style.border='1px solid #0fff90'; }
+  else if(tipo==='error'){ mensajeDiv.style.background='#2a0a0a'; mensajeDiv.style.color='#ff4d4d'; mensajeDiv.style.border='1px solid #ff4d4d'; }
+  else{ mensajeDiv.style.background='#1a1a2e'; mensajeDiv.style.color='#ccc'; mensajeDiv.style.border='1px solid #555'; }
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  mensajeDiv.style.display='none';
+
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const tipo=document.getElementById('tipo').value;
+
+  if(!email || !password){
+    mostrarMensaje('⚠️ Por favor ingresa todos los campos','error');
+    return;
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    mensajeDiv.style.display = 'none';
+  const API=tipo==='admin'?API_ADMIN:API_USUARIO;
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+  try{
+    mostrarMensaje('🔄 Iniciando sesión...','info');
+    const res=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email,password })
+    });
 
-    if (!email || !password) {
-      mostrarMensaje('⚠️ Por favor ingresa todos los campos', 'error');
-      return;
+    const text=await res.text();
+    let data;
+    try{ data=JSON.parse(text); }catch{ data=text; }
+
+    if(res.ok){
+      mostrarMensaje('✅ Sesión iniciada correctamente','ok');
+      localStorage.setItem('aitrain_logged','true');
+      localStorage.setItem('aitrain_user',email);
+      localStorage.setItem('aitrain_tipo',tipo);
+
+      setTimeout(()=>{
+        if(tipo==='admin') window.location.href='dashboard_admin.html';
+        else window.location.href='dashboard_usuario.html';
+      },1000);
+
+    }else{
+      // muestra el mensaje que devuelva el backend
+      mostrarMensaje('❌ '+(typeof data==='string'?data:data.message||'Credenciales incorrectas'),'error');
     }
 
-    try {
-      mostrarMensaje('🔄 Iniciando sesión...', 'info');
-
-      const res = await fetch(API_LOGIN, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const text = await res.text();
-
-      if (res.ok) {
-        mostrarMensaje('✅ Sesión iniciada correctamente', 'ok');
-        localStorage.setItem('aitrain_logged', 'true');
-        localStorage.setItem('aitrain_user', email);
-
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1000);
-      } else {
-        mostrarMensaje('❌ Credenciales incorrectas', 'error');
-      }
-    } catch (err) {
-      console.error(err);
-      mostrarMensaje('⚠️ No se pudo conectar al servidor', 'error');
-    }
-  });
+  }catch(err){
+    console.error(err);
+    mostrarMensaje('⚠️ No se pudo conectar al servidor','error');
+  }
+});
 </script>
 </body>
 </html>
-
