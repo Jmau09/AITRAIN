@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correo Verificado - AiTrain</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: #0d0d0d;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        animation: fadeIn 1s ease-in;
+    }
+
+    .container {
+        background-color: #1a1a1a;
+        border: 2px solid #ff0000;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+        width: 400px;
+        max-width: 90%;
+        padding: 40px 30px;
+        text-align: center;
+        animation: slideIn 0.8s ease-out;
+    }
+
+    .container h1 {
+        color: #ff0000;
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .container p {
+        color: #ddd;
+        font-size: 1rem;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    button {
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #cc0000;
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>¡Correo Verificado!</h1>
+    <p>Tu correo ha sido confirmado correctamente.<br>
+       Ahora puedes iniciar sesión y comenzar a usar AiTrain.</p>
+    <button onclick="window.location.href='login.html'">Ir al Login</button>
+</div>
+</body>
+</html>

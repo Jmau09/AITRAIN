@@ -145,6 +145,57 @@ button.secondary { background:#333;color:#fff; }
                 <button type="submit">Crear cuenta</button>
                 <button type="button" class="secondary" id="limpiarBtn">Limpiar</button>
             </div>
+            <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAAwm2LHCPY5pn-CFq5x_gI9VFgkEt3elc",
+    authDomain: "aitrain-4a720.firebaseapp.com",
+    projectId: "aitrain-4a720",
+    storageBucket: "aitrain-4a720.firebasestorage.app",
+    messagingSenderId: "600939007220",
+    appId: "1:600939007220:web:09d9c0f57c7b449f3062a1",
+    measurementId: "G-YYDK02V0LC"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Capturar formulario
+  const registerForm = document.getElementById("registerForm");
+  const mensaje = document.getElementById("mensaje");
+
+  // Evento submit
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault(); // Evita que se recargue la página
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Enviar correo de verificación
+        sendEmailVerification(user)
+          .then(() => {
+            mensaje.textContent = "Usuario registrado! Revisa tu correo para confirmar la cuenta.";
+            registerForm.reset();
+          });
+      })
+      .catch((error) => {
+        mensaje.textContent = "Error: " + error.message;
+      });
+  });
+
+  // Botón limpiar
+  document.getElementById("limpiarBtn").addEventListener("click", () => {
+    registerForm.reset();
+    mensaje.textContent = "";
+  });
+</script>
+
 
             <div class="login-link full">
                 ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
