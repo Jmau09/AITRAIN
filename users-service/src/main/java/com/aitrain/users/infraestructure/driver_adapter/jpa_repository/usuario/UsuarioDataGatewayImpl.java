@@ -52,4 +52,5 @@ public class UsuarioDataGatewayImpl implements UsuarioGateway {
                 .map(mapperUsuario::toUsuario)
                 .toList();
     }
+
 }

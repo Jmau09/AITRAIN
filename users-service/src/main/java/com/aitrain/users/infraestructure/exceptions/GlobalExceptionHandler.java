@@ -45,6 +45,21 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.OK)
                 .body(ex.getMessage());
     }
+    @ExceptionHandler(ValoracionNotFoundException.class)
+    public ResponseEntity<String> handleValoracionNotFound(ValoracionNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ValoracionInvalidDataException.class)
+    public ResponseEntity<String> handleValoracionInvalid(ValoracionInvalidDataException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ValoracionYaExisteException.class)
+    public ResponseEntity<String> handleValoracionInvalid(ValoracionYaExisteException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+    }
+
 
     // Manejo de validaciones @Valid si en el futuro usas anotaciones de validación
     @ExceptionHandler(MethodArgumentNotValidException.class)

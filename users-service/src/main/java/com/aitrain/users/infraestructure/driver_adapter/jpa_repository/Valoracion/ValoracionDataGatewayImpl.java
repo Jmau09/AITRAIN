@@ -3,6 +3,7 @@ package com.aitrain.users.infraestructure.driver_adapter.jpa_repository.Valoraci
 import com.aitrain.users.domain.model.Valoracion;
 import com.aitrain.users.domain.model.gateway.ValoracionGateway;
 import com.aitrain.users.infraestructure.mapper.MapperValoracion;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,14 +25,25 @@ public class ValoracionDataGatewayImpl implements ValoracionGateway {
     }
 
     @Override
-    public Valoracion buscarPorId(Long id) {
-        return ValoracionRepository.findById(id)
+    public Valoracion buscarPorEmailUsuario(String emailUsuario) {
+        return ValoracionRepository.findByEmailUsuario(emailUsuario)
                 .map(mapperValoracion::toModel)
                 .orElse(null);
     }
 
     @Override
-    public void eliminarValoracion(Long id) {
-        ValoracionRepository.deleteById(id);
+    public Valoracion actualizarValoracion(Valoracion valoracion) {
+        ValoracionData data = mapperValoracion.toEntity(valoracion);
+        ValoracionData actualizada = ValoracionRepository.save(data);
+        return mapperValoracion.toModel(actualizada);
     }
+
+
+    @Transactional
+    @Override
+    public void eliminarValoracion(String emailUsuario) {
+        ValoracionRepository.deleteByEmailUsuario(emailUsuario);
+    }
+
+
 }

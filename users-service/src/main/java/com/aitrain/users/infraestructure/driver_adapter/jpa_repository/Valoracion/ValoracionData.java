@@ -51,6 +51,6 @@ public class ValoracionData {
     private String limitaciones;
 
     // Relación con usuario (no bidireccional, ligera, limpia)
-    @Column(nullable = false)
+    @Column(name = "email_usuario", nullable = false)
     private String emailUsuario;
 }

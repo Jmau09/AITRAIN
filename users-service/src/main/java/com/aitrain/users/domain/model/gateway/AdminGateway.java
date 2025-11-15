@@ -8,12 +8,8 @@ public interface AdminGateway {
 
     Admin guardarAdmin(Admin admin);
 
-    Admin actualizarAdmin(Admin admin);
-
     Admin buscarPorEmail(String email);
     void eliminarAdmin(String email);
-
-    boolean existePorEmail(String email);
 
     List<Admin> listarAdmins();
 }
