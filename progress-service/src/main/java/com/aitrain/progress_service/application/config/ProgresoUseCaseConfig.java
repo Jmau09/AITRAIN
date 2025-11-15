@@ -13,7 +13,5 @@ public class ProgresoUseCaseConfig {
         return new ProgresoUseCase(progresoGateway);
 
     }
-    @Bean
-    public UsuarioUseCase usuarioUseCase(UsuarioGateway usuarioGateway, EncrypterGateway encrypterGateway) {
-        return new UsuarioUseCase(usuarioGateway, encrypterGateway);
+
 }

@@ -4,8 +4,10 @@ package com.aitrain.users.application.config;
 import com.aitrain.users.domain.model.gateway.AdminGateway;
 import com.aitrain.users.domain.model.gateway.EncrypterGateway;
 import com.aitrain.users.domain.model.gateway.UsuarioGateway;
+import com.aitrain.users.domain.model.gateway.ValoracionGateway;
 import com.aitrain.users.domain.usecase.AdminUseCase;
 import com.aitrain.users.domain.usecase.UsuarioUseCase;
+import com.aitrain.users.domain.usecase.ValoracionUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,5 +27,8 @@ public class UsuarioUseCaseConfig {
                                     EncrypterGateway encrypterGateway)  {
         return new AdminUseCase(adminGateway, encrypterGateway);
     }
+
+
+
 
 }
