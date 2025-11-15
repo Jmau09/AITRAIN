@@ -29,6 +29,7 @@ body{
   padding:25px;
   border-right:2px solid #ef4444;
   box-shadow:4px 0 15px rgba(239,68,68,0.15);
+  justify-content:space-between; /* Para que logout quede abajo */
 }
 
 .logo{
@@ -165,14 +166,38 @@ button.delete-btn{
   outline:none;
   box-shadow:0 0 5px rgba(239,68,68,0.5);
 }
+
+/* Logout button */
+#btnLogout{
+  margin-top:20px;
+  background:#ef4444;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  gap:10px;
+  transition:all 0.2s;
+}
+#btnLogout:hover{
+  background:#cc0000;
+  transform:scale(1.03);
+}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-  <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
-  <h2>Admin Panel</h2>
-  <button id="btnDashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+  <div>
+    <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
+    <h2>Admin Panel</h2>
+    <button id="btnDashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+  </div>
+  <button id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
 </div>
 
 <div class="main-content">
@@ -213,17 +238,20 @@ const searchInput = document.getElementById('searchInput');
 
 let usuarios = [];
 
-// Función para cargar usuarios
+// Cargar usuarios desde la API
 async function cargarUsuarios() {
   try {
     const res = await fetch('http://localhost:8080/api/aitrain/usuario/listar');
-    usuarios = await res.json();
+    const data = await res.json();
+
+    usuarios = Array.isArray(data) ? data : data.usuarios || [];
 
     totalUsuariosCard.textContent = usuarios.length;
-    usuariosActivosCard.textContent = usuarios.length; // Aquí puedes filtrar los activos si tienes esa info
+    usuariosActivosCard.textContent = usuarios.length;
 
     renderTabla(usuarios);
-  } catch(err) {
+
+  } catch (err) {
     console.error('Error al cargar usuarios:', err);
   }
 }
@@ -232,19 +260,23 @@ async function cargarUsuarios() {
 function renderTabla(data) {
   usuariosTable.innerHTML = '';
   data.forEach(u => {
-    const tr = document.createElement('tr');
+    const nombre = u.nombre || u.firstName || '-';
+    const apellido = u.apellido || u.lastName || '';
+    const email = u.email || '-';
+    const telefono = u.telefono || '-';
+    const edad = u.edad || '-';
 
+    const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${u.nombre} ${u.apellido}</td>
-      <td>${u.email}</td>
-      <td>${u.telefono || '-'}</td>
-      <td>${u.edad || '-'}</td>
+      <td>${nombre} ${apellido}</td>
+      <td>${email}</td>
+      <td>${telefono}</td>
+      <td>${edad}</td>
       <td>
-        <button class="action-btn view-btn" onclick="verUsuario('${u.email}')">Ver</button>
-        <button class="action-btn delete-btn" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
+        <button class="action-btn view-btn" onclick="verUsuario('${email}')">Ver</button>
+        <button class="action-btn delete-btn" onclick="eliminarUsuario('${email}')">Eliminar</button>
       </td>
     `;
-
     usuariosTable.appendChild(tr);
   });
 }
@@ -254,14 +286,14 @@ async function verUsuario(email) {
   try {
     const res = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
     const data = await res.json();
-    alert(`Nombre: ${data.nombre} ${data.apellido}\nCorreo: ${data.email}\nTeléfono: ${data.telefono || '-'}\nEdad: ${data.edad || '-'}`);
+    alert(`Nombre: ${data.nombre || '-'} ${data.apellido || '-'}\nCorreo: ${data.email || '-'}\nTeléfono: ${data.telefono || '-'}\nEdad: ${data.edad || '-'}`);
   } catch(err) {
     console.error('Error al ver usuario:', err);
     alert('Error al obtener información del usuario.');
   }
 }
 
-// Eliminar usuario
+// Eliminar usuario (solo BD)
 async function eliminarUsuario(email) {
   const confirmar = confirm(`⚠ ¿Eliminar usuario ${email}?`);
   if(!confirmar) return;
@@ -269,7 +301,7 @@ async function eliminarUsuario(email) {
   try {
     await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
     alert('Usuario eliminado correctamente');
-    cargarUsuarios(); // recargar tabla
+    cargarUsuarios();
   } catch(err) {
     console.error('Error al eliminar usuario:', err);
     alert('Error al eliminar usuario.');
@@ -279,12 +311,24 @@ async function eliminarUsuario(email) {
 // Filtrar tabla
 searchInput.addEventListener('input', () => {
   const term = searchInput.value.toLowerCase();
-  const filtered = usuarios.filter(u => 
-    `${u.nombre} ${u.apellido}`.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)
-  );
+  const filtered = usuarios.filter(u => {
+    const nombreCompleto = (u.nombre || u.firstName || '') + ' ' + (u.apellido || u.lastName || '');
+    const email = u.email || '';
+    return nombreCompleto.toLowerCase().includes(term) || email.toLowerCase().includes(term);
+  });
   renderTabla(filtered);
 });
 
+// Logout
+document.getElementById("btnLogout").addEventListener("click", () => {
+  const confirmar = confirm("¿Deseas cerrar sesión?");
+  if (!confirmar) return;
+
+  localStorage.removeItem("aitrain_user");
+  window.location.href = "login.html";
+});
+
+// Inicializar
 cargarUsuarios();
 </script>
 
