@@ -41,26 +41,26 @@ public class ValoracionController {
         }
     }
 
-    @GetMapping("/buscar/{email}")
-    public ResponseEntity<RespuestaValoracion> obtenerValoracion(@PathVariable String email) {
-        try {
-            Valoracion valoracion = valoracionUseCase.obtenerValoracionPorEmail(email);
+        @GetMapping("/buscar/{email}")
+        public ResponseEntity<RespuestaValoracion> obtenerValoracion(@PathVariable String email) {
+            try {
+                Valoracion valoracion = valoracionUseCase.obtenerValoracionPorEmail(email);
 
-            ValoracionData data = mapperValoracion.toEntity(valoracion);
+                ValoracionData data = mapperValoracion.toEntity(valoracion);
 
-            return ResponseEntity.ok(new RespuestaValoracion("Valoración encontrada", data));
+                return ResponseEntity.ok(new RespuestaValoracion("Valoración encontrada", data));
 
-        } catch (ValoracionInvalidDataException | ValoracionNotFoundException e) {
+            } catch (ValoracionInvalidDataException | ValoracionNotFoundException e) {
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new RespuestaValoracion(e.getMessage(), null));
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new RespuestaValoracion(e.getMessage(), null));
 
-        } catch (Exception e) {
+            } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new RespuestaValoracion("Error interno del servidor", null));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new RespuestaValoracion("Error interno del servidor", null));
+            }
         }
-    }
 
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarValoracion(@RequestBody ValoracionData valoracionData) {

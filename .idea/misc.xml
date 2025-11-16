@@ -11,11 +11,13 @@
         <option value="$PROJECT_DIR$/admin-service/pom.xml" />
         <option value="$PROJECT_DIR$/rutinas-service/pom.xml" />
         <option value="$PROJECT_DIR$/nutrition-service/pom.xml" />
+        <option value="$PROJECT_DIR$/chatbot-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/admin-service/pom.xml" />
+        <option value="$PROJECT_DIR$/chatbot-service/pom.xml" />
       </set>
     </option>
   </component>
