@@ -1,122 +1,412 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Perfil - AiTrain</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* -------------------- ESTILOS -------------------- */
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif}
-body{display:flex;min-height:100vh;background:#0d0d0d;color:#fff;}
-.sidebar{width:260px;background:#141414;display:flex;flex-direction:column;padding:25px;border-right:2px solid #ef4444;box-shadow:4px 0 15px rgba(239,68,68,0.15);}
-.logo{width:150px;margin:0 auto 25px auto;cursor:pointer;border-radius:15px;transition:transform .2s;}
-.logo:hover{transform:scale(1.06);}
-.sidebar h2{color:#ef4444;margin-bottom:20px;font-size:20px;text-align:center;font-weight:700;}
-.sidebar button{background:none;border:none;color:#fff;text-align:left;padding:12px 14px;font-size:15px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;border-radius:8px;transition:all 0.2s;}
-.sidebar button:hover,.sidebar button.active{background:#222;color:#ef4444;transform:translateX(5px);}
-.main-content{flex:1;padding:40px;}
-section{display:none;}
-section.active{display:flex;flex-direction:column;align-items:center;gap:25px;}
-.info-card{background:#1a1a1a;border:1px solid #ef4444;border-radius:15px;padding:30px;width:600px;box-shadow:0 0 15px rgba(239,68,68,0.20);animation:fadeIn .4s ease;}
-.info-header{display:flex;align-items:center;gap:15px;margin-bottom:25px;}
-.info-header i{font-size:32px;color:#ef4444;}
-.info-header h1{color:#ef4444;font-size:26px;margin:0;}
-.info-row{margin-bottom:15px;font-size:16px;}
-.info-row strong{color:#ef4444;font-weight:600;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-form{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
-label{font-size:14px;color:#fff;}
-input,textarea,select{padding:10px;border-radius:8px;border:1px solid #ef4444;background:#1a1a1a;color:#fff;font-size:14px;outline:none;}
-input:focus,textarea:focus,select:focus{border-color:#ff6b6b;box-shadow:0 0 5px rgba(239,68,68,0.5);}
-button.submit-btn{padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all 0.3s;background:#ef4444;color:#fff;}
-button.submit-btn:hover{background:#cc0000;transform:scale(1.03);}
-.valoracion-card{margin-top:10px;padding:25px;background:#1a1a1a;border:1px solid #ef4444;border-radius:15px;box-shadow:0 0 15px rgba(239,68,68,0.2);width:600px;}
-.valoracion-card h2{margin-bottom:15px;color:#ef4444;display:flex;align-items:center;gap:10px;}
-.valoracion-card p{margin:6px 0;font-size:15px;}
-.valoracion-card strong{color:#ef4444 !important;}
+body{
+  background:#0d0d0d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:20px;
+}
+.card{
+  background:#1a1a1a;
+  border-radius:12px;
+  border:2px solid #ef4444; /* borde neón rojo */
+  box-shadow:0 0 20px #ef4444,0 8px 30px rgba(2,6,23,0.5);
+  width:100%;
+  max-width:1000px;
+  display:flex;
+  overflow:hidden;
+  min-height:600px;
+}
+.left{
+  flex:1;
+  padding:40px;
+  background:#000;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.left .logo{display:flex;gap:12px;align-items:center;margin-bottom:20px;}
+.left .logo img{width:64px;height:auto}
+.left h1{font-size:28px;margin-top:6px;color:#fff}
+.left p{color:rgba(255,255,255,0.8);max-width:320px;line-height:1.4}
+.nav-menu{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+.nav-btn{
+  background:none;
+  border:none;
+  color:#fff;
+  text-align:left;
+  padding:12px 16px;
+  font-size:15px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-radius:8px;
+  transition:all 0.2s;
+  width:100%;
+}
+.nav-btn:hover,.nav-btn.active{
+  background:#1a1a1a;
+  color:#ef4444;
+  border-left:4px solid #ef4444;
+}
+.right{
+  flex:1;
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  background:#1a1a1a;
+  overflow-y:auto;
+}
+h2{font-size:24px;color:#fff;margin-bottom:4px;font-weight:700}
+p.sub{color:#ccc;margin-bottom:12px}
+
+/* Form Styles */
+form{display:flex;flex-direction:column;gap:14px;margin-top:20px;}
+label{font-size:13px;color:#ccc;margin-bottom:6px;display:block}
+input[type="email"],input[type="password"],input[type="text"],input[type="number"],textarea,select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #555;
+  background:#222;
+  color:#fff;
+  outline:none;
+  font-size:14px;
+  transition:all 0.2s ease;
+}
+input::placeholder,textarea::placeholder{color:#888}
+input:focus,textarea:focus,select:focus{border-color:#ef4444;box-shadow:0 0 8px #ef4444;}
+button.submit-btn{
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  margin-top:10px;
+}
+button.submit-btn:hover{background:#ff1a1a;transform:scale(1.03)}
+
+/* Info Cards - TEXTO EN BLANCO */
+.info-card{
+  background:#111;
+  border-radius:8px;
+  padding:20px;
+  margin-bottom:15px;
+  border:1px solid #333;
+  color: #fff; /* Texto en blanco */
+}
+.info-row{
+  margin-bottom:12px;
+  font-size:14px;
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid #333;
+  color: #fff; /* Texto en blanco */
+}
+.info-row:last-child{
+  border-bottom:none;
+}
+.info-row strong{
+  color:#ef4444;
+  font-weight:600;
+}
+/* Asegurar que todos los textos dentro de las cards sean blancos */
+.info-card span,
+.valoracion-card span {
+  color: #fff !important;
+}
+
+/* Sections */
+.section{
+  display:none;
+  animation:fadeIn 0.4s ease;
+}
+.section.active{
+  display:block;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Mensajes */
+.mensaje{
+  text-align:center;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+  font-size:14px;
+  display:none;
+}
+.mensaje.success{
+  background:#0a261f;
+  color:#0fff90;
+  border:1px solid #0fff90;
+  display:block;
+}
+.mensaje.error{
+  background:#2a0a0a;
+  color:#ff4d4d;
+  border:1px solid #ff4d4d;
+  display:block;
+}
+.mensaje.info{
+  background:#1a1a2e;
+  color:#ccc;
+  border:1px solid #555;
+  display:block;
+}
+
+/* Danger Zone */
+.danger-zone{
+  background:#2a0a0a;
+  border:1px solid #ef4444;
+  border-radius:8px;
+  padding:20px;
+  margin-top:20px;
+  color: #fff; /* Texto en blanco */
+}
+.danger-zone h3{
+  color:#ef4444;
+  margin-bottom:15px;
+}
+.danger-zone p {
+  color: #ccc; /* Texto gris claro */
+}
+
+/* Valoración card específica */
+.valoracion-card {
+  background:#111;
+  border:1px solid #333;
+  border-radius:8px;
+  padding:20px;
+  margin-top:15px;
+  color: #fff; /* Texto en blanco */
+}
+
+@media (max-width:780px){
+  .card{flex-direction:column;}
+  .left{padding:30px;}
+  .right{padding:30px;}
+}
 </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
-  <h2>Mi Perfil</h2>
-  <button id="btnInicio"><i class="fas fa-home"></i> Volver al inicio</button>
-  <button class="active" data-target="info">Información Personal <i class="fas fa-user"></i></button>
-  <button data-target="actualizar">Actualizar Datos <i class="fas fa-edit"></i></button>
-  <button data-target="eliminar">Eliminar Cuenta <i class="fas fa-trash-alt"></i></button>
-  <button data-target="valoracion">Registrar Valoración <i class="fas fa-star"></i></button>
-</div>
-
-<!-- Main Content -->
-<div class="main-content">
-  <section id="info" class="active">
-    <div class="info-card">
-      <div class="info-header"><i class="fas fa-address-card"></i><h1>Información Personal</h1></div>
-      <p class="info-row"><strong>Nombre Completo:</strong> <span id="nombreUsuario"></span></p>
-      <p class="info-row"><strong>Correo:</strong> <span id="correoUsuario"></span></p>
-      <p class="info-row"><strong>Teléfono:</strong> <span id="telefonoUsuario"></span></p>
-      <p class="info-row"><strong>Edad:</strong> <span id="edadUsuario"></span></p>
+<div class="card" role="main">
+  <div class="left" aria-hidden="true">
+    <div class="logo">
+      <img src="brazo.png" alt="AiTrain logo" />
+      <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
     </div>
-    <div class="valoracion-card">
-      <h2 class="valoracion-title"><i class="fas fa-dumbbell"></i> Última Valoración Física</h2>
-      <p><strong>Peso:</strong> <span id="v_peso">—</span> kg</p>
-      <p><strong>Estatura:</strong> <span id="v_estatura">—</span> cm</p>
-      <p><strong>IMC:</strong> <span id="v_imc">—</span></p>
-      <p><strong>Género:</strong> <span id="v_genero">—</span></p>
-      <p><strong>Edad:</strong> <span id="v_edad">—</span></p>
-      <p><strong>Nivel Actividad:</strong> <span id="v_actividad">—</span></p>
-      <p><strong>Días Entrenamiento:</strong> <span id="v_dias">—</span></p>
-      <p><strong>Tiempo por sesión:</strong> <span id="v_tiempo">—</span> min</p>
-      <p><strong>Objetivo:</strong> <span id="v_objetivo">—</span></p>
+    <h1>Mi Perfil</h1>
+    <p>Gestiona tu información personal, actualiza tus datos y configura tu cuenta.</p>
+    
+    <div class="nav-menu">
+      <button class="nav-btn active" data-target="info">
+        <i class="fas fa-user"></i> Información Personal
+      </button>
+      <button class="nav-btn" data-target="actualizar">
+        <i class="fas fa-edit"></i> Actualizar Datos
+      </button>
+      <button class="nav-btn" data-target="valoracion">
+        <i class="fas fa-star"></i> Valoración Física
+      </button>
+      <button class="nav-btn" data-target="eliminar">
+        <i class="fas fa-trash-alt"></i> Eliminar Cuenta
+      </button>
+      <button class="nav-btn" onclick="window.location.href='dashboard_usuario.html'" style="margin-top:20px;">
+        <i class="fas fa-arrow-left"></i> Volver al Dashboard
+      </button>
     </div>
-  </section>
+  </div>
 
-  <section id="actualizar">
-    <h1 style="color:#ef4444;">Actualizar Datos</h1>
-    <form id="updateForm">
-      <label>Nombre</label><input type="text" id="nombre" required>
-      <label>Apellido</label><input type="text" id="apellido" required>
-      <label>Teléfono</label><input type="text" id="telefono" required>
-      <label>Edad</label><input type="number" id="edad" required min="1">
-      <label>Contraseña</label><input type="password" id="password" required minlength="4">
-      <button type="submit" class="submit-btn">Actualizar</button>
-    </form>
-  </section>
+  <div class="right">
+    <!-- Información Personal -->
+    <div id="info" class="section active">
+      <h2>Información Personal</h2>
+      <p class="sub">Datos básicos de tu cuenta</p>
+      
+      <div class="info-card">
+        <div class="info-row">
+          <strong>Nombre Completo:</strong>
+          <span id="nombreUsuario">Cargando...</span>
+        </div>
+        <div class="info-row">
+          <strong>Correo Electrónico:</strong>
+          <span id="correoUsuario">Cargando...</span>
+        </div>
+        <div class="info-row">
+          <strong>Teléfono:</strong>
+          <span id="telefonoUsuario">Cargando...</span>
+        </div>
+        <div class="info-row">
+          <strong>Edad:</strong>
+          <span id="edadUsuario">Cargando...</span>
+        </div>
+      </div>
 
-  <section id="eliminar">
-    <h1 style="color:#ef4444;">Eliminar Cuenta</h1>
-    <button id="btnEliminar" class="submit-btn"><i class="fas fa-trash-alt"></i> Eliminar mi cuenta</button>
-  </section>
+      <h3 style="color:#ef4444; margin-top:30px;">Última Valoración Física</h3>
+      <div class="info-card valoracion-card">
+        <div class="info-row">
+          <strong>Peso:</strong>
+          <span id="v_peso">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Estatura:</strong>
+          <span id="v_estatura">—</span>
+        </div>
+        <div class="info-row">
+          <strong>IMC:</strong>
+          <span id="v_imc">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Género:</strong>
+          <span id="v_genero">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Edad:</strong>
+          <span id="v_edad">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Nivel de Actividad:</strong>
+          <span id="v_actividad">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Días de Entrenamiento:</strong>
+          <span id="v_dias">—</span>
+        </div>
+        <div class="info-row">
+          <strong>Tiempo por Sesión:</strong>
+          <span id="v_tiempo">— min</span>
+        </div>
+        <div class="info-row">
+          <strong>Objetivo:</strong>
+          <span id="v_objetivo">—</span>
+        </div>
+      </div>
+    </div>
 
-  <section id="valoracion">
-    <h1>Registrar Valoración Física</h1>
-    <form id="valoracionForm">
-      <label>Peso (kg)</label><input type="number" id="pesoKg" step="0.1" min="1" required>
-      <label>Estatura (cm)</label><input type="number" id="estaturaCm" min="50" required>
-      <label>Género</label><select id="genero" required><option value="">Seleccione…</option><option value="M">Masculino</option><option value="F">Femenino</option></select>
-      <label>Edad</label><input type="number" id="edadValoracion" min="1" required>
-      <label>Nivel de Actividad</label><select id="nivelActividad" required><option value="">Seleccione…</option><option value="Sedentaria">Sedentaria</option><option value="Ligera">Ligera</option><option value="Moderada">Moderada</option><option value="Intensa">Intensa</option></select>
-      <label>Días de Entrenamiento por Semana</label><input type="number" id="diasEntrenamiento" min="1" max="7" required>
-      <label>Tiempo por Sesión (min)</label><input type="number" id="tiempoPorSesionMin" min="10" required>
-      <label>Objetivo</label><select id="objetivo" required>
-        <option value="">Seleccione…</option>
-        <option value="Perder grasa">Perder grasa</option>
-        <option value="Ganar masa muscular">Ganar masa muscular</option>
-        <option value="Mantener peso">Mantener peso</option>
-        <option value="Mejorar resistencia">Mejorar resistencia</option>
-        <option value="Aumentar fuerza">Aumentar fuerza</option>
-        <option value="Acondicionamiento general">Acondicionamiento general</option>
-      </select>
-      <label>Restricciones</label><input type="text" id="restricciones" placeholder="Opcional">
-      <label>Limitaciones</label><input type="text" id="limitaciones" placeholder="Opcional">
-      <button type="submit" class="submit-btn">Guardar Valoración</button>
-      <div id="mensajeValoracion"></div>
-    </form>
-  </section>
+    <!-- Actualizar Datos -->
+    <div id="actualizar" class="section">
+      <h2>Actualizar Datos</h2>
+      <p class="sub">Modifica tu información personal</p>
+      
+      <form id="updateForm">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" required>
+        
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" required>
+        
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" required>
+        
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" required min="1">
+        
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" required minlength="4">
+        
+        <button type="submit" class="submit-btn">Actualizar Datos</button>
+        <div id="mensajeUpdate" class="mensaje"></div>
+      </form>
+    </div>
+
+    <!-- Valoración Física -->
+    <div id="valoracion" class="section">
+      <h2>Registrar Valoración Física</h2>
+      <p class="sub">Actualiza tus métricas para rutinas personalizadas</p>
+      
+      <form id="valoracionForm">
+        <label for="pesoKg">Peso (kg)</label>
+        <input type="number" id="pesoKg" step="0.1" min="1" required>
+        
+        <label for="estaturaCm">Estatura (cm)</label>
+        <input type="number" id="estaturaCm" min="50" required>
+        
+        <label for="genero">Género</label>
+        <select id="genero" required>
+          <option value="">Seleccione...</option>
+          <option value="M">Masculino</option>
+          <option value="F">Femenino</option>
+        </select>
+        
+        <label for="edadValoracion">Edad</label>
+        <input type="number" id="edadValoracion" min="1" required>
+        
+        <label for="nivelActividad">Nivel de Actividad</label>
+        <select id="nivelActividad" required>
+          <option value="">Seleccione...</option>
+          <option value="Sedentaria">Sedentaria</option>
+          <option value="Ligera">Ligera</option>
+          <option value="Moderada">Moderada</option>
+          <option value="Intensa">Intensa</option>
+        </select>
+        
+        <label for="diasEntrenamiento">Días de Entrenamiento por Semana</label>
+        <input type="number" id="diasEntrenamiento" min="1" max="7" required>
+        
+        <label for="tiempoPorSesionMin">Tiempo por Sesión (min)</label>
+        <input type="number" id="tiempoPorSesionMin" min="10" required>
+        
+        <label for="objetivo">Objetivo</label>
+        <select id="objetivo" required>
+          <option value="">Seleccione...</option>
+          <option value="Perder grasa">Perder grasa</option>
+          <option value="Ganar masa muscular">Ganar masa muscular</option>
+          <option value="Mantener peso">Mantener peso</option>
+          <option value="Mejorar resistencia">Mejorar resistencia</option>
+          <option value="Aumentar fuerza">Aumentar fuerza</option>
+          <option value="Acondicionamiento general">Acondicionamiento general</option>
+        </select>
+        
+        <label for="restricciones">Restricciones (opcional)</label>
+        <input type="text" id="restricciones" placeholder="Ej: Alergias, dietas especiales">
+        
+        <label for="limitaciones">Limitaciones (opcional)</label>
+        <input type="text" id="limitaciones" placeholder="Ej: Lesiones, condiciones médicas">
+        
+        <button type="submit" class="submit-btn">Guardar Valoración</button>
+        <div id="mensajeValoracion" class="mensaje"></div>
+      </form>
+    </div>
+
+    <!-- Eliminar Cuenta -->
+    <div id="eliminar" class="section">
+      <h2>Eliminar Cuenta</h2>
+      <p class="sub">Elimina permanentemente tu cuenta y todos tus datos</p>
+      
+      <div class="danger-zone">
+        <h3><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h3>
+        <p style="margin-bottom:20px;">
+          Esta acción no se puede deshacer. Se eliminarán permanentemente todos tus datos, 
+          rutinas, progreso y valoraciones.
+        </p>
+        <button id="btnEliminar" class="submit-btn" style="background:#dc2626;">
+          <i class="fas fa-trash-alt"></i> Eliminar Mi Cuenta
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="module">
@@ -137,18 +427,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// 🔹 Navegación Sidebar
-const sections = document.querySelectorAll("section");
-const buttons = document.querySelectorAll(".sidebar button");
-buttons.forEach(btn => btn.addEventListener("click", () => {
-  buttons.forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  sections.forEach(sec => sec.classList.remove("active"));
-  document.getElementById(btn.dataset.target)?.classList.add("active");
-}));
+// 🔹 Navegación
+const sections = document.querySelectorAll(".section");
+const navButtons = document.querySelectorAll(".nav-btn");
 
-document.getElementById("logoBtn").addEventListener("click",()=>window.location.href="dashboard_usuario.html");
-document.getElementById("btnInicio").addEventListener("click",()=>window.location.href="dashboard_usuario.html");
+navButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (!btn.dataset.target) return;
+    
+    navButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    
+    sections.forEach(sec => sec.classList.remove("active"));
+    document.getElementById(btn.dataset.target)?.classList.add("active");
+  });
+});
 
 // 🔹 Cargar info usuario
 async function cargarInfoUsuario() {
@@ -161,15 +454,22 @@ async function cargarInfoUsuario() {
     document.getElementById("correoUsuario").textContent = data.email || email;
     document.getElementById("telefonoUsuario").textContent = data.telefono || "—";
     document.getElementById("edadUsuario").textContent = data.edad || "—";
+    
+    // Rellenar formulario de actualización
+    document.getElementById("nombre").value = data.nombre || '';
+    document.getElementById("apellido").value = data.apellido || '';
+    document.getElementById("telefono").value = data.telefono || '';
+    document.getElementById("edad").value = data.edad || '';
   } catch(e){ console.error(e); }
 }
-cargarInfoUsuario();
 
 // 🔹 Actualizar datos
-document.getElementById("updateForm").addEventListener("submit", async e=>{
+document.getElementById("updateForm").addEventListener("submit", async e => {
   e.preventDefault();
+  const mensajeUpdate = document.getElementById("mensajeUpdate");
   const email = localStorage.getItem("aitrain_user");
   if(!email) return;
+  
   const data = {
     email,
     nombre: document.getElementById("nombre").value,
@@ -178,22 +478,44 @@ document.getElementById("updateForm").addEventListener("submit", async e=>{
     password: document.getElementById("password").value,
     edad: parseInt(document.getElementById("edad").value)
   };
+  
   try {
-    await fetch("http://localhost:8080/api/aitrain/usuario/update", {method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-    alert("Datos actualizados ✔");
-    cargarInfoUsuario();
-  } catch(e){ alert("Error al actualizar"); console.error(e); }
+    const response = await fetch("http://localhost:8080/api/aitrain/usuario/update", {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    
+    if(response.ok) {
+      mensajeUpdate.textContent = "Datos actualizados correctamente ✔";
+      mensajeUpdate.className = "mensaje success";
+      cargarInfoUsuario();
+    } else {
+      throw new Error("Error en la respuesta");
+    }
+  } catch(e){
+    mensajeUpdate.textContent = "Error al actualizar los datos ❌";
+    mensajeUpdate.className = "mensaje error";
+    console.error(e);
+  }
 });
 
 // 🔹 Valoraciones
-const mensajeValoracion = document.getElementById("mensajeValoracion");
-document.getElementById("valoracionForm").addEventListener("submit", async e=>{
+document.getElementById("valoracionForm").addEventListener("submit", async e => {
   e.preventDefault();
+  const mensajeValoracion = document.getElementById("mensajeValoracion");
   const email = localStorage.getItem("aitrain_user");
-  if(!email){ mensajeValoracion.textContent="No se encontró el usuario"; mensajeValoracion.style.color="red"; return;}
+  
+  if(!email){
+    mensajeValoracion.textContent = "No se encontró el usuario";
+    mensajeValoracion.className = "mensaje error";
+    return;
+  }
+  
   const peso = parseFloat(document.getElementById("pesoKg").value);
   const estaturaCm = parseFloat(document.getElementById("estaturaCm").value);
   const imc = +(peso / ((estaturaCm/100)**2)).toFixed(2);
+  
   const data = {
     emailUsuario: email,
     pesoKg: peso,
@@ -208,49 +530,90 @@ document.getElementById("valoracionForm").addEventListener("submit", async e=>{
     restricciones: document.getElementById("restricciones").value || "Ninguna",
     limitaciones: document.getElementById("limitaciones").value || "Ninguna"
   };
+  
   try {
-    await fetch("http://localhost:8080/api/aitrain/valoracion/guardar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-    mensajeValoracion.textContent="Valoración registrada ✔"; mensajeValoracion.style.color="#4ade80";
-    document.getElementById("valoracionForm").reset();
-  } catch(e){ mensajeValoracion.textContent="Error al guardar ❌"; mensajeValoracion.style.color="red"; console.error(e); }
+    const response = await fetch("http://localhost:8080/api/aitrain/valoracion/guardar", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    
+    if(response.ok) {
+      mensajeValoracion.textContent = "Valoración registrada correctamente ✔";
+      mensajeValoracion.className = "mensaje success";
+      document.getElementById("valoracionForm").reset();
+      cargarValoracionUsuario();
+    } else {
+      throw new Error("Error en la respuesta");
+    }
+  } catch(e){
+    mensajeValoracion.textContent = "Error al guardar la valoración ❌";
+    mensajeValoracion.className = "mensaje error";
+    console.error(e);
+  }
 });
 
 async function cargarValoracionUsuario(){
-  const email = localStorage.getItem("aitrain_user"); if(!email) return;
+  const email = localStorage.getItem("aitrain_user");
+  if(!email) return;
+  
   try {
     const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
     if(!res.ok) throw new Error("No encontrada");
+    
     const data = await res.json();
     const v = data.valoracion;
-    document.getElementById("v_peso").textContent=v.pesoKg;
-    document.getElementById("v_estatura").textContent=v.estaturaCm;
-    document.getElementById("v_imc").textContent=v.imc.toFixed(2);
-    document.getElementById("v_genero").textContent=v.genero;
-    document.getElementById("v_edad").textContent=v.edad;
-    document.getElementById("v_actividad").textContent=v.nivelActividad;
-    document.getElementById("v_dias").textContent=v.diasEntrenamiento;
-    document.getElementById("v_tiempo").textContent=v.tiempoPorSesionMin;
-    document.getElementById("v_objetivo").textContent=v.objetivo;
-  } catch(e){ console.error("No hay valoraciones todavía."); }
+    
+    document.getElementById("v_peso").textContent = v.pesoKg;
+    document.getElementById("v_estatura").textContent = v.estaturaCm;
+    document.getElementById("v_imc").textContent = v.imc.toFixed(2);
+    document.getElementById("v_genero").textContent = v.genero;
+    document.getElementById("v_edad").textContent = v.edad;
+    document.getElementById("v_actividad").textContent = v.nivelActividad;
+    document.getElementById("v_dias").textContent = v.diasEntrenamiento;
+    document.getElementById("v_tiempo").textContent = v.tiempoPorSesionMin;
+    document.getElementById("v_objetivo").textContent = v.objetivo;
+  } catch(e){
+    console.error("No hay valoraciones todavía.");
+  }
 }
-cargarValoracionUsuario();
 
 // 🔹 Eliminar cuenta
-document.getElementById("btnEliminar").addEventListener("click", async ()=>{
-  const email = localStorage.getItem("aitrain_user"); if(!email) return alert("Usuario no encontrado");
-  const confirmar = confirm("⚠ ¿Eliminar cuenta?"); if(!confirmar) return;
-  const password = prompt("Ingresa tu contraseña para confirmar:"); if(!password) return;
+document.getElementById("btnEliminar").addEventListener("click", async () => {
+  const email = localStorage.getItem("aitrain_user");
+  if(!email) return alert("Usuario no encontrado");
+  
+  const confirmar = confirm("⚠ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.");
+  if(!confirmar) return;
+  
+  const password = prompt("Ingresa tu contraseña para confirmar:");
+  if(!password) return;
+  
   try {
     const user = auth.currentUser;
-    const cred = EmailAuthProvider.credential(email,password);
-    await reauthenticateWithCredential(user,cred);
+    const cred = EmailAuthProvider.credential(email, password);
+    await reauthenticateWithCredential(user, cred);
     await deleteUser(user);
-    await fetch(`http://localhost:8080/api/aitrain/valoracion/eliminar/${email}`,{method:"DELETE"});
-    await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`,{method:"DELETE"});
+    
+    await fetch(`http://localhost:8080/api/aitrain/valoracion/eliminar/${email}`, {method: "DELETE"});
+    await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, {method: "DELETE"});
+    
     localStorage.removeItem("aitrain_user");
-    alert("Cuenta eliminada ✔");
-    window.location.href="login.html";
-  } catch(e){ alert("Error al eliminar cuenta ❌"); console.error(e); }
+    localStorage.removeItem("aitrain_logged");
+    localStorage.removeItem("aitrain_tipo");
+    
+    alert("Cuenta eliminada correctamente ✔");
+    window.location.href = "login.html";
+  } catch(e){
+    alert("Error al eliminar la cuenta ❌");
+    console.error(e);
+  }
+});
+
+// Cargar datos al iniciar
+document.addEventListener('DOMContentLoaded', function() {
+  cargarInfoUsuario();
+  cargarValoracionUsuario();
 });
 </script>
 </body>
