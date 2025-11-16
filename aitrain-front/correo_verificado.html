@@ -1,87 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Correo Verificado - AiTrain</title>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif}
+body{
+  background:#0d0d0d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:20px;
+}
+.card{
+  background:#1a1a1a;
+  border-radius:12px;
+  border:2px solid #ef4444; /* borde neón rojo */
+  box-shadow:0 0 20px #ef4444,0 8px 30px rgba(2,6,23,0.5);
+  width:100%;
+  max-width:920px;
+  display:flex;
+  overflow:hidden;
+}
+.left{
+  flex:1;
+  padding:40px;
+  background:#000;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+}
+.left .logo{display:flex;gap:12px;align-items:center}
+.left .logo img{width:64px;height:auto}
+.left h1{font-size:28px;margin-top:6px;color:#fff}
+.left p{color:rgba(255,255,255,0.8);max-width:320px;line-height:1.4}
+.right{
+  flex:1;
+  padding:40px 45px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+  background:#1a1a1a;
+}
+h2{font-size:24px;color:#fff;margin-bottom:4px;font-weight:700}
+p.sub{color:#ccc;margin-bottom:12px}
 
-    body {
-        background-color: #0d0d0d;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        animation: fadeIn 1s ease-in;
-    }
+.success-icon {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-    .container {
-        background-color: #1a1a1a;
-        border: 2px solid #ff0000;
-        border-radius: 15px;
-        box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
-        width: 400px;
-        max-width: 90%;
-        padding: 40px 30px;
-        text-align: center;
-        animation: slideIn 0.8s ease-out;
-    }
+.success-icon i {
+  font-size: 64px;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #10b981;
+  box-shadow: 0 0 20px #10b981;
+}
 
-    .container h1 {
-        color: #ff0000;
-        font-size: 2rem;
-        margin-bottom: 15px;
-    }
+.countdown {
+  background: rgba(239, 68, 68, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px 0;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
 
-    .container p {
-        color: #ddd;
-        font-size: 1rem;
-        margin-bottom: 30px;
-        line-height: 1.5;
-    }
+.countdown-text {
+  color: #ccc;
+  font-size: 14px;
+}
 
-    button {
-        background-color: #ff0000;
-        color: #fff;
-        border: none;
-        padding: 10px 25px;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
+.countdown-number {
+  color: #ef4444;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
 
-    button:hover {
-        background-color: #cc0000;
-        transform: scale(1.05);
-    }
+button{
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+button:hover{background:#ff1a1a;transform:scale(1.03)}
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
+.features {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-    @keyframes slideIn {
-        from { transform: translateY(-30px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.feature i {
+  color: #ef4444;
+  width: 20px;
+}
+
+@media (max-width:780px){.left{display:none}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<div class="container">
-    <h1>¡Correo Verificado!</h1>
-    <p>Tu correo ha sido confirmado correctamente.<br>
-       Ahora puedes iniciar sesión y comenzar a usar AiTrain.</p>
-    <button onclick="window.location.href='login.html'">Ir al Login</button>
+<div class="card" role="main">
+  <div class="left" aria-hidden="true">
+    <div class="logo">
+      <img src="brazo.png" alt="AiTrain logo" />
+      <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
+    </div>
+    <h1>Verificación Exitosa</h1>
+    <p>Tu cuenta ha sido verificada correctamente. Ahora tienes acceso completo a todas las funciones premium de AiTrain.</p>
+    
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-dumbbell"></i>
+        <span>Rutinas personalizadas con IA</span>
+      </div>
+      <div class="feature">
+        <i class="fas fa-chart-line"></i>
+        <span>Seguimiento de progreso detallado</span>
+      </div>
+      <div class="feature">
+        <i class="fas fa-robot"></i>
+        <span>Asistente virtual de entrenamiento</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    
+    <div>
+      <h2>¡Correo Verificado!</h2>
+      <p class="sub">Tu dirección de correo electrónico ha sido confirmada exitosamente.</p>
+    </div>
+
+    <div class="countdown">
+      <div class="countdown-text">Serás redirigido automáticamente en <span class="countdownNumber" id="countdownNumber">15</span> segundos</div>
+    </div>
+
+    <button onclick="redirectToLogin()">
+      <i class="fas fa-sign-in-alt"></i> Iniciar Sesión Ahora
+    </button>
+  </div>
 </div>
+
+<script>
+let countdown = 15;
+const countdownElement = document.getElementById('countdownNumber');
+
+function updateCountdown() {
+    countdownElement.textContent = countdown;
+    countdown--;
+    
+    if (countdown < 0) {
+        redirectToLogin();
+    }
+}
+
+function redirectToLogin() {
+    window.location.href = 'login.html';
+}
+
+// Actualizar el contador cada segundo
+const countdownInterval = setInterval(updateCountdown, 1000);
+
+// Iniciar el contador inmediatamente
+updateCountdown();
+</script>
 </body>
 </html>
