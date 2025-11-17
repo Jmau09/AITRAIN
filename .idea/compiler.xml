@@ -14,26 +14,17 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="users-service" />
-      </profile>
-      <profile name="Annotation profile for rutinas-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-        </processorPath>
-        <module name="nutrition-service" />
-        <module name="workouts-service" />
         <module name="rutinas-service" />
-        <module name="progress-service" />
+        <module name="nutrition-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="admin-service" target="17" />
       <module name="chatbot-service" target="17" />
+      <module name="progress-service" target="17" />
+      <module name="workouts-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

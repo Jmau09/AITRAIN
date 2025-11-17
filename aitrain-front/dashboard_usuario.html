@@ -1,324 +1,802 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - AiTrain</title>
-
-<!-- ICONS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-*{margin:0; padding:0; box-sizing:border-box; font-family:Inter,Segoe UI,Arial,sans-serif;}
-body{background:#0d0d0d; color:#fff;}
-
-/* NAVBAR */
-.navbar{width:100%; background:#141414; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ef4444;}
-.nav-left{display:flex; gap:15px; align-items:center;}
-.nav-left img{width:55px; cursor:pointer;}
-.nav-right{display:flex; gap:20px;}
-.nav-right button{background:none; border:none; color:#fff; font-size:17px; cursor:pointer; transition:0.2s;}
-.nav-right button:hover{color:#ef4444;}
-
-/* MAIN CONTENT */
-.container{padding:40px; display:flex; flex-direction:column; gap:30px;}
-
-/* BIG CARDS */
-.big-card{background:#1a1a1a; border:1px solid #ef4444; border-radius:18px; padding:25px; box-shadow:0 0 15px rgba(239,68,68,0.3); animation:fadeIn .4s ease;}
-.big-card h2{color:#ef4444; display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-.big-card p{color:#ccc; font-size:15px; margin-top:10px;}
-
-/* STATS GRID */
-.stats-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px;}
-
-/* INDIVIDUAL STAT CARD */
-.stat-card{background:#111; border-radius:18px; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(239,68,68,0.2); position:relative; transition:0.3s;}
-.stat-card:hover{transform:translateY(-5px);}
-.stat-card h3{color:#fff; margin-bottom:10px;}
-.stat-value{font-size:32px; font-weight:bold; margin-bottom:10px;}
-.progress-bar{width:100%; height:12px; border-radius:10px; background:#333; overflow:hidden; margin-top:5px;}
-.progress-fill{height:100%; border-radius:10px; background:#ef4444; width:0; transition:width 1s ease;}
-.stat-icon{font-size:28px; margin-bottom:5px; color:#ef4444;}
-
-/* Slider frases motivadoras */
-.slider-wrapper{
-  overflow:hidden;
-  position:relative;
-  height:40px;
-  margin-top:10px;
-}
-
-.slider{
-  display:flex;
-  animation:slide 12s linear infinite;
-}
-
-.slide{
-  min-width:100%;
-  text-align:center;
-  color:#fff;
-  font-size:16px;
-  padding:5px 0;
-}
-
-/* Animación de desplazamiento */
-@keyframes slide{
-  0%{transform:translateX(0);}
-  25%{transform:translateX(-100%);}
-  50%{transform:translateX(-200%);}
-  75%{transform:translateX(-300%);}
-  100%{transform:translateX(0);}
-}
-
-/* Accordion consejos de salud */
-.accordion-item{
-  margin-top:10px;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid #ef4444;
-  background:#111;
-}
-
-.accordion-btn{
-  width:100%;
-  text-align:left;
-  background:none;
-  border:none;
-  color:#fff;
-  padding:12px 15px;
-  font-size:15px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.accordion-btn:hover{
-  background:rgba(239,68,68,0.1);
-}
-
-.accordion-content{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height 0.3s ease;
-  padding:0 15px;
-  color:#ccc;
-  font-size:14px;
-}
-
-.accordion-content p{
-  margin:10px 0;
-}
-
-/* Motivación y Consejos - tarjetas hover */
-.motivacion-grid, .consejos-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:10px;
-}
-
-.motiv-card, .consejo-card{
-  background:#1a1a1a;
-  border:1px solid #ef4444;
-  border-radius:15px;
-  padding:15px;
-  color:#fff;
-  font-size:14px;
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  box-shadow:0 0 10px rgba(239,68,68,0.2);
-  transition:0.3s;
-}
-
-.motiv-card:hover, .consejo-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 15px rgba(239,68,68,0.4);
-}
-
-.motiv-card i, .consejo-card i{
-  color:#ef4444;
-  font-size:18px;
-  flex-shrink:0;
-}
-
-/* Animación general */
-@keyframes fadeIn{from{opacity:0; transform:translateY(10px);}to{opacity:1; transform:translateY(0);}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard - AiTrain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            width: 55px;
+            height: auto;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            color: #ef4444;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #dc2626;
+            transform: scale(1.05);
+        }
+        
+        .btn-outline {
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .welcome-section p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        
+        .icon-calories {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .icon-workouts {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        
+        .icon-streak {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        
+        .icon-weight {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border: 1px solid #a855f7;
+        }
+        
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .stat-change {
+            font-size: 0.8rem;
+            color: #22c55e;
+            margin-top: 0.3rem;
+        }
+        
+        .stat-change.negative {
+            color: #ef4444;
+        }
+        
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        /* Workout Section */
+        .workout-section {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .workout-card {
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .workout-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .workout-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+        
+        .status-completed {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        
+        .workout-meta {
+            display: flex;
+            gap: 1rem;
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .workout-exercises {
+            margin-bottom: 1rem;
+        }
+        
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .exercise-name {
+            font-weight: 500;
+            color: #fff;
+        }
+        
+        .exercise-sets {
+            color: #ccc;
+        }
+        
+        .workout-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Sidebar Sections */
+        .sidebar-section {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .progress-chart {
+            height: 150px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ccc;
+            margin-bottom: 1rem;
+            border: 1px solid #333;
+        }
+        
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .progress-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .progress-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .progress-label {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        .challenge-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        .challenge-info h4 {
+            margin-bottom: 0.3rem;
+            color: #fff;
+        }
+        
+        .challenge-info p {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #111;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s;
+            border: 1px solid #333;
+        }
+        
+        .action-btn:hover {
+            background-color: #1a1a1a;
+            transform: translateY(-2px);
+            border-color: #ef4444;
+        }
+        
+        .action-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ef4444;
+        }
+        
+        .action-btn span {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                padding: 1rem;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-left">
-    <img src="brazo.png" alt="logo" onclick="location.href='dashboard_usuario.html'">
-    <h2 style="color:#ef4444;">AiTrain Dashboard</h2>
-  </div>
-  <div class="nav-right">
-    <button onclick="location.href='chat.html'"><i class="fas fa-robot"></i> Chatbot</button>
-    <button onclick="location.href='perfil.html'"><i class="fas fa-user"></i> Perfil</button>
-    <button onclick="cerrarSesion()"><i class="fas fa-door-open"></i> Cerrar sesión</button>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="container">
-
-  <!-- MI RUTINA -->
-  <div class="big-card">
-    <h2><i class="fas fa-dumbbell"></i> Mi Rutina Actual</h2>
-    <p id="rutinaText">Aún no tienes rutina generada. ¡Pídesela al chatbot!</p>
-  </div>
-
-  <!-- MI ALIMENTACIÓN -->
-  <div class="big-card">
-    <h2><i class="fas fa-apple-alt"></i> Mi Alimentación</h2>
-    <p id="alimentacionText">Todavía no se ha generado tu alimentación. Solicítala al chatbot.</p>
-  </div>
-
-  <!-- STATS DEL USUARIO -->
-  <div class="stats-grid">
-    <!-- Peso -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-weight"></i></div>
-      <h3>Peso</h3>
-      <div class="stat-value" id="valorPeso">0 kg</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressPeso"></div></div>
-    </div>
-
-    <!-- Estatura -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-ruler-vertical"></i></div>
-      <h3>Estatura</h3>
-      <div class="stat-value" id="valorEstatura">0 cm</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressEstatura"></div></div>
-    </div>
-
-    <!-- IMC -->
-    <div class="stat-card">
-      <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-      <h3>IMC</h3>
-      <div class="stat-value" id="valorIMC">0</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressIMC"></div></div>
-    </div>
-  </div>
-
-  <!-- Frases motivadoras -->
-  <div class="big-card">
-    <h2><i class="fas fa-star"></i> Frases motivadoras</h2>
-    <div class="slider-wrapper">
-      <div class="slider" id="motivSlider">
-        <div class="slide">🏋️ “El éxito no se logra solo, ¡entrena cada día!”</div>
-        <div class="slide">🏃 “No te compares con otros, compite contigo mismo.”</div>
-        <div class="slide">🔥 “Cada esfuerzo suma. ¡Sigue adelante!”</div>
-        <div class="slide">💪 “La disciplina vence la motivación temporal.”</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Consejos de salud (accordion mini-blog) -->
-  <div class="big-card">
-    <h2><i class="fas fa-heart"></i> Consejos de salud</h2>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-apple-alt"></i> Alimentación saludable</button>
-        <div class="accordion-content">
-          <p>Incluye proteínas magras, carbohidratos complejos y grasas saludables. Evita ultraprocesados y exceso de azúcar.</p>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="brazo.png" alt="AiTrain Logo">
+            <div class="logo-text">Ai<span>Train</span></div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-water"></i> Hidratación</button>
-        <div class="accordion-content">
-          <p>Bebe al menos 2 litros de agua al día. Mantente hidratado antes, durante y después de entrenar.</p>
+        
+        <div class="user-menu">
+            <a href="chat.html" class="btn btn-primary">
+                <i class="fas fa-robot"></i> Chatbot IA
+            </a>
+            <a href="perfil.html" class="btn btn-outline">
+                <i class="fas fa-user"></i> Perfil
+            </a>
+            <button class="btn btn-outline" onclick="cerrarSesion()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-bed"></i> Sueño y recuperación</button>
-        <div class="accordion-content">
-          <p>Duerme entre 7 y 8 horas diarias. La recuperación muscular ocurre mientras descansas.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 id="welcomeTitle">¡Bienvenido de nuevo!</h1>
+            <p id="welcomeSubtitle">Tu rutina de hoy está lista. ¿Preparado para entrenar?</p>
+        </section>
+
+        <!-- STATS DEL USUARIO -->
+        <div class="stats-grid">
+            <!-- Peso -->
+            <div class="stat-card">
+                <div class="stat-icon icon-weight">
+                    <i class="fas fa-weight"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Peso</h3>
+                    <div class="stat-value" id="valorPeso">0 kg</div>
+                    <div class="stat-change" id="cambioPeso">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Estatura -->
+            <div class="stat-card">
+                <div class="stat-icon icon-streak">
+                    <i class="fas fa-ruler-vertical"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Estatura</h3>
+                    <div class="stat-value" id="valorEstatura">0 cm</div>
+                    <div class="stat-change">Tu altura actual</div>
+                </div>
+            </div>
+
+            <!-- IMC -->
+            <div class="stat-card">
+                <div class="stat-icon icon-calories">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>IMC</h3>
+                    <div class="stat-value" id="valorIMC">0</div>
+                    <div class="stat-change" id="categoriaIMC">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Entrenamientos -->
+            <div class="stat-card">
+                <div class="stat-icon icon-workouts">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Entrenamientos</h3>
+                    <div class="stat-value" id="valorEntrenamientos">0/0</div>
+                    <div class="stat-change">Esta semana</div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-btn"><i class="fas fa-running"></i> Ejercicio</button>
-        <div class="accordion-content">
-          <p>Realiza al menos 30 minutos de actividad física diaria. Alterna cardio, fuerza y estiramientos.</p>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- MI RUTINA -->
+                <section class="workout-section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-dumbbell"></i> Mi Rutina Actual</h2>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play"></i> Comenzar
+                        </button>
+                    </div>
+                    
+                    <div class="workout-card">
+                        <div class="workout-header">
+                            <h3 class="workout-title" id="rutinaTitulo">Rutina Personalizada</h3>
+                            <span class="workout-status status-pending" id="rutinaEstado">Pendiente</span>
+                        </div>
+                        <div class="workout-meta">
+                            <span><i class="fas fa-clock"></i> <span id="rutinaDuracion">45 min</span></span>
+                            <span><i class="fas fa-bolt"></i> Intensidad: <span id="rutinaIntensidad">Media</span></span>
+                            <span><i class="fas fa-dumbbell"></i> <span id="rutinaEjercicios">6 ejercicios</span></span>
+                        </div>
+                        <div class="workout-exercises" id="rutinaEjerciciosLista">
+                            <!-- Los ejercicios se cargarán aquí dinámicamente -->
+                        </div>
+                        <div class="workout-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-info-circle"></i> Detalles
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-sync-alt"></i> Modificar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MI ALIMENTACIÓN -->
+                <section class="workout-section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-apple-alt"></i> Mi Alimentación</h2>
+                        <button class="btn btn-outline">
+                            Ver Detalles
+                        </button>
+                    </div>
+                    <div class="workout-card">
+                        <p id="alimentacionText">Todavía no se ha generado tu alimentación. Solicítala al chatbot.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Current Challenge -->
+                <section class="sidebar-section">
+                    <h3 class="section-title"><i class="fas fa-trophy"></i> Desafío Activo</h3>
+                    <div class="challenge-card">
+                        <div class="challenge-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="challenge-info">
+                            <h4>Reto de 30 Días</h4>
+                            <p id="desafioProgreso">0/30 días completados</p>
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="progress-stat">
+                            <div class="progress-value" id="progresoFuerza">0%</div>
+                            <div class="progress-label">Fuerza</div>
+                        </div>
+                        <div class="progress-stat">
+                            <div class="progress-value" id="progresoResistencia">0%</div>
+                            <div class="progress-label">Resistencia</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="sidebar-section">
+                    <h3 class="section-title"><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-utensils"></i>
+                            <span>Nutrición</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Progreso</span>
+                        </a>
+                        <a href="chat.html" class="action-btn">
+                            <i class="fas fa-robot"></i>
+                            <span>Chatbot</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-cog"></i>
+                            <span>Ajustes</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Next Workout -->
+                <section class="sidebar-section">
+                    <h3 class="section-title"><i class="fas fa-calendar"></i> Próximo Entrenamiento</h3>
+                    <div class="workout-card">
+                        <div class="workout-header">
+                            <h4 class="workout-title" id="proximoEntrenamientoTitulo">Rutina Inferior</h4>
+                            <span class="workout-status status-pending" id="proximoEntrenamientoEstado">Mañana</span>
+                        </div>
+                        <div class="workout-meta">
+                            <span><i class="fas fa-clock"></i> <span id="proximoEntrenamientoDuracion">50 min</span></span>
+                            <span><i class="fas fa-bolt"></i> <span id="proximoEntrenamientoIntensidad">Media</span></span>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </main>
 
-</div>
+    <script>
+        // =====================================
+        // CARGAR VALORACIÓN DEL USUARIO
+        // =====================================
+        async function cargarValoracion() {
+            const email = localStorage.getItem("aitrain_user");
+            
+            // Si no hay usuario logueado, mostrar datos de ejemplo
+            if(!email) {
+                mostrarDatosEjemplo();
+                actualizarInterfazUsuario(null);
+                return;
+            }
 
-<script>
-// =====================================
-// CARGAR VALORACIÓN DEL USUARIO
-// =====================================
-async function cargarValoracion() {
-  const email = localStorage.getItem("aitrain_user");
-  if(!email) return;
+            try {
+                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
+                if(!res.ok) {
+                    mostrarDatosEjemplo();
+                    actualizarInterfazUsuario(email);
+                    return;
+                }
+                const data = await res.json();
+                const v = data.valoracion;
 
-  try {
-    const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
-    if(!res.ok) return;
-    const data = await res.json();
-    const v = data.valoracion;
+                mostrarDatosReales(v.pesoKg, v.estaturaCm, v.imc);
+                actualizarInterfazUsuario(email);
 
-    mostrarDatos(v.pesoKg, v.estaturaCm, v.imc);
+            } catch (e) {
+                console.error("Error cargando valoración.");
+                mostrarDatosEjemplo();
+                actualizarInterfazUsuario(email);
+            }
+        }
 
-    // Simular rutina y alimentación
-    document.getElementById("rutinaText").innerText = "🏋️ 3x12 Sentadillas, 3x10 Press Banca, 2x15 Curl Bíceps";
-    document.getElementById("alimentacionText").innerText = "🥗 Proteínas 40%, Carbs 40%, Grasas 20%";
+        // =====================================
+        // MOSTRAR DATOS DE EJEMPLO
+        // =====================================
+        function mostrarDatosEjemplo() {
+            // Mostrar datos de ejemplo
+            document.getElementById("valorPeso").innerText = "75 kg";
+            document.getElementById("cambioPeso").innerText = "+0.5 kg este mes";
+            document.getElementById("cambioPeso").className = "stat-change negative";
 
-  } catch (e) {
-    console.error("Error cargando valoración.");
-  }
-}
+            document.getElementById("valorEstatura").innerText = "175 cm";
 
-// =====================================
-// MOSTRAR DATOS EN TARJETAS
-// =====================================
-function mostrarDatos(peso, estatura, imc){
-  // Peso
-  document.getElementById("valorPeso").innerText = peso + " kg";
-  document.getElementById("progressPeso").style.width = Math.min((peso/100)*100,100) + "%";
+            document.getElementById("valorIMC").innerText = "24.5";
+            document.getElementById("categoriaIMC").innerText = "Peso normal";
+            document.getElementById("categoriaIMC").className = "stat-change";
 
-  // Estatura
-  document.getElementById("valorEstatura").innerText = estatura + " cm";
-  document.getElementById("progressEstatura").style.width = Math.min((estatura/200)*100,100) + "%";
+            document.getElementById("valorEntrenamientos").innerText = "3/5";
 
-  // IMC
-  document.getElementById("valorIMC").innerText = imc.toFixed(1);
-  let color = "#22c55e"; // Normal
-  if(imc<18.5) color = "#3b82f6";
-  else if(imc>=25 && imc<30) color = "#f59e0b";
-  else if(imc>=30) color = "#ef4444";
-  document.getElementById("progressIMC").style.width = Math.min((imc/40)*100,100) + "%";
-  document.getElementById("progressIMC").style.backgroundColor = color;
-}
+            // Rutina de ejemplo
+            document.getElementById("rutinaTitulo").innerText = "Rutina Superior - Fuerza";
+            document.getElementById("rutinaDuracion").innerText = "45 min";
+            document.getElementById("rutinaIntensidad").innerText = "Alta";
+            document.getElementById("rutinaEjercicios").innerText = "6 ejercicios";
+            
+            const ejerciciosEjemplo = [
+                { nombre: "Press de Banca", series: "4x8-10" },
+                { nombre: "Dominadas", series: "3x6-8" },
+                { nombre: "Press Militar", series: "3x10-12" },
+                { nombre: "Curl de Bíceps", series: "3x12-15" }
+            ];
+            
+            mostrarEjercicios(ejerciciosEjemplo);
 
-cargarValoracion();
+            document.getElementById("alimentacionText").innerText = "🥗 Proteínas 40%, Carbs 40%, Grasas 20% - 2200 kcal";
 
-// =====================================
-// CERRAR SESIÓN
-// =====================================
-function cerrarSesion(){
-  localStorage.removeItem("aitrain_user");
-  window.location.href = "index.html";
-}
+            // Desafío
+            document.getElementById("desafioProgreso").innerText = "8/30 días completados";
+            document.getElementById("progresoFuerza").innerText = "75%";
+            document.getElementById("progresoResistencia").innerText = "60%";
 
-// Accordion toggle
-const accBtns = document.querySelectorAll('.accordion-btn');
-accBtns.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const content = btn.nextElementSibling;
-    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
-    // Cerrar todos
-    document.querySelectorAll('.accordion-content').forEach(c=>c.style.maxHeight="0");
-    if(!isOpen) content.style.maxHeight = content.scrollHeight + "px";
-  });
-});
-</script>
+            // Próximo entrenamiento
+            document.getElementById("proximoEntrenamientoTitulo").innerText = "Rutina Inferior";
+            document.getElementById("proximoEntrenamientoDuracion").innerText = "50 min";
+            document.getElementById("proximoEntrenamientoIntensidad").innerText = "Media";
+        }
 
+        // =====================================
+        // MOSTRAR DATOS REALES
+        // =====================================
+        function mostrarDatosReales(peso, estatura, imc) {
+            document.getElementById("valorPeso").innerText = peso + " kg";
+            document.getElementById("valorEstatura").innerText = estatura + " cm";
+            document.getElementById("valorIMC").innerText = imc.toFixed(1);
+            
+            // Determinar categoría IMC
+            let categoria = "";
+            let clase = "stat-change";
+            if(imc < 18.5) {
+                categoria = "Bajo peso";
+                clase = "stat-change negative";
+            } else if(imc < 25) {
+                categoria = "Peso normal";
+            } else if(imc < 30) {
+                categoria = "Sobrepeso";
+                clase = "stat-change negative";
+            } else {
+                categoria = "Obesidad";
+                clase = "stat-change negative";
+            }
+            
+            document.getElementById("categoriaIMC").innerText = categoria;
+            document.getElementById("categoriaIMC").className = clase;
+
+            document.getElementById("alimentacionText").innerText = "🥗 Plan nutricional personalizado basado en tus métricas";
+        }
+
+        // =====================================
+        // MOSTRAR EJERCICIOS
+        // =====================================
+        function mostrarEjercicios(ejercicios) {
+            const container = document.getElementById("rutinaEjerciciosLista");
+            container.innerHTML = "";
+            
+            ejercicios.forEach(ej => {
+                const exerciseItem = document.createElement('div');
+                exerciseItem.className = 'exercise-item';
+                exerciseItem.innerHTML = `
+                    <span class="exercise-name">${ej.nombre}</span>
+                    <span class="exercise-sets">${ej.series}</span>
+                `;
+                container.appendChild(exerciseItem);
+            });
+        }
+
+        // =====================================
+        // ACTUALIZAR INTERFAZ SEGÚN USUARIO
+        // =====================================
+        function actualizarInterfazUsuario(email) {
+            if (email) {
+                const userName = email.split('@')[0];
+                const nombreMostrar = userName.charAt(0).toUpperCase() + userName.slice(1);
+                document.getElementById("welcomeTitle").textContent = `¡Bienvenido de nuevo, ${nombreMostrar}!`;
+                document.getElementById("welcomeSubtitle").textContent = "Tu rutina personalizada está lista";
+                document.getElementById("valorEntrenamientos").textContent = "4/5";
+            } else {
+                document.getElementById("welcomeTitle").textContent = "¡Bienvenido a AiTrain!";
+                document.getElementById("welcomeSubtitle").textContent = "Explora las funciones del dashboard";
+                document.getElementById("valorEntrenamientos").textContent = "0/0";
+                document.getElementById("rutinaEstado").textContent = "Demo";
+            }
+        }
+
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarValoracion();
+        });
+
+        // =====================================
+        // CERRAR SESIÓN
+        // =====================================
+        function cerrarSesion() {
+            const isLoggedIn = localStorage.getItem("aitrain_logged");
+            
+            if (isLoggedIn) {
+                localStorage.removeItem("aitrain_logged");
+                localStorage.removeItem("aitrain_user");
+                localStorage.removeItem("aitrain_tipo");
+                window.location.href = "login.html";
+            } else {
+                // Si no estaba logueado, redirigir al login igualmente
+                window.location.href = "login.html";
+            }
+        }
+    </script>
 </body>
 </html>
