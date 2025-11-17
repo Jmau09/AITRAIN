@@ -1,336 +1,630 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Admin - AiTrain</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif;
-}
-
-body{
-  display:flex;
-  min-height:100vh;
-  background:#0d0d0d;
-  color:#fff;
-}
-
-/* Sidebar */
-.sidebar{
-  width:260px;
-  background:#141414;
-  display:flex;
-  flex-direction:column;
-  padding:25px;
-  border-right:2px solid #ef4444;
-  box-shadow:4px 0 15px rgba(239,68,68,0.15);
-  justify-content:space-between; /* Para que logout quede abajo */
-}
-
-.logo{
-  width:150px;
-  margin:0 auto 25px auto;
-  cursor:pointer;
-  border-radius:15px;
-  transition:transform .2s;
-}
-.logo:hover{
-  transform:scale(1.06);
-}
-
-.sidebar h2{
-  color:#ef4444;
-  margin-bottom:20px;
-  font-size:20px;
-  text-align:center;
-  font-weight:700;
-}
-
-.sidebar button{
-  background:none;
-  border:none;
-  color:#fff;
-  text-align:left;
-  padding:12px 14px;
-  font-size:15px;
-  margin-bottom:8px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-radius:8px;
-  transition:all 0.2s;
-}
-
-.sidebar button:hover,
-.sidebar button.active{
-  background:#222;
-  color:#ef4444;
-  transform:translateX(5px);
-}
-
-/* Main content */
-.main-content{
-  flex:1;
-  padding:40px;
-}
-
-/* Cards */
-.cards{
-  display:flex;
-  gap:20px;
-  margin-bottom:30px;
-  flex-wrap:wrap;
-}
-
-.card{
-  background:#1a1a1a;
-  border:1px solid #ef4444;
-  border-radius:15px;
-  padding:20px 25px;
-  width:250px;
-  box-shadow:0 0 15px rgba(239,68,68,0.2);
-}
-
-.card h3{
-  color:#ef4444;
-  margin-bottom:10px;
-}
-
-.card p{
-  font-size:20px;
-  font-weight:600;
-}
-
-/* Table */
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-
-thead{
-  background:#141414;
-}
-
-th, td{
-  padding:12px 15px;
-  text-align:left;
-  border-bottom:1px solid #ef4444;
-}
-
-th{
-  color:#ef4444;
-}
-
-tr:hover{
-  background:#222;
-}
-
-button.action-btn{
-  padding:5px 10px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  color:#fff;
-  font-weight:600;
-}
-
-button.view-btn{
-  background:#4ade80;
-  margin-right:5px;
-}
-
-button.delete-btn{
-  background:#ef4444;
-}
-
-/* Search */
-#searchInput{
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ef4444;
-  background:#1a1a1a;
-  color:#fff;
-  margin-bottom:15px;
-  width:250px;
-}
-
-#searchInput:focus{
-  border-color:#ff6b6b;
-  outline:none;
-  box-shadow:0 0 5px rgba(239,68,68,0.5);
-}
-
-/* Logout button */
-#btnLogout{
-  margin-top:20px;
-  background:#ef4444;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  gap:10px;
-  transition:all 0.2s;
-}
-#btnLogout:hover{
-  background:#cc0000;
-  transform:scale(1.03);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AiTrain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            width: 55px;
+            height: auto;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            color: #ef4444;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #dc2626;
+            transform: scale(1.05);
+        }
+        
+        .btn-outline {
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .welcome-section p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        
+        .icon-users {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .icon-active {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        
+        .icon-premium {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border: 1px solid #a855f7;
+        }
+        
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        #searchInput {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #111;
+            color: #fff;
+        }
+        
+        #searchInput:focus {
+            border-color: #ef4444;
+            outline: none;
+            box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        
+        /* Table Section */
+        .table-section {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: #111;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            color: #ccc;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        tr:hover {
+            background-color: #222;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        button.action-btn {
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        button.view-btn {
+            background: #22c55e;
+        }
+        
+        button.view-btn:hover {
+            background: #16a34a;
+        }
+        
+        button.edit-btn {
+            background: #3b82f6;
+        }
+        
+        button.edit-btn:hover {
+            background: #2563eb;
+        }
+        
+        button.delete-btn {
+            background: #ef4444;
+        }
+        
+        button.delete-btn:hover {
+            background: #dc2626;
+        }
+        
+        .plan-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .plan-premium {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .plan-basic {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #ccc;
+        }
+        
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+        
+        /* No Data State */
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #ccc;
+        }
+        
+        .no-data i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-main {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-section {
+                flex-direction: column;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="brazo.png" alt="AiTrain Logo">
+            <div class="logo-text">Ai<span>Train</span></div>
+        </div>
+        
+        <div class="user-menu">
+            <a href="dashboard_usuario.html" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+            <button class="btn btn-outline" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </header>
 
-<div class="sidebar">
-  <div>
-    <img src="brazo.png" class="logo" id="logoBtn" alt="AiTrain Logo">
-    <h2>Admin Panel</h2>
-    <button id="btnDashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
-  </div>
-  <button id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-</div>
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1>Panel de Administración</h1>
+            <p>Gestiona usuarios y supervisa la plataforma AiTrain</p>
+        </section>
 
-<div class="main-content">
-  <div class="cards">
-    <div class="card">
-      <h3>Usuarios Activos</h3>
-      <p id="usuariosActivos">0</p>
-    </div>
-    <div class="card">
-      <h3>Total de Usuarios</h3>
-      <p id="totalUsuarios">0</p>
-    </div>
-  </div>
+        <!-- Stats Grid - Solo 3 tarjetas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-users">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total de Usuarios</h3>
+                    <div class="stat-value" id="totalUsuarios">0</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon icon-active">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Usuarios Activos</h3>
+                    <div class="stat-value" id="usuariosActivos">0</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon icon-premium">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Plan Premium</h3>
+                    <div class="stat-value" id="usuariosPremium">0</div>
+                </div>
+            </div>
+        </div>
 
-  <input type="text" id="searchInput" placeholder="Buscar por nombre o correo...">
+        <!-- Search Section -->
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, correo o teléfono...">
+            <button class="btn btn-primary" onclick="filtrarUsuarios()">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+        </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Teléfono</th>
-        <th>Edad</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="usuariosTable">
-      <!-- Usuarios se cargan aquí -->
-    </tbody>
-  </table>
-</div>
+        <!-- Table Section -->
+        <div class="table-section">
+            <div class="section-header">
+                <h2 class="section-title">Gestión de Usuarios</h2>
+                <button class="btn btn-primary" onclick="nuevoUsuario()">
+                    <a href="nuevo_usuario_admin.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Usuario
+                    </a>
+                </button>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Edad</th>
+                        <th>Plan</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usuariosTable">
+                    <tr>
+                        <td colspan="6" class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Cargando usuarios...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 
-<script>
-const usuariosTable = document.getElementById('usuariosTable');
-const totalUsuariosCard = document.getElementById('totalUsuarios');
-const usuariosActivosCard = document.getElementById('usuariosActivos');
-const searchInput = document.getElementById('searchInput');
+    <script>
+        const usuariosTable = document.getElementById('usuariosTable');
+        const totalUsuariosCard = document.getElementById('totalUsuarios');
+        const usuariosActivosCard = document.getElementById('usuariosActivos');
+        const usuariosPremiumCard = document.getElementById('usuariosPremium');
+        const searchInput = document.getElementById('searchInput');
 
-let usuarios = [];
+        let usuarios = [];
 
-// Cargar usuarios desde la API
-async function cargarUsuarios() {
-  try {
-    const res = await fetch('http://localhost:8080/api/aitrain/usuario/listar');
-    const data = await res.json();
+        // Cargar usuarios desde la API
+        async function cargarUsuarios() {
+            try {
+                const res = await fetch('http://localhost:8080/api/aitrain/usuario/listar');
+                const data = await res.json();
+                usuarios = Array.isArray(data) ? data : data.usuarios || [];
+                actualizarEstadisticas();
+                renderTabla(usuarios);
 
-    usuarios = Array.isArray(data) ? data : data.usuarios || [];
+            } catch (err) {
+                console.error('Error al cargar usuarios:', err);
+                usuariosTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="no-data">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error al cargar los usuarios</p>
+                            <button class="btn btn-outline" onclick="cargarUsuarios()" style="margin-top: 10px;">
+                                <i class="fas fa-redo"></i> Reintentar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
 
-    totalUsuariosCard.textContent = usuarios.length;
-    usuariosActivosCard.textContent = usuarios.length;
+        function actualizarEstadisticas() {
+            totalUsuariosCard.textContent = usuarios.length;
+            usuariosActivosCard.textContent = usuarios.length;
+            usuariosPremiumCard.textContent = usuarios.filter(u => u.plan === "Premium").length;
+        }
 
-    renderTabla(usuarios);
+        // Renderizar tabla
+        function renderTabla(data) {
+            if (data.length === 0) {
+                usuariosTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="no-data">
+                            <i class="fas fa-search"></i>
+                            <p>No se encontraron usuarios</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
-  } catch (err) {
-    console.error('Error al cargar usuarios:', err);
-  }
-}
+            usuariosTable.innerHTML = '';
+            data.forEach(u => {
+                const nombre = u.nombre || u.firstName || '-';
+                const apellido = u.apellido || u.lastName || '';
+                const email = u.email || '-';
+                const telefono = u.telefono || '-';
+                const edad = u.edad || '-';
+                const plan = u.plan || 'Básico';
 
-// Renderizar tabla
-function renderTabla(data) {
-  usuariosTable.innerHTML = '';
-  data.forEach(u => {
-    const nombre = u.nombre || u.firstName || '-';
-    const apellido = u.apellido || u.lastName || '';
-    const email = u.email || '-';
-    const telefono = u.telefono || '-';
-    const edad = u.edad || '-';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${nombre} ${apellido}</strong></td>
+                    <td>${email}</td>
+                    <td>${telefono}</td>
+                    <td>${edad} años</td>
+                    <td>
+                        <span class="plan-badge ${plan === 'Premium' ? 'plan-premium' : 'plan-basic'}">
+                            ${plan}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn view-btn" onclick="verUsuario('${email}')">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                            <button class="action-btn edit-btn" onclick="editarUsuario('${email}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="action-btn delete-btn" onclick="eliminarUsuario('${email}')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </td>
+                `;
+                usuariosTable.appendChild(tr);
+            });
+        }
 
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${nombre} ${apellido}</td>
-      <td>${email}</td>
-      <td>${telefono}</td>
-      <td>${edad}</td>
-      <td>
-        <button class="action-btn view-btn" onclick="verUsuario('${email}')">Ver</button>
-        <button class="action-btn delete-btn" onclick="eliminarUsuario('${email}')">Eliminar</button>
-      </td>
-    `;
-    usuariosTable.appendChild(tr);
-  });
-}
+        // Ver usuario
+        async function verUsuario(email) {
+            try {
+                const res = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
+                const data = await res.json();
+                alert(`📋 Información del Usuario\n\n👤 Nombre: ${data.nombre || '-'} ${data.apellido || '-'}\n📧 Correo: ${data.email || '-'}\n📞 Teléfono: ${data.telefono || '-'}\n🎂 Edad: ${data.edad || '-'}\n💎 Plan: ${data.plan || 'Básico'}`);
+            } catch(err) {
+                console.error('Error al ver usuario:', err);
+                alert('Error al obtener información del usuario.');
+            }
+        }
 
-// Ver usuario
-async function verUsuario(email) {
-  try {
-    const res = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
-    const data = await res.json();
-    alert(`Nombre: ${data.nombre || '-'} ${data.apellido || '-'}\nCorreo: ${data.email || '-'}\nTeléfono: ${data.telefono || '-'}\nEdad: ${data.edad || '-'}`);
-  } catch(err) {
-    console.error('Error al ver usuario:', err);
-    alert('Error al obtener información del usuario.');
-  }
-}
+        // Editar usuario
+        function editarUsuario(email) {
+            alert(`Función de edición para: ${email}\n\nEsta funcionalidad estará disponible en la próxima actualización.`);
+        }
 
-// Eliminar usuario (solo BD)
-async function eliminarUsuario(email) {
-  const confirmar = confirm(`⚠ ¿Eliminar usuario ${email}?`);
-  if(!confirmar) return;
+        // Eliminar usuario
+        async function eliminarUsuario(email) {
+            const confirmar = confirm(`⚠ ¿Eliminar usuario ${email}?`);
+            if(!confirmar) return;
 
-  try {
-    await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
-    alert('Usuario eliminado correctamente');
-    cargarUsuarios();
-  } catch(err) {
-    console.error('Error al eliminar usuario:', err);
-    alert('Error al eliminar usuario.');
-  }
-}
+            try {
+                await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
+                alert('Usuario eliminado correctamente');
+                cargarUsuarios();
+            } catch(err) {
+                console.error('Error al eliminar usuario:', err);
+                alert('Error al eliminar usuario.');
+            }
+        }
 
-// Filtrar tabla
-searchInput.addEventListener('input', () => {
-  const term = searchInput.value.toLowerCase();
-  const filtered = usuarios.filter(u => {
-    const nombreCompleto = (u.nombre || u.firstName || '') + ' ' + (u.apellido || u.lastName || '');
-    const email = u.email || '';
-    return nombreCompleto.toLowerCase().includes(term) || email.toLowerCase().includes(term);
-  });
-  renderTabla(filtered);
-});
+        // Filtrar usuarios
+        function filtrarUsuarios() {
+            const term = searchInput.value.toLowerCase();
+            const filtered = usuarios.filter(u => {
+                const nombreCompleto = (u.nombre || u.firstName || '') + ' ' + (u.apellido || u.lastName || '');
+                const email = u.email || '';
+                const telefono = u.telefono || '';
+                return nombreCompleto.toLowerCase().includes(term) || 
+                       email.toLowerCase().includes(term) || 
+                       telefono.toLowerCase().includes(term);
+            });
+            renderTabla(filtered);
+        }
 
-// Logout
-document.getElementById("btnLogout").addEventListener("click", () => {
-  const confirmar = confirm("¿Deseas cerrar sesión?");
-  if (!confirmar) return;
+        // Logout
+        function logout() {
+            const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
+            if (!confirmar) return;
 
-  localStorage.removeItem("aitrain_user");
-  window.location.href = "login.html";
-});
+            localStorage.removeItem("admin_logged_in");
+            window.location.href = "login.html";
+        }
 
-// Inicializar
-cargarUsuarios();
-</script>
+        // Inicializar
+        cargarUsuarios();
 
+        // Búsqueda en tiempo real
+        searchInput.addEventListener('input', filtrarUsuarios);
+    </script>
 </body>
 </html>

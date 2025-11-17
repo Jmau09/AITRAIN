@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Usuario - Admin AiTrain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            width: 55px;
+            height: auto;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            color: #ef4444;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #dc2626;
+            transform: scale(1.05);
+        }
+        
+        .btn-outline {
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: #ef4444;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            flex: 1;
+            padding: 2rem;
+            margin-top: 80px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .welcome-section {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .welcome-section p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+        
+        /* Form Container */
+        .form-container {
+            background-color: #1a1a1a;
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #111;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #ef4444;
+            outline: none;
+            box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #333;
+        }
+        
+        .btn-large {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        .form-help {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.3rem;
+        }
+        
+        /* Checkbox Group */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+        }
+        
+        /* Plan Selection */
+        .plan-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .plan-option {
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .plan-option:hover {
+            border-color: #ef4444;
+        }
+        
+        .plan-option.selected {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .plan-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .plan-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-features {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #ccc;
+        }
+        
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+        
+        /* Success Message */
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #22c55e;
+            display: none;
+        }
+        
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #ef4444;
+            display: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-main {
+                padding: 1rem;
+                margin-top: 70px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="brazo.png" alt="AiTrain Logo">
+            <div class="logo-text">Ai<span>Train</span></div>
+        </div>
+        
+        <div class="user-menu">
+            <a href="dashboard_admin.html" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Volver al Admin
+            </a>
+            <button class="btn btn-outline" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1>Crear Nuevo Usuario</h1>
+            <p>Completa la información para registrar un nuevo usuario en AiTrain</p>
+        </section>
+
+        <!-- Messages -->
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i> <strong>¡Éxito!</strong> Usuario creado correctamente.
+        </div>
+        
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> <span id="errorText"></span>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <form id="userForm">
+                <!-- Información Personal -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i> Información Personal
+                    </h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">Nombre <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="form-help">Nombre del usuario</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Apellido <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="form-help">Apellido del usuario</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                            <div class="form-help">Correo único para el login</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone">
+                            <div class="form-help">Número de contacto opcional</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="age">Edad</label>
+                            <input type="number" id="age" name="age" min="16" max="100">
+                            <div class="form-help">Edad del usuario (16-100)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Género</label>
+                            <select id="gender" name="gender">
+                                <option value="">Seleccionar...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                                <option value="O">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de Cuenta -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-key"></i> Información de Cuenta
+                    </h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="password">Contraseña Temporal <span class="required">*</span></label>
+                            <input type="password" id="password" name="password" required>
+                            <div class="form-help">El usuario deberá cambiar esta contraseña en su primer acceso</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Contraseña <span class="required">*</span></label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="sendWelcomeEmail" name="sendWelcomeEmail" checked>
+                        <label for="sendWelcomeEmail">Enviar email de bienvenida con credenciales</label>
+                    </div>
+                </div>
+
+                <!-- Plan y Configuración -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-crown"></i> Plan y Configuración
+                    </h3>
+                    
+                    <div class="plan-options">
+                        <div class="plan-option" onclick="selectPlan('basic')" id="planBasic">
+                            <div class="plan-name">Plan Básico</div>
+                            <div class="plan-price">$9/mes</div>
+                            <div class="plan-features">
+                                • Rutinas personalizadas básicas<br>
+                                • Seguimiento de progreso<br>
+                                • Acceso a comunidad
+                            </div>
+                        </div>
+                        
+                        <div class="plan-option" onclick="selectPlan('premium')" id="planPremium">
+                            <div class="plan-name">Plan Premium</div>
+                            <div class="plan-price">$19/mes</div>
+                            <div class="plan-features">
+                                • Todas las funciones Básico<br>
+                                • Rutinas adaptativas con IA<br>
+                                • Plan nutricional personalizado<br>
+                                • Chat con entrenadores
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="selectedPlan" name="plan" value="basic" required>
+                    
+                    <div class="form-group">
+                        <label for="subscriptionStart">Fecha de Inicio de Suscripción</label>
+                        <input type="date" id="subscriptionStart" name="subscriptionStart">
+                        <div class="form-help">Dejar en blanco para fecha actual</div>
+                    </div>
+                </div>
+
+                <!-- Información Adicional -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle"></i> Información Adicional
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="fitnessLevel">Nivel de Fitness</label>
+                        <select id="fitnessLevel" name="fitnessLevel">
+                            <option value="">Seleccionar...</option>
+                            <option value="beginner">Principiante</option>
+                            <option value="intermediate">Intermedio</option>
+                            <option value="advanced">Avanzado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fitnessGoal">Objetivo Principal</label>
+                        <select id="fitnessGoal" name="fitnessGoal">
+                            <option value="">Seleccionar...</option>
+                            <option value="weight-loss">Pérdida de peso</option>
+                            <option value="muscle-gain">Ganar músculo</option>
+                            <option value="strength">Aumentar fuerza</option>
+                            <option value="endurance">Mejorar resistencia</option>
+                            <option value="toning">Tonificación</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Notas Adicionales</label>
+                        <textarea id="notes" name="notes" placeholder="Observaciones o información adicional sobre el usuario..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline btn-large" onclick="cancelar()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                        <i class="fas fa-user-plus"></i> Crear Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let selectedPlan = 'basic';
+
+        // Seleccionar plan
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            document.getElementById('selectedPlan').value = plan;
+            
+            // Actualizar estilos visuales
+            document.getElementById('planBasic').classList.remove('selected');
+            document.getElementById('planPremium').classList.remove('selected');
+            document.getElementById('plan' + (plan === 'basic' ? 'Basic' : 'Premium')).classList.add('selected');
+        }
+
+        // Inicializar plan por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            selectPlan('basic');
+            
+            // Establecer fecha mínima para la suscripción (hoy)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('subscriptionStart').min = today;
+        });
+
+        // Validar y enviar formulario
+        document.getElementById('userForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Validar contraseñas
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            // Mostrar loading
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Recopilar datos del formulario
+                const formData = {
+                    nombre: document.getElementById('firstName').value,
+                    apellido: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    telefono: document.getElementById('phone').value,
+                    edad: document.getElementById('age').value,
+                    genero: document.getElementById('gender').value,
+                    password: password,
+                    plan: selectedPlan,
+                    nivelFitness: document.getElementById('fitnessLevel').value,
+                    objetivo: document.getElementById('fitnessGoal').value,
+                    notas: document.getElementById('notes').value,
+                    fechaInicioSuscripcion: document.getElementById('subscriptionStart').value || new Date().toISOString().split('T')[0],
+                    enviarEmailBienvenida: document.getElementById('sendWelcomeEmail').checked
+                };
+                
+                // Enviar a la API
+                const response = await fetch('http://localhost:8080/api/aitrain/usuario/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    showSuccess();
+                    // Limpiar formulario después de 2 segundos
+                    setTimeout(() => {
+                        document.getElementById('userForm').reset();
+                        selectPlan('basic');
+                    }, 2000);
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.message || 'Error al crear el usuario');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error de conexión. Intente nuevamente.');
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Mostrar mensaje de éxito
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Mostrar mensaje de error
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Cancelar y volver
+        function cancelar() {
+            if (confirm('¿Estás seguro de que deseas cancelar? Los datos no guardados se perderán.')) {
+                window.location.href = 'dashboard_admin.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
+            if (!confirmar) return;
+
+            localStorage.removeItem("admin_logged_in");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
