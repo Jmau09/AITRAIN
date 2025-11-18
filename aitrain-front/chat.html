@@ -1,400 +1,839 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat AiTrain</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', Arial, Helvetica, sans-serif; }
-body { background: #0d0d0d; color: #fff; height: 100vh; display: flex; flex-direction: column; }
-
-/* NAVBAR */
-.navbar{width:100%; background:#141414; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ef4444;}
-.nav-left{display:flex; gap:15px; align-items:center;}
-.nav-left img{width:50px; cursor:pointer;}
-.nav-left h2{color:#ef4444;}
-.nav-right{display:flex; gap:20px;}
-.nav-right button{background:none; border:none; color:#fff; font-size:17px; cursor:pointer; transition:0.2s;}
-.nav-right button:hover{color:#ef4444;}
-
-/* CHAT CONTAINER */
-.chat-container { flex: 1; display: flex; flex-direction: column; max-width: 700px; margin: 20px auto; background: #141414; border-radius: 15px; box-shadow:0 0 20px rgba(239,68,68,0.3); overflow: hidden; }
-
-/* CHAT HEADER */
-.chat-header { background: #ef4444; padding: 15px; text-align: center; font-weight: 700; font-size: 20px; }
-
-/* CHAT MESSAGES */
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
-.message { padding: 10px 15px; border-radius: 10px; max-width: 80%; word-wrap: break-word; }
-.message.bot { background: #1a1a1a; border-left: 4px solid #ef4444; align-self: flex-start; }
-.message.user { background: #ef4444; color: #fff; align-self: flex-end; }
-
-/* BUTTONS CONTAINER */
-.buttons-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 15px; border-top: 1px solid #222; background: #1a1a1a; }
-.buttons-container button { padding: 10px 15px; background: #ef4444; border: none; color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-.buttons-container button:hover { background: #cc0000; transform: scale(1.05); }
-
-/* CARDS RUTINA / PLAN */
-.card { background: #1a1a1a; border: 1px solid #ef4444; border-radius: 12px; padding: 15px; box-shadow: 0 0 10px rgba(239,68,68,0.2); }
-.card h3 { color: #ef4444; margin-bottom: 8px; }
-.card ul { list-style: none; padding-left: 10px; }
-.card ul li { margin-bottom: 5px; }
-
-/* SCROLLBAR */
-.chat-messages::-webkit-scrollbar { width: 8px; }
-.chat-messages::-webkit-scrollbar-thumb { background: #ef4444; border-radius: 4px; }
-
-/* BOTONES FLOTANTES */
-.quick-buttons{
-  position: fixed; bottom: 20px; right: 20px; display:flex; flex-direction:column; gap:10px; z-index:999;
-}
-.quick-buttons button{
-  background:#ef4444; color:#fff; border:none; padding:12px 20px; font-size:16px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:10px; transition:0.2s;
-}
-.quick-buttons button:hover{ background:#cc0000; transform:scale(1.05); }
-
-/* MODAL */
-.modal{
-  display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;
-}
-.modal-content{
-  background:#141414; padding:25px; border-radius:15px; width:90%; max-width:600px; max-height:80%; overflow-y:auto; position:relative; border:2px solid #ef4444;
-}
-.modal-content .close{
-  position:absolute; top:10px; right:15px; font-size:25px; cursor:pointer; color:#ef4444;
-}
-.card-modal{ background:#1a1a1a; border:1px solid #ef4444; border-radius:12px; padding:15px; margin-bottom:15px; }
-.card-modal h3{ color:#ef4444; margin-bottom:8px; }
-.card-modal ul{ list-style:none; padding-left:10px; }
-.card-modal ul li{ margin-bottom:5px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat AiTrain</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Inter, Segoe UI, Arial, Helvetica, sans-serif;
+        }
+        
+        body {
+            background: #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 20px #ef4444, 0 8px 30px rgba(2, 6, 23, 0.5);
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            overflow: hidden;
+            height: 90vh;
+        }
+        
+        .left {
+            flex: 1;
+            padding: 40px;
+            background: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+        
+        .left .logo {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .left .logo img {
+            width: 64px;
+            height: auto;
+        }
+        
+        .left h1 {
+            font-size: 28px;
+            margin-top: 6px;
+            color: #fff;
+        }
+        
+        .left p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 320px;
+            line-height: 1.4;
+        }
+        
+        .features {
+            margin-top: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #ccc;
+        }
+        
+        .feature-icon {
+            color: #ef4444;
+            font-size: 14px;
+        }
+        
+        .right {
+            flex: 1.5;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: #1a1a1a;
+        }
+        
+        .chat-header {
+            background: #000;
+            color: #fff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ef4444;
+        }
+        
+        .header-info h2 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        
+        .header-info p {
+            color: #ccc;
+            font-size: 13px;
+        }
+        
+        .chat-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #0fff90;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #0fff90;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #0d0d0d;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: #ef4444;
+            color: #fff;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .quick-actions {
+            padding: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #1a1a1a;
+        }
+        
+        button {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+        
+        button:hover {
+            background: #ff1a1a;
+            transform: scale(1.03);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+        
+        .btn-outline:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+        
+        .floating-buttons {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .floating-btn {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            background: #ff1a1a;
+            transform: translateY(-2px);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 20px #ef4444;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #ef4444;
+        }
+        
+        .card-modal {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .card-modal h3 {
+            color: #ef4444;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .card-modal ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .card-modal li {
+            margin-bottom: 6px;
+            padding-left: 15px;
+            position: relative;
+            color: #ccc;
+        }
+        
+        .card-modal li:before {
+            content: "•";
+            color: #ef4444;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Botón Volver Mejorado */
+        .back-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Nuevos estilos para organizar los botones */
+        .top-actions {
+            padding: 15px 30px;
+            border-bottom: 1px solid #333;
+            background: #000;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .main-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        @media (max-width: 780px) {
+            .left {
+                display: none;
+            }
+            
+            .floating-buttons {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 15px;
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .main-actions {
+                flex-direction: column;
+            }
+            
+            .options-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="card" role="main">
+        <div class="left" aria-hidden="true">
+            <div class="logo">
+                <img src="brazo.png" alt="AiTrain logo" />
+                <div style="font-weight:700;font-size:18px">Ai<span style="color:#ef4444">Train</span></div>
+            </div>
+            <h1>Asistente de Entrenamiento</h1>
+            <p>Consulta rutinas personalizadas, planes nutricionales y obtén recomendaciones inteligentes para tu progreso.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">✓</span>
+                    <span>Rutinas personalizadas con IA</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">✓</span>
+                    <span>Plan nutricional adaptado</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">✓</span>
+                    <span>Seguimiento de progreso</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">✓</span>
+                    <span>Recomendaciones inteligentes</span>
+                </div>
+            </div>
+        </div>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-left">
-    <img src="brazo.png" alt="logo" onclick="location.href='dashboard_usuario.html'">
-    <h2>AiTrain Chat</h2>
-  </div>
-  <div class="nav-right">
-    <button onclick="location.href='chat.html'"><i class="fas fa-robot"></i> Chatbot</button>
-    <button onclick="location.href='perfil.html'"><i class="fas fa-user"></i> Perfil</button>
-    <button onclick="cerrarSesion()"><i class="fas fa-door-open"></i> Cerrar sesión</button>
-  </div>
-</div>
+        <div class="right">
+            <!-- Sección superior con el botón de volver a inicio -->
+            <div class="top-actions">
+                <button class="back-btn" onclick="volverAlDashboard()">
+                    <i class="fas fa-home"></i> Volver a Inicio
+                </button>
+            </div>
+            
+            <div class="chat-header">
+                <div class="header-info">
+                    <h2>AiTrain Assistant</h2>
+                    <p>Especialista en fitness y nutrición</p>
+                </div>
+                <div class="chat-status">
+                    <div class="status-dot"></div>
+                    <span>En línea</span>
+                </div>
+            </div>
+            
+            <div class="messages-container" id="messagesContainer">
+                <!-- Mensajes se cargarán aquí dinámicamente -->
+                <div class="message bot-message">
+                    ¡Hola! Soy tu asistente de AiTrain. ¿En qué puedo ayudarte hoy con tu entrenamiento o nutrición?
+                    <div class="message-time">Ahora</div>
+                </div>
+            </div>
+            
+            <div class="quick-actions" id="quickActions">
+                <div class="main-actions">
+                    <button id="btnValoracion">
+                        <i class="fas fa-chart-line"></i> Ver mi Valoración
+                    </button>
+                    <button class="btn-outline" id="btnGenerarRutina">
+                        <i class="fas fa-dumbbell"></i> Generar Rutina
+                    </button>
+                    <button class="btn-outline" id="btnGenerarPlan">
+                        <i class="fas fa-utensils"></i> Generar Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botones flotantes -->
+        <div class="floating-buttons">
+            <button class="floating-btn" id="btnUltimaRutina">
+                <i class="fas fa-dumbbell"></i> Ver Última Rutina
+            </button>
+            <button class="floating-btn" id="btnUltimaAlimentacion">
+                <i class="fas fa-apple-alt"></i> Ver Último Plan
+            </button>
+        </div>
+    </div>
 
-<!-- CHAT CONTAINER -->
-<div class="chat-container">
-  <div class="chat-header">AiTrain Chat</div>
-  <div class="chat-messages" id="chatMessages"></div>
-  <div class="buttons-container" id="buttonsContainer">
-    <button id="btnValoracion">Ver mi Valoración</button>
-    <button id="btnGenerarRutina">Generar Rutina y Plan Alimenticio</button>
-  </div>
-</div>
+    <!-- Modal -->
+    <div id="modalInfo" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
 
-<!-- BOTONES FLOTANTES -->
-<div class="quick-buttons">
-  <button id="btnUltimaRutina"><i class="fas fa-dumbbell"></i> Ver mi Última Rutina</button>
-  <button id="btnUltimaAlimentacion"><i class="fas fa-apple-alt"></i> Ver mi Último Plan Alimenticio</button>
-</div>
+    <script>
+        // Elementos del DOM
+        const messagesContainer = document.getElementById('messagesContainer');
+        const quickActions = document.getElementById('quickActions');
+        const modal = document.getElementById("modalInfo");
+        const modalBody = document.getElementById("modalBody");
+        const modalClose = document.querySelector(".modal-close");
+        
+        const userId = localStorage.getItem("aitrain_user") || "usuario@ejemplo.com";
+        let estadoChat = 'inicio';
+        let objetivoUsuario = '';
+        let diasUsuario = 0;
+        let rutinaGenerada = false; // Nueva variable para controlar si ya se generó una rutina
 
-<!-- MODAL -->
-<div id="modalInfo" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div id="modalBody"></div>
-  </div>
-</div>
+        // Frases motivadoras
+        const frasesMotivadoras = [
+            '¡Vamos, tú puedes! 💪',
+            'Cada repetición te acerca a tu objetivo.',
+            '¡Entrena con constancia y verás resultados!',
+            'Hoy es un buen día para superarte.',
+            '¡No te rindas, tu esfuerzo vale!'
+        ];
 
-<script>
-const chatMessages = document.getElementById('chatMessages');
-const buttonsContainer = document.getElementById('buttonsContainer');
-const userId = localStorage.getItem("aitrain_user") || "usuario@ejemplo.com";
+        // Configurar modal
+        modalClose.onclick = () => modal.style.display = "none";
+        window.onclick = (e) => { 
+            if(e.target == modal) modal.style.display = "none"; 
+        };
 
-// MODAL
-const modal = document.getElementById("modalInfo");
-const modalBody = document.getElementById("modalBody");
-const spanClose = document.querySelector(".close");
-spanClose.onclick = () => modal.style.display = "none";
-window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; };
-function mostrarModal(html){ modalBody.innerHTML = html; modal.style.display = "flex"; }
+        // Funciones de utilidad
+        function mostrarModal(html) { 
+            modalBody.innerHTML = html; 
+            modal.style.display = "flex"; 
+        }
 
-// AGREGAR MENSAJE
-function addMessage(text, sender='bot'){
-  const msg = document.createElement('div');
-  msg.classList.add('message', sender);
-  msg.innerHTML = text;
-  chatMessages.appendChild(msg);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+        function addMessage(text, sender = 'bot') {
+            const msg = document.createElement('div');
+            msg.classList.add('message', sender === 'bot' ? 'bot-message' : 'user-message');
+            
+            const time = new Date().toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            msg.innerHTML = `
+                ${text}
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesContainer.appendChild(msg);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
-// MENSAJE BIENVENIDA
-addMessage('¡Hola! Bienvenido a AiTrain. Estoy aquí para ayudarte a mejorar tu entrenamiento y alimentación.');
+        function fraseAleatoria() {
+            return frasesMotivadoras[Math.floor(Math.random() * frasesMotivadoras.length)];
+        }
 
-// HELPER POST
-async function postJson(url, body){
-  const res = await fetch(url, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  let data;
-  try{ data = await res.json(); } catch(e){ data = await res.text(); }
-  if(!res.ok) throw new Error(data.mensaje || data || 'Error en la petición');
-  return data;
-}
+        // Helper para peticiones POST
+        async function postJson(url, body) {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            let data;
+            try { 
+                data = await res.json(); 
+            } catch(e) { 
+                data = await res.text(); 
+            }
+            if(!res.ok) throw new Error(data.mensaje || data || 'Error en la petición');
+            return data;
+        }
 
-// VER VALORACIÓN
-document.getElementById('btnValoracion').addEventListener('click', async ()=>{
-  try{
-    const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
-    if(!res.ok) throw new Error('Error al obtener valoración');
-    const data = await res.json();
-    if(data.valoracion){
-      const v = data.valoracion;
-      addMessage(`Tu valoración: Peso = ${v.pesoKg} kg, Estatura = ${v.estaturaCm} cm, IMC = ${v.imc.toFixed(2)}`);
-    } else addMessage('No se encontró valoración para este usuario.');
-  }catch(err){ addMessage('⚠️ No se pudo obtener tu valoración.', 'bot'); console.error(err);}
-});
+        // Volver al dashboard
+        function volverAlDashboard() {
+            window.location.href = 'dashboard_usuario.html';
+        }
 
-// GENERAR RUTINA Y PLAN
-// ESTADO DEL USUARIO PARA EL CHAT
-let estadoChat = 'inicio'; // inicio, objetivo, dias, confirmar, generado
-let objetivoUsuario = '';
-let diasUsuario = 0;
+        // Funcionalidades del chat
+        document.getElementById('btnValoracion').addEventListener('click', async () => {
+            try {
+                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
+                if(!res.ok) throw new Error('Error al obtener valoración');
+                const data = await res.json();
+                if(data.valoracion) {
+                    const v = data.valoracion;
+                    addMessage(`📊 <strong>Tu valoración actual:</strong><br>
+                               • Peso: ${v.pesoKg} kg<br>
+                               • Estatura: ${v.estaturaCm} cm<br>
+                               • IMC: ${v.imc.toFixed(2)}`);
+                } else {
+                    addMessage('No se encontró valoración para este usuario.');
+                }
+            } catch(err) { 
+                addMessage('⚠️ No se pudo obtener tu valoración.'); 
+                console.error(err);
+            }
+        });
 
-// FRASES MOTIVADORAS
-const frasesMotivadoras = [
-  '¡Vamos, tú puedes! 💪',
-  'Cada repetición te acerca a tu objetivo.',
-  '¡Entrena con constancia y verás resultados!',
-  'Hoy es un buen día para superarte.',
-  '¡No te rindas, tu esfuerzo vale!'
-];
+        // Generar rutina y plan
+        document.getElementById('btnGenerarRutina').addEventListener('click', () => {
+            if (rutinaGenerada) {
+                addMessage('Ya tienes una rutina generada. Si deseas crear una nueva, por favor recarga la página.');
+                return;
+            }
+            
+            estadoChat = 'objetivo';
+            addMessage('¡Excelente! Vamos a crear tu rutina personalizada. Primero, ¿cuál es tu objetivo principal?');
+            mostrarOpcionesObjetivo();
+        });
 
-// MENSAJE INICIAL
-addMessage('¡Hola! Bienvenido a AiTrain. Para empezar, selecciona tu objetivo:');
-mostrarOpcionesObjetivo();
+        document.getElementById('btnGenerarPlan').addEventListener('click', () => {
+            estadoChat = 'objetivo_nutricion';
+            addMessage('¡Perfecto! Vamos a crear tu plan alimenticio. ¿Cuál es tu objetivo principal?');
+            mostrarOpcionesObjetivoNutricion();
+        });
 
-// BOTONES DE OBJETIVO
-function mostrarOpcionesObjetivo() {
-  const objetivos = ['Definición', 'Volumen', 'Fuerza', 'Resistencia'];
-  buttonsContainer.innerHTML = ''; // limpiar botones
-  objetivos.forEach(obj => {
-    const btn = document.createElement('button');
-    btn.textContent = obj;
-    btn.addEventListener('click', () => {
-      objetivoUsuario = obj;
-      addMessage(`✅ Objetivo seleccionado: ${obj}`);
-      addMessage(fraseAleatoria());
-      estadoChat = 'dias';
-      mostrarOpcionesDias();
-    });
-    buttonsContainer.appendChild(btn);
-  });
-}
+        function mostrarOpcionesObjetivo() {
+            quickActions.innerHTML = '';
+            const objetivos = [
+                { text: 'Definición Muscular', value: 'Definición' },
+                { text: 'Ganar Volumen', value: 'Volumen' },
+                { text: 'Aumentar Fuerza', value: 'Fuerza' },
+                { text: 'Mejorar Resistencia', value: 'Resistencia' }
+            ];
+            
+            // Crear contenedor para opciones
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            objetivos.forEach(obj => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-outline';
+                btn.innerHTML = `<i class="fas fa-target"></i> ${obj.text}`;
+                btn.addEventListener('click', () => {
+                    objetivoUsuario = obj.value;
+                    addMessage(`✅ Objetivo seleccionado: <strong>${obj.text}</strong>`);
+                    addMessage(fraseAleatoria());
+                    estadoChat = 'dias';
+                    // Limpiar opciones después de seleccionar
+                    quickActions.innerHTML = '';
+                    mostrarOpcionesDias();
+                });
+                optionsContainer.appendChild(btn);
+            });
+            
+            quickActions.appendChild(optionsContainer);
+        }
 
-// BOTONES DE DÍAS
-function mostrarOpcionesDias() {
-  addMessage('Perfecto, ahora selecciona cuántos días a la semana quieres entrenar:');
-  const dias = [1,2,3,4,5,6,7];
-  buttonsContainer.innerHTML = '';
-  dias.forEach(d => {
-    const btn = document.createElement('button');
-    btn.textContent = d;
-    btn.addEventListener('click', () => {
-      diasUsuario = d;
-      addMessage(`✅ Días seleccionados: ${d}`);
-      addMessage(fraseAleatoria());
-      estadoChat = 'confirmar';
-      mostrarBotonGenerar();
-    });
-    buttonsContainer.appendChild(btn);
-  });
-}
+        function mostrarOpcionesDias() {
+            addMessage('¿Cuántos días a la semana puedes entrenar?');
+            
+            // Crear contenedor para opciones
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            for(let i = 1; i <= 5; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-outline';
+                btn.textContent = `${i} día${i > 1 ? 's' : ''}`;
+                btn.addEventListener('click', () => {
+                    diasUsuario = i;
+                    addMessage(`✅ Días seleccionados: <strong>${i} día${i > 1 ? 's' : ''} por semana</strong>`);
+                    addMessage(fraseAleatoria());
+                    // Limpiar opciones inmediatamente después de seleccionar
+                    quickActions.innerHTML = '';
+                    generarRutinaPlan();
+                });
+                optionsContainer.appendChild(btn);
+            }
+            
+            quickActions.appendChild(optionsContainer);
+        }
 
-// BOTÓN GENERAR PLAN Y RUTINA
-function mostrarBotonGenerar() {
-  buttonsContainer.innerHTML = '';
-  const btn = document.createElement('button');
-  btn.textContent = 'Generar Rutina y Plan Alimenticio';
-  btn.addEventListener('click', generarRutinaPlanDinamico);
-  buttonsContainer.appendChild(btn);
-}
+        async function generarRutinaPlan() {
+            addMessage('⌛ Generando tu rutina personalizada...');
+            
+            const rutina = generarRutina(objetivoUsuario, diasUsuario);
 
-// FUNCION PARA ELEGIR FRASE ALEATORIA
-function fraseAleatoria() {
-  return frasesMotivadoras[Math.floor(Math.random() * frasesMotivadoras.length)];
-}
+            try {
+                await postJson('http://localhost:8081/api/aitrain/rutinas/save', rutina);
+                addMessage('✅ ¡Rutina generada exitosamente!');
+                addMessage(fraseAleatoria());
+                
+                // Marcar que ya se generó una rutina
+                rutinaGenerada = true;
 
-// FUNCION PARA GENERAR RUTINA Y PLAN DINAMICO
-async function generarRutinaPlanDinamico() {
-  addMessage('⌛ Generando tu rutina y plan alimenticio...');
-  
-  const rutina = generarRutina(objetivoUsuario, diasUsuario);
-  const planAlimenticio = generarPlan(objetivoUsuario, diasUsuario);
+                // Mostrar resumen de la rutina
+                let resumen = `<strong>📋 Tu Nueva Rutina - ${objetivoUsuario}</strong><br>`;
+                rutina.dias.forEach(dia => {
+                    resumen += `<br><strong>${dia.nombreDia}:</strong><br>`;
+                    dia.ejercicios.forEach(e => 
+                        resumen += `• ${e.nombre}: ${e.series}x${e.repeticiones}<br>`
+                    );
+                });
+                addMessage(resumen);
 
-  try {
-    await postJson('http://localhost:8081/api/aitrain/rutinas/save', rutina);
-    await postJson('http://localhost:8082/api/aitrain/nutricion/save', planAlimenticio);
-    addMessage('✅ Rutina y plan alimenticio generados exitosamente!');
-    addMessage(fraseAleatoria());
+                // Restaurar botones principales después de un breve tiempo
+                setTimeout(() => {
+                    restaurarBotonesPrincipales();
+                }, 1500);
 
-    if(!document.getElementById('btnVerRutina')){
-      const btnRutina = document.createElement('button');
-      btnRutina.id='btnVerRutina'; btnRutina.textContent='Ver mi Rutina'; btnRutina.addEventListener('click', verRutina);
-      const btnPlan = document.createElement('button');
-      btnPlan.id='btnVerPlan'; btnPlan.textContent='Ver mi Plan Alimenticio'; btnPlan.addEventListener('click', verPlanAlimenticio);
-      buttonsContainer.appendChild(btnRutina); 
-      buttonsContainer.appendChild(btnPlan);
-    }
+            } catch(err) {
+                addMessage(`⚠️ Error al generar rutina: ${err.message}`); 
+                console.error(err);
+                // Restaurar botones principales incluso si hay error
+                setTimeout(() => {
+                    restaurarBotonesPrincipales();
+                }, 1500);
+            }
+        }
 
-  } catch(err) {
-    addMessage(`⚠️ Error al generar rutina y plan: ${err.message}`, 'bot'); 
-    console.error(err);
-  }
-}
+        function restaurarBotonesPrincipales() {
+            quickActions.innerHTML = `
+                <div class="main-actions">
+                    <button id="btnValoracion">
+                        <i class="fas fa-chart-line"></i> Ver mi Valoración
+                    </button>
+                    <button class="btn-outline" id="btnGenerarRutina">
+                        <i class="fas fa-dumbbell"></i> Generar Rutina
+                    </button>
+                    <button class="btn-outline" id="btnGenerarPlan">
+                        <i class="fas fa-utensils"></i> Generar Plan
+                    </button>
+                </div>
+            `;
+            
+            // Reasignar eventos a los botones
+            document.getElementById('btnValoracion').addEventListener('click', async () => {
+                try {
+                    const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
+                    if(!res.ok) throw new Error('Error al obtener valoración');
+                    const data = await res.json();
+                    if(data.valoracion) {
+                        const v = data.valoracion;
+                        addMessage(`📊 <strong>Tu valoración actual:</strong><br>
+                                   • Peso: ${v.pesoKg} kg<br>
+                                   • Estatura: ${v.estaturaCm} cm<br>
+                                   • IMC: ${v.imc.toFixed(2)}`);
+                    } else {
+                        addMessage('No se encontró valoración para este usuario.');
+                    }
+                } catch(err) { 
+                    addMessage('⚠️ No se pudo obtener tu valoración.'); 
+                    console.error(err);
+                }
+            });
+            
+            document.getElementById('btnGenerarRutina').addEventListener('click', () => {
+                if (rutinaGenerada) {
+                    addMessage('Ya tienes una rutina generada. Si deseas crear una nueva, por favor recarga la página.');
+                    return;
+                }
+                
+                estadoChat = 'objetivo';
+                addMessage('¡Excelente! Vamos a crear tu rutina personalizada. Primero, ¿cuál es tu objetivo principal?');
+                mostrarOpcionesObjetivo();
+            });
+            
+            document.getElementById('btnGenerarPlan').addEventListener('click', () => {
+                estadoChat = 'objetivo_nutricion';
+                addMessage('¡Perfecto! Vamos a crear tu plan alimenticio. ¿Cuál es tu objetivo principal?');
+                mostrarOpcionesObjetivoNutricion();
+            });
+        }
 
-// GENERADOR DINÁMICO DE RUTINAS
-function generarRutina(objetivo, dias) {
-  const ejerciciosBase = {
-    'Definición': ['Cardio', 'Burpees', 'Jumping Jacks', 'Plancha', 'Mountain Climbers', 'Saltar cuerda', 'Abdominales'],
-    'Volumen': ['Press de banca', 'Sentadillas', 'Peso muerto', 'Dominadas', 'Curl bíceps', 'Fondos triceps', 'Remo con barra'],
-    'Fuerza': ['Sentadillas pesadas', 'Press militar', 'Peso muerto', 'Fondos triceps', 'Dominadas lastradas', 'Press banca inclinado'],
-    'Resistencia': ['Correr', 'Saltos', 'Flexiones', 'Remo', 'Bicicleta estática', 'Burpees', 'Plancha dinámica']
-  };
+        // Generador de rutinas (manteniendo la funcionalidad original)
+        function generarRutina(objetivo, dias) {
+            const ejerciciosBase = {
+                'Definición': ['Cardio', 'Burpees', 'Jumping Jacks', 'Plancha', 'Mountain Climbers', 'Saltar cuerda', 'Abdominales'],
+                'Volumen': ['Press de banca', 'Sentadillas', 'Peso muerto', 'Dominadas', 'Curl bíceps', 'Fondos triceps', 'Remo con barra'],
+                'Fuerza': ['Sentadillas pesadas', 'Press militar', 'Peso muerto', 'Fondos triceps', 'Dominadas lastradas', 'Press banca inclinado'],
+                'Resistencia': ['Correr', 'Saltos', 'Flexiones', 'Remo', 'Bicicleta estática', 'Burpees', 'Plancha dinámica']
+            };
 
-  const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  let rutina = { userId, nombre:`Rutina ${objetivo}`, objetivo, duracionSemanas:4, fechaCreacion:new Date().toISOString().split('T')[0], dias:[] };
+            const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+            let rutina = { 
+                userId, 
+                nombre: `Rutina ${objetivo}`, 
+                objetivo, 
+                duracionSemanas: 4, 
+                fechaCreacion: new Date().toISOString().split('T')[0], 
+                dias: [] 
+            };
 
-  for(let i=0;i<dias;i++){
-    // seleccionar 3-5 ejercicios aleatorios diferentes cada día
-    let listaEjercicios = ejerciciosBase[objetivo].sort(()=>0.5-Math.random()).slice(0, 3 + Math.floor(Math.random()*3));
-    let ejercicios = listaEjercicios.map(e => ({
-      nombre:e,
-      series: 3 + Math.floor(Math.random()*3),
-      repeticiones: 8 + Math.floor(Math.random()*8),
-      tiempo: `${20 + Math.floor(Math.random()*40)}s`
-    }));
-    rutina.dias.push({ nombreDia: diasSemana[i], ejercicios });
-  }
-  return rutina;
-}
+            for(let i = 0; i < dias; i++) {
+                let listaEjercicios = ejerciciosBase[objetivo].sort(() => 0.5 - Math.random()).slice(0, 3 + Math.floor(Math.random() * 3));
+                let ejercicios = listaEjercicios.map(e => ({
+                    nombre: e,
+                    series: 3 + Math.floor(Math.random() * 3),
+                    repeticiones: 8 + Math.floor(Math.random() * 8),
+                    tiempo: `${20 + Math.floor(Math.random() * 40)}s`
+                }));
+                rutina.dias.push({ nombreDia: diasSemana[i], ejercicios });
+            }
+            return rutina;
+        }
 
-// GENERADOR DINÁMICO DE PLAN ALIMENTICIO
-function generarPlan(objetivo, dias) {
-  const comidasBase = {
-    'Definición':[{"nombre":"Desayuno","descripcion":"Avena con frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
-                  {"nombre":"Almuerzo","descripcion":"Pechuga de pollo con ensalada","calorias":450+Math.floor(Math.random()*100)}],
-    'Volumen':[{"nombre":"Desayuno","descripcion":"Huevos con pan integral y avena","calorias":400+Math.floor(Math.random()*50)},
-               {"nombre":"Almuerzo","descripcion":"Pollo con arroz y pasta","calorias":700+Math.floor(Math.random()*100)}],
-    'Fuerza':[{"nombre":"Desayuno","descripcion":"Batido proteico con avena","calorias":350+Math.floor(Math.random()*50)},
-              {"nombre":"Almuerzo","descripcion":"Carne con papas y verduras","calorias":650+Math.floor(Math.random()*100)}],
-    'Resistencia':[{"nombre":"Desayuno","descripcion":"Frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
-                   {"nombre":"Almuerzo","descripcion":"Pescado con quinoa y vegetales","calorias":550+Math.floor(Math.random()*100)}]
-  };
+        // Botones flotantes
+        document.getElementById("btnUltimaRutina").addEventListener("click", async () => {
+            try {
+                const res = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${userId}`);
+                if(!res.ok) throw new Error('Error al obtener rutina');
+                const data = await res.json();
+                if(Array.isArray(data) && data.length > 0) {
+                    const ultima = data[data.length - 1];
+                    let html = `<div class="card-modal"><h3>📋 Tu Última Rutina</h3>`;
+                    ultima.dias.forEach(dia => {
+                        html += `<strong>${dia.nombreDia}:</strong><ul>`;
+                        dia.ejercicios.forEach(e => html += `<li>${e.nombre}: ${e.series}x${e.repeticiones} (${e.tiempo})</li>`);
+                        html += `</ul>`;
+                    });
+                    html += `</div>`;
+                    mostrarModal(html);
+                } else {
+                    mostrarModal('<p>No se encontró rutina para este usuario.</p>');
+                }
+            } catch(err) { 
+                mostrarModal(`<p>⚠ Error al obtener rutina: ${err.message}</p>`); 
+                console.error(err);
+            }
+        });
 
-  const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  let plan = { userId, nombre:`Plan ${objetivo}`, objetivo, dias:[] };
+        document.getElementById("btnUltimaAlimentacion").addEventListener("click", async () => {
+            try {
+                const res = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${userId}`);
+                if(!res.ok) throw new Error('Error al obtener plan alimenticio');
+                const data = await res.json();
+                if(Array.isArray(data) && data.length > 0) {
+                    const ultimo = data[data.length - 1];
+                    let html = `<div class="card-modal"><h3>🥗 Tu Último Plan Alimenticio</h3>`;
+                    ultimo.dias.forEach(dia => {
+                        html += `<strong>${dia.nombreDia}:</strong><ul>`;
+                        dia.comidas.forEach(c => html += `<li>${c.nombre}: ${c.descripcion} (${c.calorias} kcal)</li>`);
+                        html += `</ul>`;
+                    });
+                    html += `</div>`;
+                    mostrarModal(html);
+                } else {
+                    mostrarModal('<p>No se encontró plan alimenticio para este usuario.</p>');
+                }
+            } catch(err) { 
+                mostrarModal(`<p>⚠ Error al obtener plan: ${err.message}</p>`); 
+                console.error(err);
+            }
+        });
 
-  for(let i=0;i<dias;i++){
-    // agregamos las comidas base, con pequeñas variaciones en calorías
-    const comidas = comidasBase[objetivo].map(c => ({
-      nombre: c.nombre,
-      descripcion: c.descripcion,
-      calorias: c.calorias
-    }));
-    plan.dias.push({ nombreDia:diasSemana[i], comidas });
-  }
+        // Mensaje de bienvenida inicial
+        setTimeout(() => {
+            addMessage('Puedes consultar tu valoración actual o generar nuevas rutinas y planes alimenticios usando los botones de abajo.');
+        }, 1000);
+    </script>
 
-  return plan;
-}
-
-
-// VER RUTINA
-async function verRutina(){
-  try{
-    const res = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${userId}`);
-    if(!res.ok) throw new Error('Error al obtener rutina');
-    const data = await res.json();
-    if(Array.isArray(data) && data.length>0){
-      const ultima = data[data.length-1];
-      let html = `<div class="card"><h3>📋 Tu Rutina</h3>`;
-      ultima.dias.forEach(dia=>{
-        html += `<strong>${dia.nombreDia}:</strong><ul>`;
-        dia.ejercicios.forEach(e=>html+=`<li>${e.nombre}: ${e.series}x${e.repeticiones} (${e.tiempo})</li>`);
-        html += `</ul>`;
-      });
-      html += `</div>`; addMessage(html);
-    }else addMessage('No se encontró rutina para este usuario.', 'bot');
-  }catch(err){ addMessage(`⚠️ Error al obtener rutina: ${err.message}`,'bot'); console.error(err);}
-}
-
-// VER PLAN ALIMENTICIO
-async function verPlanAlimenticio(){
-  try{
-    const res = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${userId}`);
-    if(!res.ok) throw new Error('Error al obtener plan alimenticio');
-    const data = await res.json();
-    if(Array.isArray(data) && data.length>0){
-      const ultimo = data[data.length-1];
-      let html = `<div class="card"><h3>🥗 Tu Plan Alimenticio</h3>`;
-      ultimo.dias.forEach(dia=>{
-        html += `<strong>${dia.nombreDia}:</strong><ul>`;
-        dia.comidas.forEach(c=>html+=`<li>${c.nombre}: ${c.descripcion} (${c.calorias} kcal)</li>`);
-        html += `</ul>`;
-      });
-      html += `</div>`; addMessage(html);
-    }else addMessage('No se encontró plan alimenticio para este usuario.', 'bot');
-  }catch(err){ addMessage(`⚠️ Error al obtener plan: ${err.message}`,'bot'); console.error(err);}
-}
-
-// BOTONES FLOTANTES
-document.getElementById("btnUltimaRutina").addEventListener("click", async ()=>{
-  try{
-    const res = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${userId}`);
-    if(!res.ok) throw new Error('Error al obtener rutina');
-    const data = await res.json();
-    if(Array.isArray(data) && data.length>0){
-      const ultima = data[data.length-1];
-      let html = `<div class="card-modal"><h3>📋 Tu Última Rutina</h3>`;
-      ultima.dias.forEach(dia=>{
-        html += `<strong>${dia.nombreDia}:</strong><ul>`;
-        dia.ejercicios.forEach(e=>html+=`<li>${e.nombre}: ${e.series}x${e.repeticiones} (${e.tiempo})</li>`);
-        html += `</ul>`;
-      });
-      html += `</div>`;
-      mostrarModal(html);
-    }else mostrarModal('<p>No se encontró rutina para este usuario.</p>');
-  }catch(err){ mostrarModal(`<p>⚠ Error al obtener rutina: ${err.message}</p>`); console.error(err);}
-});
-
-document.getElementById("btnUltimaAlimentacion").addEventListener("click", async ()=>{
-  try{
-    const res = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${userId}`);
-    if(!res.ok) throw new Error('Error al obtener plan alimenticio');
-    const data = await res.json();
-    if(Array.isArray(data) && data.length>0){
-      const ultimo = data[data.length-1];
-      let html = `<div class="card-modal"><h3>🥗 Tu Último Plan Alimenticio</h3>`;
-      ultimo.dias.forEach(dia=>{
-        html += `<strong>${dia.nombreDia}:</strong><ul>`;
-        dia.comidas.forEach(c=>html+=`<li>${c.nombre}: ${c.descripcion} (${c.calorias} kcal)</li>`);
-        html += `</ul>`;
-      });
-      html += `</div>`;
-      mostrarModal(html);
-    }else mostrarModal('<p>No se encontró plan alimenticio para este usuario.</p>');
-  }catch(err){ mostrarModal(`<p>⚠ Error al obtener plan: ${err.message}</p>`); console.error(err);}
-});
-
-// CERRAR SESIÓN
-function cerrarSesion(){ localStorage.removeItem("aitrain_user"); window.location.href="index.html"; }
-</script>
-
+    <!-- Font Awesome para íconos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
