@@ -162,34 +162,158 @@ document.getElementById('btnValoracion').addEventListener('click', async ()=>{
 });
 
 // GENERAR RUTINA Y PLAN
-document.getElementById('btnGenerarRutina').addEventListener('click', async ()=>{
-  try{
-    const rutina = { userId, nombre:"Rutina Completa", objetivo:"Fuerza y Resistencia", duracionSemanas:4, fechaCreacion:"2025-11-16", dias:[
-      {"nombreDia":"Pierna","ejercicios":[{"nombre":"Sentadillas","series":3,"repeticiones":12,"tiempo":"30s"},{"nombre":"Prensa","series":3,"repeticiones":10,"tiempo":"40s"},{"nombre":"Peso muerto","series":3,"repeticiones":10,"tiempo":"50s"}]},
-      {"nombreDia":"Pecho","ejercicios":[{"nombre":"Press de banca","series":3,"repeticiones":10,"tiempo":"30s"},{"nombre":"Flexiones","series":3,"repeticiones":15,"tiempo":"40s"},{"nombre":"Aperturas con mancuernas","series":3,"repeticiones":12,"tiempo":"35s"}]},
-      {"nombreDia":"Espalda","ejercicios":[{"nombre":"Dominadas","series":3,"repeticiones":8,"tiempo":"30s"},{"nombre":"Remo con barra","series":3,"repeticiones":10,"tiempo":"40s"},{"nombre":"Pull-over","series":3,"repeticiones":12,"tiempo":"35s"}]},
-      {"nombreDia":"Brazos","ejercicios":[{"nombre":"Curl bíceps","series":3,"repeticiones":12,"tiempo":"30s"},{"nombre":"Fondos triceps","series":3,"repeticiones":10,"tiempo":"40s"},{"nombre":"Curl martillo","series":3,"repeticiones":12,"tiempo":"35s"}]}
-    ]};
-    const planAlimenticio = { userId, nombre:"Plan de Fuerza", objetivo:"Ganar masa muscular", dias:[
-      {"nombreDia":"Lunes","comidas":[{"nombre":"Desayuno","descripcion":"Huevos con avena","calorias":400},{"nombre":"Almuerzo","descripcion":"Pollo con arroz","calorias":600}]},
-      {"nombreDia":"Martes","comidas":[{"nombre":"Desayuno","descripcion":"Yogur con frutas","calorias":350},{"nombre":"Almuerzo","descripcion":"Pescado con ensalada","calorias":550}]}
-    ]};
+// ESTADO DEL USUARIO PARA EL CHAT
+let estadoChat = 'inicio'; // inicio, objetivo, dias, confirmar, generado
+let objetivoUsuario = '';
+let diasUsuario = 0;
 
+// FRASES MOTIVADORAS
+const frasesMotivadoras = [
+  '¡Vamos, tú puedes! 💪',
+  'Cada repetición te acerca a tu objetivo.',
+  '¡Entrena con constancia y verás resultados!',
+  'Hoy es un buen día para superarte.',
+  '¡No te rindas, tu esfuerzo vale!'
+];
+
+// MENSAJE INICIAL
+addMessage('¡Hola! Bienvenido a AiTrain. Para empezar, selecciona tu objetivo:');
+mostrarOpcionesObjetivo();
+
+// BOTONES DE OBJETIVO
+function mostrarOpcionesObjetivo() {
+  const objetivos = ['Definición', 'Volumen', 'Fuerza', 'Resistencia'];
+  buttonsContainer.innerHTML = ''; // limpiar botones
+  objetivos.forEach(obj => {
+    const btn = document.createElement('button');
+    btn.textContent = obj;
+    btn.addEventListener('click', () => {
+      objetivoUsuario = obj;
+      addMessage(`✅ Objetivo seleccionado: ${obj}`);
+      addMessage(fraseAleatoria());
+      estadoChat = 'dias';
+      mostrarOpcionesDias();
+    });
+    buttonsContainer.appendChild(btn);
+  });
+}
+
+// BOTONES DE DÍAS
+function mostrarOpcionesDias() {
+  addMessage('Perfecto, ahora selecciona cuántos días a la semana quieres entrenar:');
+  const dias = [1,2,3,4,5,6,7];
+  buttonsContainer.innerHTML = '';
+  dias.forEach(d => {
+    const btn = document.createElement('button');
+    btn.textContent = d;
+    btn.addEventListener('click', () => {
+      diasUsuario = d;
+      addMessage(`✅ Días seleccionados: ${d}`);
+      addMessage(fraseAleatoria());
+      estadoChat = 'confirmar';
+      mostrarBotonGenerar();
+    });
+    buttonsContainer.appendChild(btn);
+  });
+}
+
+// BOTÓN GENERAR PLAN Y RUTINA
+function mostrarBotonGenerar() {
+  buttonsContainer.innerHTML = '';
+  const btn = document.createElement('button');
+  btn.textContent = 'Generar Rutina y Plan Alimenticio';
+  btn.addEventListener('click', generarRutinaPlanDinamico);
+  buttonsContainer.appendChild(btn);
+}
+
+// FUNCION PARA ELEGIR FRASE ALEATORIA
+function fraseAleatoria() {
+  return frasesMotivadoras[Math.floor(Math.random() * frasesMotivadoras.length)];
+}
+
+// FUNCION PARA GENERAR RUTINA Y PLAN DINAMICO
+async function generarRutinaPlanDinamico() {
+  addMessage('⌛ Generando tu rutina y plan alimenticio...');
+  
+  const rutina = generarRutina(objetivoUsuario, diasUsuario);
+  const planAlimenticio = generarPlan(objetivoUsuario, diasUsuario);
+
+  try {
     await postJson('http://localhost:8081/api/aitrain/rutinas/save', rutina);
     await postJson('http://localhost:8082/api/aitrain/nutricion/save', planAlimenticio);
-
     addMessage('✅ Rutina y plan alimenticio generados exitosamente!');
+    addMessage(fraseAleatoria());
 
     if(!document.getElementById('btnVerRutina')){
       const btnRutina = document.createElement('button');
       btnRutina.id='btnVerRutina'; btnRutina.textContent='Ver mi Rutina'; btnRutina.addEventListener('click', verRutina);
       const btnPlan = document.createElement('button');
       btnPlan.id='btnVerPlan'; btnPlan.textContent='Ver mi Plan Alimenticio'; btnPlan.addEventListener('click', verPlanAlimenticio);
-      buttonsContainer.appendChild(btnRutina); buttonsContainer.appendChild(btnPlan);
+      buttonsContainer.appendChild(btnRutina); 
+      buttonsContainer.appendChild(btnPlan);
     }
 
-  }catch(err){ addMessage(`⚠️ Error al generar rutina y plan: ${err.message}`, 'bot'); console.error(err);}
-});
+  } catch(err) {
+    addMessage(`⚠️ Error al generar rutina y plan: ${err.message}`, 'bot'); 
+    console.error(err);
+  }
+}
+
+// GENERADOR DINÁMICO DE RUTINAS
+function generarRutina(objetivo, dias) {
+  const ejerciciosBase = {
+    'Definición': ['Cardio', 'Burpees', 'Jumping Jacks', 'Plancha', 'Mountain Climbers', 'Saltar cuerda', 'Abdominales'],
+    'Volumen': ['Press de banca', 'Sentadillas', 'Peso muerto', 'Dominadas', 'Curl bíceps', 'Fondos triceps', 'Remo con barra'],
+    'Fuerza': ['Sentadillas pesadas', 'Press militar', 'Peso muerto', 'Fondos triceps', 'Dominadas lastradas', 'Press banca inclinado'],
+    'Resistencia': ['Correr', 'Saltos', 'Flexiones', 'Remo', 'Bicicleta estática', 'Burpees', 'Plancha dinámica']
+  };
+
+  const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  let rutina = { userId, nombre:`Rutina ${objetivo}`, objetivo, duracionSemanas:4, fechaCreacion:new Date().toISOString().split('T')[0], dias:[] };
+
+  for(let i=0;i<dias;i++){
+    // seleccionar 3-5 ejercicios aleatorios diferentes cada día
+    let listaEjercicios = ejerciciosBase[objetivo].sort(()=>0.5-Math.random()).slice(0, 3 + Math.floor(Math.random()*3));
+    let ejercicios = listaEjercicios.map(e => ({
+      nombre:e,
+      series: 3 + Math.floor(Math.random()*3),
+      repeticiones: 8 + Math.floor(Math.random()*8),
+      tiempo: `${20 + Math.floor(Math.random()*40)}s`
+    }));
+    rutina.dias.push({ nombreDia: diasSemana[i], ejercicios });
+  }
+  return rutina;
+}
+
+// GENERADOR DINÁMICO DE PLAN ALIMENTICIO
+function generarPlan(objetivo, dias) {
+  const comidasBase = {
+    'Definición':[{"nombre":"Desayuno","descripcion":"Avena con frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
+                  {"nombre":"Almuerzo","descripcion":"Pechuga de pollo con ensalada","calorias":450+Math.floor(Math.random()*100)}],
+    'Volumen':[{"nombre":"Desayuno","descripcion":"Huevos con pan integral y avena","calorias":400+Math.floor(Math.random()*50)},
+               {"nombre":"Almuerzo","descripcion":"Pollo con arroz y pasta","calorias":700+Math.floor(Math.random()*100)}],
+    'Fuerza':[{"nombre":"Desayuno","descripcion":"Batido proteico con avena","calorias":350+Math.floor(Math.random()*50)},
+              {"nombre":"Almuerzo","descripcion":"Carne con papas y verduras","calorias":650+Math.floor(Math.random()*100)}],
+    'Resistencia':[{"nombre":"Desayuno","descripcion":"Frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
+                   {"nombre":"Almuerzo","descripcion":"Pescado con quinoa y vegetales","calorias":550+Math.floor(Math.random()*100)}]
+  };
+
+  const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  let plan = { userId, nombre:`Plan ${objetivo}`, objetivo, dias:[] };
+
+  for(let i=0;i<dias;i++){
+    // agregamos las comidas base, con pequeñas variaciones en calorías
+    const comidas = comidasBase[objetivo].map(c => ({
+      nombre: c.nombre,
+      descripcion: c.descripcion,
+      calorias: c.calorias
+    }));
+    plan.dias.push({ nombreDia:diasSemana[i], comidas });
+  }
+
+  return plan;
+}
+
 
 // VER RUTINA
 async function verRutina(){
