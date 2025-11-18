@@ -632,171 +632,236 @@
     </main>
 
     <script>
-        // =====================================
-        // CARGAR VALORACIÓN DEL USUARIO
-        // =====================================
-        async function cargarValoracion() {
-            const email = localStorage.getItem("aitrain_user");
-            
-            // Si no hay usuario logueado, mostrar datos de ejemplo
-            if(!email) {
+ // =====================================
+    // CARGAR VALORACIÓN DEL USUARIO
+    // =====================================
+    async function cargarValoracion() {
+        const email = localStorage.getItem("aitrain_user");
+        
+        if(!email) {
+            mostrarDatosEjemplo();
+            actualizarInterfazUsuario(null);
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
+            if(!res.ok) {
                 mostrarDatosEjemplo();
-                actualizarInterfazUsuario(null);
+                actualizarInterfazUsuario(email);
                 return;
             }
+            const data = await res.json();
+            const v = data.valoracion;
 
-            try {
-                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
-                if(!res.ok) {
-                    mostrarDatosEjemplo();
-                    actualizarInterfazUsuario(email);
-                    return;
-                }
-                const data = await res.json();
-                const v = data.valoracion;
+            mostrarDatosReales(v.pesoKg, v.estaturaCm, v.imc);
+            actualizarInterfazUsuario(email);
 
-                mostrarDatosReales(v.pesoKg, v.estaturaCm, v.imc);
-                actualizarInterfazUsuario(email);
-
-            } catch (e) {
-                console.error("Error cargando valoración.");
-                mostrarDatosEjemplo();
-                actualizarInterfazUsuario(email);
-            }
+        } catch (e) {
+            console.error("Error cargando valoración.");
+            mostrarDatosEjemplo();
+            actualizarInterfazUsuario(email);
         }
+    }
 
-        // =====================================
-        // MOSTRAR DATOS DE EJEMPLO
-        // =====================================
-        function mostrarDatosEjemplo() {
-            // Mostrar datos de ejemplo
-            document.getElementById("valorPeso").innerText = "75 kg";
-            document.getElementById("cambioPeso").innerText = "+0.5 kg este mes";
-            document.getElementById("cambioPeso").className = "stat-change negative";
+    // =====================================
+    // MOSTRAR DATOS DE EJEMPLO
+    // =====================================
+    function mostrarDatosEjemplo() {
+        document.getElementById("valorPeso").innerText = "75 kg";
+        document.getElementById("cambioPeso").innerText = "+0.5 kg este mes";
+        document.getElementById("cambioPeso").className = "stat-change negative";
 
-            document.getElementById("valorEstatura").innerText = "175 cm";
+        document.getElementById("valorEstatura").innerText = "175 cm";
 
-            document.getElementById("valorIMC").innerText = "24.5";
-            document.getElementById("categoriaIMC").innerText = "Peso normal";
-            document.getElementById("categoriaIMC").className = "stat-change";
+        document.getElementById("valorIMC").innerText = "24.5";
+        document.getElementById("categoriaIMC").innerText = "Peso normal";
+        document.getElementById("categoriaIMC").className = "stat-change";
 
-            document.getElementById("valorEntrenamientos").innerText = "3/5";
+        document.getElementById("valorEntrenamientos").innerText = "3/5";
 
-            // Rutina de ejemplo
-            document.getElementById("rutinaTitulo").innerText = "Rutina Superior - Fuerza";
-            document.getElementById("rutinaDuracion").innerText = "45 min";
-            document.getElementById("rutinaIntensidad").innerText = "Alta";
-            document.getElementById("rutinaEjercicios").innerText = "6 ejercicios";
-            
-            const ejerciciosEjemplo = [
-                { nombre: "Press de Banca", series: "4x8-10" },
-                { nombre: "Dominadas", series: "3x6-8" },
-                { nombre: "Press Militar", series: "3x10-12" },
-                { nombre: "Curl de Bíceps", series: "3x12-15" }
-            ];
-            
-            mostrarEjercicios(ejerciciosEjemplo);
+        document.getElementById("rutinaTitulo").innerText = "Rutina Superior - Fuerza";
+        document.getElementById("rutinaDuracion").innerText = "45 min";
+        document.getElementById("rutinaIntensidad").innerText = "Alta";
+        document.getElementById("rutinaEjercicios").innerText = "6 ejercicios";
+        
+        const ejerciciosEjemplo = [
+            { nombre: "Press de Banca", series: "4x8-10" },
+            { nombre: "Dominadas", series: "3x6-8" },
+            { nombre: "Press Militar", series: "3x10-12" },
+            { nombre: "Curl de Bíceps", series: "3x12-15" }
+        ];
+        
+        mostrarEjercicios([{ nombreDia: "Lunes", ejercicios: ejerciciosEjemplo }]);
 
-            document.getElementById("alimentacionText").innerText = "🥗 Proteínas 40%, Carbs 40%, Grasas 20% - 2200 kcal";
+        document.getElementById("alimentacionText").innerText = "🥗 Proteínas 40%, Carbs 40%, Grasas 20% - 2200 kcal";
 
-            // Desafío
-            document.getElementById("desafioProgreso").innerText = "8/30 días completados";
-            document.getElementById("progresoFuerza").innerText = "75%";
-            document.getElementById("progresoResistencia").innerText = "60%";
+        document.getElementById("desafioProgreso").innerText = "8/30 días completados";
+        document.getElementById("progresoFuerza").innerText = "75%";
+        document.getElementById("progresoResistencia").innerText = "60%";
 
-            // Próximo entrenamiento
-            document.getElementById("proximoEntrenamientoTitulo").innerText = "Rutina Inferior";
-            document.getElementById("proximoEntrenamientoDuracion").innerText = "50 min";
-            document.getElementById("proximoEntrenamientoIntensidad").innerText = "Media";
+        document.getElementById("proximoEntrenamientoTitulo").innerText = "Rutina Inferior";
+        document.getElementById("proximoEntrenamientoDuracion").innerText = "50 min";
+        document.getElementById("proximoEntrenamientoIntensidad").innerText = "Media";
+    }
+
+    // =====================================
+    // MOSTRAR DATOS REALES
+    // =====================================
+    function mostrarDatosReales(peso, estatura, imc) {
+        document.getElementById("valorPeso").innerText = peso + " kg";
+        document.getElementById("valorEstatura").innerText = estatura + " cm";
+        document.getElementById("valorIMC").innerText = imc.toFixed(1);
+        
+        let categoria = "";
+        let clase = "stat-change";
+        if(imc < 18.5) {
+            categoria = "Bajo peso";
+            clase = "stat-change negative";
+        } else if(imc < 25) {
+            categoria = "Peso normal";
+        } else if(imc < 30) {
+            categoria = "Sobrepeso";
+            clase = "stat-change negative";
+        } else {
+            categoria = "Obesidad";
+            clase = "stat-change negative";
         }
+        
+        document.getElementById("categoriaIMC").innerText = categoria;
+        document.getElementById("categoriaIMC").className = clase;
 
-        // =====================================
-        // MOSTRAR DATOS REALES
-        // =====================================
-        function mostrarDatosReales(peso, estatura, imc) {
-            document.getElementById("valorPeso").innerText = peso + " kg";
-            document.getElementById("valorEstatura").innerText = estatura + " cm";
-            document.getElementById("valorIMC").innerText = imc.toFixed(1);
-            
-            // Determinar categoría IMC
-            let categoria = "";
-            let clase = "stat-change";
-            if(imc < 18.5) {
-                categoria = "Bajo peso";
-                clase = "stat-change negative";
-            } else if(imc < 25) {
-                categoria = "Peso normal";
-            } else if(imc < 30) {
-                categoria = "Sobrepeso";
-                clase = "stat-change negative";
-            } else {
-                categoria = "Obesidad";
-                clase = "stat-change negative";
-            }
-            
-            document.getElementById("categoriaIMC").innerText = categoria;
-            document.getElementById("categoriaIMC").className = clase;
+        document.getElementById("alimentacionText").innerText = "🥗 Plan nutricional personalizado basado en tus métricas";
+    }
 
-            document.getElementById("alimentacionText").innerText = "🥗 Plan nutricional personalizado basado en tus métricas";
-        }
+    // =====================================
+    // MOSTRAR EJERCICIOS AGRUPADOS POR DÍA
+    // =====================================
+    function mostrarEjercicios(ejerciciosPorDia) {
+        const container = document.getElementById("rutinaEjerciciosLista");
+        container.innerHTML = "";
 
-        // =====================================
-        // MOSTRAR EJERCICIOS
-        // =====================================
-        function mostrarEjercicios(ejercicios) {
-            const container = document.getElementById("rutinaEjerciciosLista");
-            container.innerHTML = "";
-            
-            ejercicios.forEach(ej => {
+        ejerciciosPorDia.forEach(dia => {
+            const diaContainer = document.createElement('div');
+            diaContainer.style.marginBottom = '1rem';
+
+            const diaTitulo = document.createElement('h4');
+            diaTitulo.innerText = dia.nombreDia;
+            diaTitulo.style.color = '#ef4444';
+            diaTitulo.style.marginBottom = '0.5rem';
+            diaContainer.appendChild(diaTitulo);
+
+            dia.ejercicios.forEach(ej => {
                 const exerciseItem = document.createElement('div');
                 exerciseItem.className = 'exercise-item';
                 exerciseItem.innerHTML = `
                     <span class="exercise-name">${ej.nombre}</span>
-                    <span class="exercise-sets">${ej.series}</span>
+                    <span class="exercise-sets">${ej.series}x${ej.repeticiones || ''}</span>
                 `;
-                container.appendChild(exerciseItem);
+                diaContainer.appendChild(exerciseItem);
             });
-        }
 
-        // =====================================
-        // ACTUALIZAR INTERFAZ SEGÚN USUARIO
-        // =====================================
-        function actualizarInterfazUsuario(email) {
-            if (email) {
-                const userName = email.split('@')[0];
-                const nombreMostrar = userName.charAt(0).toUpperCase() + userName.slice(1);
-                document.getElementById("welcomeTitle").textContent = `¡Bienvenido de nuevo, ${nombreMostrar}!`;
-                document.getElementById("welcomeSubtitle").textContent = "Tu rutina personalizada está lista";
-                document.getElementById("valorEntrenamientos").textContent = "4/5";
-            } else {
-                document.getElementById("welcomeTitle").textContent = "¡Bienvenido a AiTrain!";
-                document.getElementById("welcomeSubtitle").textContent = "Explora las funciones del dashboard";
-                document.getElementById("valorEntrenamientos").textContent = "0/0";
-                document.getElementById("rutinaEstado").textContent = "Demo";
-            }
-        }
-
-        // Cargar datos al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarValoracion();
+            container.appendChild(diaContainer);
         });
+    }
 
-        // =====================================
-        // CERRAR SESIÓN
-        // =====================================
-        function cerrarSesion() {
-            const isLoggedIn = localStorage.getItem("aitrain_logged");
-            
-            if (isLoggedIn) {
-                localStorage.removeItem("aitrain_logged");
-                localStorage.removeItem("aitrain_user");
-                localStorage.removeItem("aitrain_tipo");
-                window.location.href = "login.html";
-            } else {
-                // Si no estaba logueado, redirigir al login igualmente
-                window.location.href = "login.html";
-            }
+    // =====================================
+    // ACTUALIZAR INTERFAZ SEGÚN USUARIO
+    // =====================================
+    function actualizarInterfazUsuario(email) {
+        if (email) {
+            const userName = email.split('@')[0];
+            const nombreMostrar = userName.charAt(0).toUpperCase() + userName.slice(1);
+            document.getElementById("welcomeTitle").textContent = `¡Bienvenido de nuevo, ${nombreMostrar}!`;
+            document.getElementById("welcomeSubtitle").textContent = "Tu rutina personalizada está lista";
+            document.getElementById("valorEntrenamientos").textContent = "4/5";
+        } else {
+            document.getElementById("welcomeTitle").textContent = "¡Bienvenido a AiTrain!";
+            document.getElementById("welcomeSubtitle").textContent = "Explora las funciones del dashboard";
+            document.getElementById("valorEntrenamientos").textContent = "0/0";
+            document.getElementById("rutinaEstado").textContent = "Demo";
         }
+    }
+
+    // =====================================
+    // CARGAR RUTINA Y PLAN ALIMENTICIO DEL USUARIO
+    // =====================================
+    async function cargarRutinaYPlan() {
+        const email = localStorage.getItem("aitrain_user");
+        if (!email) return;
+
+        try {
+            // ===== RUTINA =====
+            const resRutina = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${email}`);
+            if (resRutina.ok) {
+                const dataRutina = await resRutina.json();
+                if (dataRutina && dataRutina.length > 0) {
+                    const ultimaRutina = dataRutina[dataRutina.length - 1];
+
+                    document.getElementById("rutinaTitulo").innerText = ultimaRutina.nombre || "Rutina Personalizada";
+                    document.getElementById("rutinaEstado").innerText = "Pendiente";
+                    document.getElementById("rutinaDuracion").innerText = `${ultimaRutina.duracionSemanas*45} min`;
+                    document.getElementById("rutinaIntensidad").innerText = "Media";
+                    document.getElementById("rutinaEjercicios").innerText = `${ultimaRutina.dias.reduce((acc,d)=>acc+d.ejercicios.length,0)} ejercicios`;
+
+                    // Agrupar ejercicios por día
+                    const ejerciciosPorDia = ultimaRutina.dias.map(dia => ({
+                        nombreDia: dia.nombreDia,
+                        ejercicios: dia.ejercicios.map(ej => ({
+                            nombre: ej.nombre,
+                            series: ej.series,
+                            repeticiones: ej.repeticiones
+                        }))
+                    }));
+                    mostrarEjercicios(ejerciciosPorDia);
+                }
+            }
+
+            // ===== PLAN ALIMENTICIO =====
+            const resPlan = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${email}`);
+            if (resPlan.ok) {
+                const dataPlan = await resPlan.json();
+                if (dataPlan && dataPlan.length > 0) {
+                    const ultimoPlan = dataPlan[dataPlan.length - 1];
+                    let textoPlan = '';
+                    ultimoPlan.dias.forEach(dia => {
+                        textoPlan += `📅 ${dia.nombreDia}:\n`;
+                        dia.comidas.forEach(c => {
+                            textoPlan += `- ${c.nombre}: ${c.descripcion} (${c.calorias} kcal)\n`;
+                        });
+                        textoPlan += '\n';
+                    });
+                    document.getElementById("alimentacionText").innerText = textoPlan.trim();
+                }
+            }
+
+        } catch (error) {
+            console.error("Error cargando rutina o plan:", error);
+        }
+    }
+
+    // Cargar datos al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarValoracion();
+        cargarRutinaYPlan();
+    });
+
+    // =====================================
+    // CERRAR SESIÓN
+    // =====================================
+    function cerrarSesion() {
+        const isLoggedIn = localStorage.getItem("aitrain_logged");
+        
+        if (isLoggedIn) {
+            localStorage.removeItem("aitrain_logged");
+            localStorage.removeItem("aitrain_user");
+            localStorage.removeItem("aitrain_tipo");
+            window.location.href = "login.html";
+        } else {
+            window.location.href = "login.html";
+        }
+    }
+
     </script>
 </body>
 </html>
