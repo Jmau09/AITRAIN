@@ -5,8 +5,10 @@ import com.aitrain.users.domain.exceptions.EmailAlreadyExistException;
 import com.aitrain.users.domain.exceptions.EmailEmptyException;
 import com.aitrain.users.domain.exceptions.IncorrectCredentialsException;
 import com.aitrain.users.domain.exceptions.UserNotFoundException;
+import com.aitrain.users.domain.model.Notificacion;
 import com.aitrain.users.domain.model.Usuario;
 import com.aitrain.users.domain.model.gateway.EncrypterGateway;
+import com.aitrain.users.domain.model.gateway.NotificacionGateway;
 import com.aitrain.users.domain.model.gateway.UsuarioGateway;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,7 @@ public class UsuarioUseCase {
     //no se puede contectar la BD en la infraestructura
     private final UsuarioGateway usuarioGateway;
     private final EncrypterGateway encrypterGateway;
+    private final NotificacionGateway notificacionGateway;
 
 public String guardarUsuario(Usuario usuario){
     if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()){
@@ -52,6 +55,15 @@ public String guardarUsuario(Usuario usuario){
 
     usuario.setPassword(encrypterGateway.encrypt(usuario.getPassword()));
     usuarioGateway.guardarUsuario(usuario);
+    Usuario usuarioGuardado = usuarioGateway.guardarUsuario(usuario);
+    Notificacion mensajeNotificacion = Notificacion.builder()
+            .tipo("Registro Usuario")
+            .email(usuarioGuardado.getEmail())
+            .numeroTelefono(usuarioGuardado.getTelefono())
+            .mensaje("Usuario registrado con exito")
+            .build();
+
+    notificacionGateway.enviarMensaje(mensajeNotificacion);
 
     return "Usuario guardado correctamente";
 }
