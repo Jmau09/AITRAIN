@@ -5,6 +5,7 @@ import com.aitrain.users.domain.model.gateway.NotificacionGateway;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
@@ -16,7 +17,8 @@ public class SqsNotificationGatewayImpl implements NotificacionGateway {
     private final SqsClient sqsClient;
     private final ObjectMapper objectMapper;
 
-    private final String queueUrl = "-"; // actualiza
+    @Value("${aws.queue-url}")
+    private final String queueUrl; // actualiza
 
     @Override
     public void enviarMensaje(Notificacion mensajeCola) {
