@@ -471,10 +471,6 @@
             
             <div class="messages-container" id="messagesContainer">
                 <!-- Mensajes se cargarán aquí dinámicamente -->
-                <div class="message bot-message">
-                    ¡Hola! Soy tu asistente de AiTrain. ¿En qué puedo ayudarte hoy con tu entrenamiento o nutrición?
-                    <div class="message-time">Ahora</div>
-                </div>
             </div>
             
             <div class="quick-actions" id="quickActions">
@@ -482,11 +478,8 @@
                     <button id="btnValoracion">
                         <i class="fas fa-chart-line"></i> Ver mi Valoración
                     </button>
-                    <button class="btn-outline" id="btnGenerarRutina">
-                        <i class="fas fa-dumbbell"></i> Generar Rutina
-                    </button>
-                    <button class="btn-outline" id="btnGenerarPlan">
-                        <i class="fas fa-utensils"></i> Generar Plan
+                    <button id="btnGenerarRutina">
+                        <i class="fas fa-dumbbell"></i> Generar Rutina y Plan Alimenticio
                     </button>
                 </div>
             </div>
@@ -523,31 +516,21 @@
         let estadoChat = 'inicio';
         let objetivoUsuario = '';
         let diasUsuario = 0;
-        let rutinaGenerada = false; // Nueva variable para controlar si ya se generó una rutina
-        let tieneValoracion = false; // Variable para verificar si el usuario tiene valoración
+        let rutinaGenerada = false;
+        let tieneValoracion = false;
 
-        // Frases motivadoras
-        const frasesMotivadoras = [
-            '¡Vamos, tú puedes! 💪',
-            'Cada repetición te acerca a tu objetivo.',
-            '¡Entrena con constancia y verás resultados!',
-            'Hoy es un buen día para superarte.',
-            '¡No te rindas, tu esfuerzo vale!'
-        ];
-
-        // Configurar modal
+        // MODAL
         modalClose.onclick = () => modal.style.display = "none";
         window.onclick = (e) => { 
             if(e.target == modal) modal.style.display = "none"; 
         };
-
-        // Funciones de utilidad
-        function mostrarModal(html) { 
+        function mostrarModal(html){ 
             modalBody.innerHTML = html; 
             modal.style.display = "flex"; 
         }
 
-        function addMessage(text, sender = 'bot') {
+        // AGREGAR MENSAJE
+        function addMessage(text, sender='bot'){
             const msg = document.createElement('div');
             msg.classList.add('message', sender === 'bot' ? 'bot-message' : 'user-message');
             
@@ -565,33 +548,23 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        function fraseAleatoria() {
-            return frasesMotivadoras[Math.floor(Math.random() * frasesMotivadoras.length)];
-        }
+        // MENSAJE BIENVENIDA
+        addMessage('¡Hola! Bienvenido a AiTrain. Estoy aquí para ayudarte a mejorar tu entrenamiento y alimentación.');
 
-        // Helper para peticiones POST
-        async function postJson(url, body) {
+        // HELPER POST
+        async function postJson(url, body){
             const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
                 body: JSON.stringify(body)
             });
             let data;
-            try { 
-                data = await res.json(); 
-            } catch(e) { 
-                data = await res.text(); 
-            }
+            try{ data = await res.json(); } catch(e){ data = await res.text(); }
             if(!res.ok) throw new Error(data.mensaje || data || 'Error en la petición');
             return data;
         }
 
-        // Volver al dashboard
-        function volverAlDashboard() {
-            window.location.href = 'dashboard_usuario.html';
-        }
-
-        // Función para verificar si el usuario tiene valoración
+        // VERIFICAR SI EL USUARIO TIENE VALORACIÓN
         async function verificarValoracion() {
             try {
                 const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
@@ -606,28 +579,25 @@
             }
         }
 
-        // Función para mostrar mensaje de error cuando no hay valoración
+        // MOSTRAR MENSAJE DE ERROR CUANDO NO HAY VALORACIÓN
         function mostrarErrorValoracion() {
             addMessage('⚠️ <strong>No puedes generar rutinas o planes sin antes completar tu valoración física</strong><br><br>Por favor, ve a tu perfil y completa la valoración física para poder crear planes personalizados según tus características.');
             
             // Crear botón para ir al perfil
             setTimeout(() => {
                 const btnPerfil = document.createElement('button');
+                btnPerfil.className = 'btn-outline';
                 btnPerfil.innerHTML = '<i class="fas fa-user"></i> Ir a mi Perfil';
                 btnPerfil.addEventListener('click', () => {
-                    window.location.href = 'perfil_usuario.html'; // Ajusta esta URL según tu aplicación
+                    window.location.href = 'perfil.html';
                 });
                 
-                const actionsContainer = document.createElement('div');
-                actionsContainer.style.marginTop = '10px';
-                actionsContainer.appendChild(btnPerfil);
-                
                 quickActions.innerHTML = '';
-                quickActions.appendChild(actionsContainer);
+                quickActions.appendChild(btnPerfil);
             }, 500);
         }
 
-        // Función para mostrar mensaje informativo sobre la valoración
+        // MOSTRAR MENSAJE INFORMATIVO SOBRE LA VALORACIÓN
         function mostrarMensajeValoracion() {
             const infoMessage = document.createElement('div');
             infoMessage.className = 'info-message';
@@ -644,31 +614,23 @@
                 <p>¡Esta información nos ayuda a crear planes que se adapten perfectamente a ti!</p>
             `;
             
-            // Insertar el mensaje después del primer mensaje del bot
-            const firstMessage = messagesContainer.querySelector('.bot-message');
-            if (firstMessage) {
-                messagesContainer.insertBefore(infoMessage, firstMessage.nextSibling);
-            } else {
-                messagesContainer.appendChild(infoMessage);
-            }
-            
+            messagesContainer.appendChild(infoMessage);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Funcionalidades del chat
-        document.getElementById('btnValoracion').addEventListener('click', async () => {
-            try {
+        // VER VALORACIÓN
+        document.getElementById('btnValoracion').addEventListener('click', async ()=>{
+            try{
                 const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener valoración');
                 const data = await res.json();
-                if(data.valoracion) {
+                if(data.valoracion){
                     const v = data.valoracion;
                     addMessage(`📊 <strong>Tu valoración actual:</strong><br>
                                • Peso: ${v.pesoKg} kg<br>
                                • Estatura: ${v.estaturaCm} cm<br>
                                • IMC: ${v.imc.toFixed(2)}`);
                     tieneValoracion = true;
-                    actualizarEstadoBotones();
                     
                     // Mostrar mensaje de éxito
                     setTimeout(() => {
@@ -677,19 +639,17 @@
                 } else {
                     addMessage('❌ <strong>No se encontró valoración para este usuario.</strong><br><br>Por favor, completa tu valoración física en tu perfil para poder acceder a todas las funciones personalizadas.');
                     tieneValoracion = false;
-                    actualizarEstadoBotones();
                     mostrarMensajeValoracion();
                 }
-            } catch(err) { 
-                addMessage('⚠️ No se pudo obtener tu valoración.'); 
+            }catch(err){ 
+                addMessage('⚠️ No se pudo obtener tu valoración.', 'bot'); 
                 console.error(err);
                 tieneValoracion = false;
-                actualizarEstadoBotones();
                 mostrarMensajeValoracion();
             }
         });
 
-        // Generar rutina y plan con verificación
+        // GENERAR RUTINA Y PLAN CON VERIFICACIÓN
         document.getElementById('btnGenerarRutina').addEventListener('click', async () => {
             // Verificar si tiene valoración antes de continuar
             const tieneValor = await verificarValoracion();
@@ -705,76 +665,36 @@
                 return;
             }
             
-            estadoChat = 'objetivo';
             addMessage('¡Excelente! Vamos a crear tu rutina personalizada. Primero, ¿cuál es tu objetivo principal?');
             mostrarOpcionesObjetivo();
         });
 
-        document.getElementById('btnGenerarPlan').addEventListener('click', async () => {
-            // Verificar si tiene valoración antes de continuar
-            const tieneValor = await verificarValoracion();
-            
-            if (!tieneValor) {
-                mostrarErrorValoracion();
-                mostrarMensajeValoracion();
-                return;
-            }
-            
-            estadoChat = 'objetivo_nutricion';
-            addMessage('¡Perfecto! Vamos a crear tu plan alimenticio. ¿Cuál es tu objetivo principal?');
-            mostrarOpcionesObjetivoNutricion();
-        });
+        // FRASES MOTIVADORAS
+        const frasesMotivadoras = [
+            '¡Vamos, tú puedes! 💪',
+            'Cada repetición te acerca a tu objetivo.',
+            '¡Entrena con constancia y verás resultados!',
+            'Hoy es un buen día para superarte.',
+            '¡No te rindas, tu esfuerzo vale!'
+        ];
 
-        // Función para actualizar el estado de los botones según la valoración
-        function actualizarEstadoBotones() {
-            const btnRutina = document.getElementById('btnGenerarRutina');
-            const btnPlan = document.getElementById('btnGenerarPlan');
-            
-            if (tieneValoracion) {
-                btnRutina.classList.remove('btn-disabled');
-                btnRutina.disabled = false;
-                btnPlan.classList.remove('btn-disabled');
-                btnPlan.disabled = false;
-                
-                // Actualizar tooltip o texto informativo
-                btnRutina.title = "Generar una rutina de entrenamiento personalizada";
-                btnPlan.title = "Generar un plan de alimentación personalizado";
-            } else {
-                btnRutina.classList.add('btn-disabled');
-                btnRutina.disabled = true;
-                btnPlan.classList.add('btn-disabled');
-                btnPlan.disabled = true;
-                
-                // Agregar tooltip informativo
-                btnRutina.title = "Completa tu valoración física primero";
-                btnPlan.title = "Completa tu valoración física primero";
-            }
-        }
-
+        // BOTONES DE OBJETIVO
         function mostrarOpcionesObjetivo() {
-            quickActions.innerHTML = '';
-            const objetivos = [
-                { text: 'Definición Muscular', value: 'Definición' },
-                { text: 'Ganar Volumen', value: 'Volumen' },
-                { text: 'Aumentar Fuerza', value: 'Fuerza' },
-                { text: 'Mejorar Resistencia', value: 'Resistencia' }
-            ];
+            const objetivos = ['Definición', 'Volumen', 'Fuerza', 'Resistencia'];
+            quickActions.innerHTML = ''; // limpiar botones
             
-            // Crear contenedor para opciones
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'options-container';
             
             objetivos.forEach(obj => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-outline';
-                btn.innerHTML = `<i class="fas fa-target"></i> ${obj.text}`;
+                btn.innerHTML = `<i class="fas fa-target"></i> ${obj}`;
                 btn.addEventListener('click', () => {
-                    objetivoUsuario = obj.value;
-                    addMessage(`✅ Objetivo seleccionado: <strong>${obj.text}</strong>`);
+                    objetivoUsuario = obj;
+                    addMessage(`✅ Objetivo seleccionado: ${obj}`);
                     addMessage(fraseAleatoria());
                     estadoChat = 'dias';
-                    // Limpiar opciones después de seleccionar
-                    quickActions.innerHTML = '';
                     mostrarOpcionesDias();
                 });
                 optionsContainer.appendChild(btn);
@@ -783,152 +703,81 @@
             quickActions.appendChild(optionsContainer);
         }
 
+        // BOTONES DE DÍAS
         function mostrarOpcionesDias() {
-            addMessage('¿Cuántos días a la semana puedes entrenar?');
+            addMessage('Perfecto, ahora selecciona cuántos días a la semana quieres entrenar:');
+            const dias = [1,2,3,4,5,6,7];
+            quickActions.innerHTML = '';
             
-            // Crear contenedor para opciones
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'options-container';
             
-            for(let i = 1; i <= 5; i++) {
+            dias.forEach(d => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-outline';
-                btn.textContent = `${i} día${i > 1 ? 's' : ''}`;
+                btn.textContent = `${d} día${d > 1 ? 's' : ''}`;
                 btn.addEventListener('click', () => {
-                    diasUsuario = i;
-                    addMessage(`✅ Días seleccionados: <strong>${i} día${i > 1 ? 's' : ''} por semana</strong>`);
+                    diasUsuario = d;
+                    addMessage(`✅ Días seleccionados: ${d}`);
                     addMessage(fraseAleatoria());
-                    // Limpiar opciones inmediatamente después de seleccionar
-                    quickActions.innerHTML = '';
-                    generarRutinaPlan();
+                    estadoChat = 'confirmar';
+                    mostrarBotonGenerar();
                 });
                 optionsContainer.appendChild(btn);
-            }
+            });
             
             quickActions.appendChild(optionsContainer);
         }
 
-        async function generarRutinaPlan() {
-            addMessage('⌛ Generando tu rutina personalizada...');
+        // BOTÓN GENERAR PLAN Y RUTINA
+        function mostrarBotonGenerar() {
+            quickActions.innerHTML = '';
+            const btn = document.createElement('button');
+            btn.textContent = 'Generar Rutina y Plan Alimenticio';
+            btn.addEventListener('click', generarRutinaPlanDinamico);
+            quickActions.appendChild(btn);
+        }
+
+        // FUNCION PARA ELEGIR FRASE ALEATORIA
+        function fraseAleatoria() {
+            return frasesMotivadoras[Math.floor(Math.random() * frasesMotivadoras.length)];
+        }
+
+        // FUNCION PARA GENERAR RUTINA Y PLAN DINAMICO
+        async function generarRutinaPlanDinamico() {
+            addMessage('⌛ Generando tu rutina y plan alimenticio...');
             
             const rutina = generarRutina(objetivoUsuario, diasUsuario);
+            const planAlimenticio = generarPlan(objetivoUsuario, diasUsuario);
 
             try {
                 await postJson('http://localhost:8081/api/aitrain/rutinas/save', rutina);
-                addMessage('✅ ¡Rutina generada exitosamente!');
+                await postJson('http://localhost:8082/api/aitrain/nutricion/save', planAlimenticio);
+                addMessage('✅ Rutina y plan alimenticio generados exitosamente!');
                 addMessage(fraseAleatoria());
-                
-                // Marcar que ya se generó una rutina
+
                 rutinaGenerada = true;
 
-                // Mostrar resumen de la rutina
-                let resumen = `<strong>📋 Tu Nueva Rutina - ${objetivoUsuario}</strong><br>`;
-                rutina.dias.forEach(dia => {
-                    resumen += `<br><strong>${dia.nombreDia}:</strong><br>`;
-                    dia.ejercicios.forEach(e => 
-                        resumen += `• ${e.nombre}: ${e.series}x${e.repeticiones}<br>`
-                    );
-                });
-                addMessage(resumen);
-
-                // Restaurar botones principales después de un breve tiempo
+                // AÑADIR BOTÓN PARA IR AL DASHBOARD
                 setTimeout(() => {
-                    restaurarBotonesPrincipales();
-                }, 1500);
+                    const btnDashboard = document.createElement('button');
+                    btnDashboard.className = 'back-btn';
+                    btnDashboard.innerHTML = '<i class="fas fa-chart-bar"></i> Ver en Dashboard';
+                    btnDashboard.addEventListener('click', () => {
+                        window.location.href = 'dashboard_usuario.html';
+                    });
+                    
+                    quickActions.innerHTML = '';
+                    quickActions.appendChild(btnDashboard);
+                }, 1000);
 
             } catch(err) {
-                addMessage(`⚠️ Error al generar rutina: ${err.message}`); 
+                addMessage(`⚠️ Error al generar rutina y plan: ${err.message}`, 'bot'); 
                 console.error(err);
-                // Restaurar botones principales incluso si hay error
-                setTimeout(() => {
-                    restaurarBotonesPrincipales();
-                }, 1500);
             }
         }
 
-        function restaurarBotonesPrincipales() {
-            quickActions.innerHTML = `
-                <div class="main-actions">
-                    <button id="btnValoracion">
-                        <i class="fas fa-chart-line"></i> Ver mi Valoración
-                    </button>
-                    <button class="btn-outline" id="btnGenerarRutina">
-                        <i class="fas fa-dumbbell"></i> Generar Rutina
-                    </button>
-                    <button class="btn-outline" id="btnGenerarPlan">
-                        <i class="fas fa-utensils"></i> Generar Plan
-                    </button>
-                </div>
-            `;
-            
-            // Reasignar eventos a los botones
-            document.getElementById('btnValoracion').addEventListener('click', async () => {
-                try {
-                    const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
-                    if(!res.ok) throw new Error('Error al obtener valoración');
-                    const data = await res.json();
-                    if(data.valoracion) {
-                        const v = data.valoracion;
-                        addMessage(`📊 <strong>Tu valoración actual:</strong><br>
-                                   • Peso: ${v.pesoKg} kg<br>
-                                   • Estatura: ${v.estaturaCm} cm<br>
-                                   • IMC: ${v.imc.toFixed(2)}`);
-                        tieneValoracion = true;
-                    } else {
-                        addMessage('No se encontró valoración para este usuario. Por favor, completa tu valoración física en tu perfil.');
-                        tieneValoracion = false;
-                        mostrarMensajeValoracion();
-                    }
-                    actualizarEstadoBotones();
-                } catch(err) { 
-                    addMessage('⚠️ No se pudo obtener tu valoración.'); 
-                    console.error(err);
-                    tieneValoracion = false;
-                    actualizarEstadoBotones();
-                    mostrarMensajeValoracion();
-                }
-            });
-            
-            document.getElementById('btnGenerarRutina').addEventListener('click', async () => {
-                // Verificar si tiene valoración antes de continuar
-                const tieneValor = await verificarValoracion();
-                
-                if (!tieneValor) {
-                    mostrarErrorValoracion();
-                    mostrarMensajeValoracion();
-                    return;
-                }
-                
-                if (rutinaGenerada) {
-                    addMessage('Ya tienes una rutina generada. Si deseas crear una nueva, por favor recarga la página.');
-                    return;
-                }
-                
-                estadoChat = 'objetivo';
-                addMessage('¡Excelente! Vamos a crear tu rutina personalizada. Primero, ¿cuál es tu objetivo principal?');
-                mostrarOpcionesObjetivo();
-            });
-            
-            document.getElementById('btnGenerarPlan').addEventListener('click', async () => {
-                // Verificar si tiene valoración antes de continuar
-                const tieneValor = await verificarValoracion();
-                
-                if (!tieneValor) {
-                    mostrarErrorValoracion();
-                    mostrarMensajeValoracion();
-                    return;
-                }
-                
-                estadoChat = 'objetivo_nutricion';
-                addMessage('¡Perfecto! Vamos a crear tu plan alimenticio. ¿Cuál es tu objetivo principal?');
-                mostrarOpcionesObjetivoNutricion();
-            });
-            
-            // Actualizar estado de los botones
-            actualizarEstadoBotones();
-        }
-
-        // Generador de rutinas (manteniendo la funcionalidad original)
+        // GENERADOR DINÁMICO DE RUTINAS
         function generarRutina(objetivo, dias) {
             const ejerciciosBase = {
                 'Definición': ['Cardio', 'Burpees', 'Jumping Jacks', 'Plancha', 'Mountain Climbers', 'Saltar cuerda', 'Abdominales'],
@@ -938,81 +787,108 @@
             };
 
             const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-            let rutina = { 
-                userId, 
-                nombre: `Rutina ${objetivo}`, 
-                objetivo, 
-                duracionSemanas: 4, 
-                fechaCreacion: new Date().toISOString().split('T')[0], 
-                dias: [] 
-            };
+            let rutina = { userId, nombre:`Rutina ${objetivo}`, objetivo, duracionSemanas:4, fechaCreacion:new Date().toISOString().split('T')[0], dias:[] };
 
-            for(let i = 0; i < dias; i++) {
-                let listaEjercicios = ejerciciosBase[objetivo].sort(() => 0.5 - Math.random()).slice(0, 3 + Math.floor(Math.random() * 3));
+            for(let i=0;i<dias;i++){
+                let listaEjercicios = ejerciciosBase[objetivo].sort(()=>0.5-Math.random()).slice(0, 3 + Math.floor(Math.random()*3));
                 let ejercicios = listaEjercicios.map(e => ({
-                    nombre: e,
-                    series: 3 + Math.floor(Math.random() * 3),
-                    repeticiones: 8 + Math.floor(Math.random() * 8),
-                    tiempo: `${20 + Math.floor(Math.random() * 40)}s`
+                    nombre:e,
+                    series: 3 + Math.floor(Math.random()*3),
+                    repeticiones: 8 + Math.floor(Math.random()*8),
+                    tiempo: `${20 + Math.floor(Math.random()*40)}s`
                 }));
                 rutina.dias.push({ nombreDia: diasSemana[i], ejercicios });
             }
             return rutina;
         }
 
-        // Botones flotantes
-        document.getElementById("btnUltimaRutina").addEventListener("click", async () => {
-            try {
+        // GENERADOR DINÁMICO DE PLAN ALIMENTICIO
+        function generarPlan(objetivo, dias) {
+            const comidasBase = {
+                'Definición':[
+                    {"nombre":"Desayuno","descripcion":"Avena con frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
+                    {"nombre":"Almuerzo","descripcion":"Pechuga de pollo con ensalada","calorias":450+Math.floor(Math.random()*100)},
+                    {"nombre":"Cena","descripcion":"Pescado al horno con verduras","calorias":350+Math.floor(Math.random()*50)}
+                ],
+                'Volumen':[
+                    {"nombre":"Desayuno","descripcion":"Huevos con pan integral y avena","calorias":400+Math.floor(Math.random()*50)},
+                    {"nombre":"Almuerzo","descripcion":"Pollo con arroz y pasta","calorias":700+Math.floor(Math.random()*100)},
+                    {"nombre":"Cena","descripcion":"Batido proteico con frutos secos","calorias":500+Math.floor(Math.random()*50)}
+                ],
+                'Fuerza':[
+                    {"nombre":"Desayuno","descripcion":"Batido proteico con avena","calorias":350+Math.floor(Math.random()*50)},
+                    {"nombre":"Almuerzo","descripcion":"Carne con papas y verduras","calorias":650+Math.floor(Math.random()*100)},
+                    {"nombre":"Cena","descripcion":"Salmón con quinoa","calorias":450+Math.floor(Math.random()*50)}
+                ],
+                'Resistencia':[
+                    {"nombre":"Desayuno","descripcion":"Frutas y yogurt","calorias":300+Math.floor(Math.random()*50)},
+                    {"nombre":"Almuerzo","descripcion":"Pescado con quinoa y vegetales","calorias":550+Math.floor(Math.random()*100)},
+                    {"nombre":"Cena","descripcion":"Ensalada de atún con aguacate","calorias":400+Math.floor(Math.random()*50)}
+                ]
+            };
+
+            const diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+            let plan = { userId, nombre:`Plan ${objetivo}`, objetivo, dias:[] };
+
+            for(let i=0;i<7;i++){
+                const comidas = comidasBase[objetivo].map(c => ({
+                    nombre: c.nombre,
+                    descripcion: c.descripcion,
+                    calorias: c.calorias
+                }));
+                plan.dias.push({ nombreDia:diasSemana[i], comidas });
+            }
+
+            return plan;
+        }
+
+        // BOTONES FLOTANTES
+        document.getElementById("btnUltimaRutina").addEventListener("click", async ()=>{
+            try{
                 const res = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener rutina');
                 const data = await res.json();
-                if(Array.isArray(data) && data.length > 0) {
-                    const ultima = data[data.length - 1];
+                if(Array.isArray(data) && data.length>0){
+                    const ultima = data[data.length-1];
                     let html = `<div class="card-modal"><h3>📋 Tu Última Rutina</h3>`;
-                    ultima.dias.forEach(dia => {
+                    ultima.dias.forEach(dia=>{
                         html += `<strong>${dia.nombreDia}:</strong><ul>`;
-                        dia.ejercicios.forEach(e => html += `<li>${e.nombre}: ${e.series}x${e.repeticiones} (${e.tiempo})</li>`);
+                        dia.ejercicios.forEach(e=>html+=`<li>${e.nombre}: ${e.series}x${e.repeticiones} (${e.tiempo})</li>`);
                         html += `</ul>`;
                     });
                     html += `</div>`;
                     mostrarModal(html);
-                } else {
-                    mostrarModal('<p>No se encontró rutina para este usuario.</p>');
-                }
-            } catch(err) { 
-                mostrarModal(`<p>⚠ Error al obtener rutina: ${err.message}</p>`); 
-                console.error(err);
-            }
+                }else mostrarModal('<p>No se encontró rutina para este usuario.</p>');
+            }catch(err){ mostrarModal(`<p>⚠ Error al obtener rutina: ${err.message}</p>`); console.error(err);}
         });
 
-        document.getElementById("btnUltimaAlimentacion").addEventListener("click", async () => {
-            try {
+        document.getElementById("btnUltimaAlimentacion").addEventListener("click", async ()=>{
+            try{
                 const res = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener plan alimenticio');
                 const data = await res.json();
-                if(Array.isArray(data) && data.length > 0) {
-                    const ultimo = data[data.length - 1];
+                if(Array.isArray(data) && data.length>0){
+                    const ultimo = data[data.length-1];
                     let html = `<div class="card-modal"><h3>🥗 Tu Último Plan Alimenticio</h3>`;
-                    ultimo.dias.forEach(dia => {
+                    ultimo.dias.forEach(dia=>{
                         html += `<strong>${dia.nombreDia}:</strong><ul>`;
-                        dia.comidas.forEach(c => html += `<li>${c.nombre}: ${c.descripcion} (${c.calorias} kcal)</li>`);
+                        dia.comidas.forEach(c=>html+=`<li>${c.nombre}: ${c.descripcion} (${c.calorias} kcal)</li>`);
                         html += `</ul>`;
                     });
                     html += `</div>`;
                     mostrarModal(html);
-                } else {
-                    mostrarModal('<p>No se encontró plan alimenticio para este usuario.</p>');
-                }
-            } catch(err) { 
-                mostrarModal(`<p>⚠ Error al obtener plan: ${err.message}</p>`); 
-                console.error(err);
-            }
+                }else mostrarModal('<p>No se encontró plan alimenticio para este usuario.</p>');
+            }catch(err){ mostrarModal(`<p>⚠ Error al obtener plan: ${err.message}</p>`); console.error(err);}
         });
 
-        // Verificar valoración al cargar la página
+        // VOLVER AL DASHBOARD
+        function volverAlDashboard() {
+            window.location.href = 'dashboard_usuario.html';
+        }
+
+        // VERIFICAR VALORACIÓN AL CARGAR LA PÁGINA
         window.addEventListener('DOMContentLoaded', async () => {
             await verificarValoracion();
-            actualizarEstadoBotones();
             
             // Mostrar mensaje informativo si no tiene valoración
             if (!tieneValoracion) {
@@ -1021,11 +897,6 @@
                 }, 1500);
             }
         });
-
-        // Mensaje de bienvenida inicial
-        setTimeout(() => {
-            addMessage('Puedes consultar tu valoración actual o generar nuevas rutinas y planes alimenticios usando los botones de abajo.');
-        }, 1000);
     </script>
 
     <!-- Font Awesome para íconos -->
