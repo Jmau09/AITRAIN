@@ -5,6 +5,7 @@ import com.ecommerce.notification.infraestructure.sqs.dto.EventoNotificacionDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
@@ -22,7 +23,8 @@ public class SqsListener {
     private final ObjectMapper objectMapper;
     private final SnsSmsSender smsSender;
 
-    private final String QUEUE_URL = "-";
+    @Value("${aws.queue-url}")
+    private String QUEUE_URL;
 
     @PostConstruct
     public void escucharMensajes() {
