@@ -18,7 +18,7 @@ public class SqsNotificationGatewayImpl implements NotificacionGateway {
     private final ObjectMapper objectMapper;
 
     @Value("${aws.queue-url}")
-    private final String queueUrl; // actualiza
+    private String queueUrl; // actualiza
 
     @Override
     public void enviarMensaje(Notificacion mensajeCola) {
