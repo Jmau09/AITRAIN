@@ -1,0 +1,28 @@
+services:
+
+  users-service:
+    build: ./users-service
+    ports:
+      - "8080:8080"
+
+  nutrition-service:
+    build: ./nutrition-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - users-service
+
+  notification:
+    build: ./notification
+    ports:
+      - "9092:9092"
+    depends_on:
+      - users-service
+
+  rutinas-service:
+    build: ./rutinas-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - users-service
+
