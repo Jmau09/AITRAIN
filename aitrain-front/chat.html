@@ -567,7 +567,7 @@
         // VERIFICAR SI EL USUARIO TIENE VALORACIÓN
         async function verificarValoracion() {
             try {
-                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
+                const res = await fetch(`https://aitrain-pss4.onrender.com/api/aitrain/valoracion/buscar/${userId}`);
                 if(!res.ok) throw new Error('Error al verificar valoración');
                 const data = await res.json();
                 tieneValoracion = !!data.valoracion;
@@ -621,7 +621,7 @@
         // VER VALORACIÓN
         document.getElementById('btnValoracion').addEventListener('click', async ()=>{
             try{
-                const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${userId}`);
+                const res = await fetch(`https://aitrain-pss4.onrender.com/api/aitrain/valoracion/buscar/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener valoración');
                 const data = await res.json();
                 if(data.valoracion){
@@ -751,8 +751,8 @@
             const planAlimenticio = generarPlan(objetivoUsuario, diasUsuario);
 
             try {
-                await postJson('http://localhost:8081/api/aitrain/rutinas/save', rutina);
-                await postJson('http://localhost:8082/api/aitrain/nutricion/save', planAlimenticio);
+                await postJson('https://aitrain-rutinas-service.onrender.com/api/aitrain/rutinas/save', rutina);
+                await postJson('https://aitrain-nutrition-service.onrender.com/api/aitrain/nutricion/save', planAlimenticio);
                 addMessage('✅ Rutina y plan alimenticio generados exitosamente!');
                 addMessage(fraseAleatoria());
 
@@ -845,7 +845,7 @@
         // BOTONES FLOTANTES
         document.getElementById("btnUltimaRutina").addEventListener("click", async ()=>{
             try{
-                const res = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${userId}`);
+                const res = await fetch(`https://aitrain-rutinas-service.onrender.com/api/aitrain/rutinas/usuario/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener rutina');
                 const data = await res.json();
                 if(Array.isArray(data) && data.length>0){
@@ -864,7 +864,7 @@
 
         document.getElementById("btnUltimaAlimentacion").addEventListener("click", async ()=>{
             try{
-                const res = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${userId}`);
+                const res = await fetch(`https://aitrain-nutrition-service.onrender.com/api/aitrain/nutricion/usuario/${userId}`);
                 if(!res.ok) throw new Error('Error al obtener plan alimenticio');
                 const data = await res.json();
                 if(Array.isArray(data) && data.length>0){

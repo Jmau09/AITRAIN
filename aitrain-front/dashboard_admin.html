@@ -485,7 +485,7 @@
         // Cargar usuarios desde la API
         async function cargarUsuarios() {
             try {
-                const res = await fetch('http://localhost:8080/api/aitrain/usuario/listar');
+                const res = await fetch('https://aitrain-pss4.onrender.com/api/aitrain/usuario/listar');
                 const data = await res.json();
                 usuarios = Array.isArray(data) ? data : data.usuarios || [];
                 actualizarEstadisticas();
@@ -568,7 +568,7 @@
         // Ver usuario
         async function verUsuario(email) {
             try {
-                const res = await fetch(`http://localhost:8080/api/aitrain/usuario/buscar/${email}`);
+                const res = await fetch(`https://aitrain-pss4.onrender.com/api/aitrain/usuario/buscar/${email}`);
                 const data = await res.json();
                 alert(`📋 Información del Usuario\n\n👤 Nombre: ${data.nombre || '-'} ${data.apellido || '-'}\n📧 Correo: ${data.email || '-'}\n📞 Teléfono: ${data.telefono || '-'}\n🎂 Edad: ${data.edad || '-'}\n💎 Plan: ${data.plan || 'Básico'}`);
             } catch(err) {
@@ -588,7 +588,7 @@
             if(!confirmar) return;
 
             try {
-                await fetch(`http://localhost:8080/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
+                await fetch(`https://aitrain-pss4.onrender.com/api/aitrain/usuario/eliminar/${email}`, { method:'DELETE' });
                 alert('Usuario eliminado correctamente');
                 cargarUsuarios();
             } catch(err) {

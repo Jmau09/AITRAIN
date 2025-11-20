@@ -453,7 +453,7 @@
         }
 
         try {
-            const res = await fetch(`http://localhost:8080/api/aitrain/valoracion/buscar/${email}`);
+            const res = await fetch(`https://aitrain-pss4.onrender.com/api/aitrain/valoracion/buscar/${email}`);
             if(!res.ok) {
                 mostrarDatosEjemplo();
                 actualizarInterfazUsuario(email);
@@ -592,7 +592,7 @@
 
         try {
             // ===== RUTINA =====
-            const resRutina = await fetch(`http://localhost:8081/api/aitrain/rutinas/usuario/${email}`);
+            const resRutina = await fetch(`https://aitrain-rutinas-service.onrender.com/api/aitrain/rutinas/usuario/${email}`);
             if (resRutina.ok) {
                 const dataRutina = await resRutina.json();
                 if (dataRutina && dataRutina.length > 0) {
@@ -618,7 +618,7 @@
             }
 
             // ===== PLAN ALIMENTICIO =====
-            const resPlan = await fetch(`http://localhost:8082/api/aitrain/nutricion/usuario/${email}`);
+            const resPlan = await fetch(`https://aitrain-nutrition-service.onrender.com/api/aitrain/nutricion/usuario/${email}`);
             if (resPlan.ok) {
                 const dataPlan = await resPlan.json();
                 if (dataPlan && dataPlan.length > 0) {
